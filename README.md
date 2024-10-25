@@ -5,6 +5,7 @@
 2. [Modelagem](#modelagem)
     - [Quadro Scrum](#quadro-scrum)
     - [Diagrama de Casos de Uso](#diagrama-de-casos-de-uso)
+    - [Diagrama de Classes](#diagrama-de-classes)
 3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
 4. [Instalação](#instalação)
 5. [Uso](#uso)
@@ -29,6 +30,12 @@ O desenvolvimento do BemGestar segue a metodologia ágil Scrum, permitindo um ge
 O Diagrama de Casos de Uso do BemGestar apresenta as principais interações entre os usuários e o sistema, ilustrando de forma clara os diferentes cenários de uso e as funcionalidades disponíveis. Através desse diagrama, é possível visualizar como gestantes, profissionais de saúde e administradores interagem com o sistema, desde o cadastro de gestantes até o acesso aos relatórios e à comunidade de apoio. Essa representação gráfica auxilia no entendimento do fluxo de operações e no planejamento das funcionalidades do sistema.
 
 ![Diagrama de Casos de Uso](./docs/bemgestarDiagramaUso.png)
+
+### Diagrama de Classes
+
+A seção de Diagrama de Classes do BemGestar apresenta a estrutura de classes que compõem o sistema, detalhando as relações entre os diferentes tipos de usuários (como gestantes, médicos e administradores) e os principais componentes do sistema. Este diagrama demonstra a hierarquia de herança e a organização das classes, ilustrando como cada uma delas interage para possibilitar funcionalidades como gerenciamento de contas, registro de consultas e geração de relatórios. Essa visão estrutural do sistema facilita o entendimento do modelo de dados e da lógica de negócio por trás do BemGestar.
+
+![Diagrama de Classes](./docs/bemGestarDiagramaClasse.png)
 
 ## Tecnologias Utilizadas
 
