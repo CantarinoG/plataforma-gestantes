@@ -23,7 +23,7 @@ Além disso, o BemGestar oferece uma comunidade de apoio, onde as gestantes pode
 O desenvolvimento do BemGestar segue a metodologia ágil Scrum, permitindo um gerenciamento eficiente do projeto através de sprints, priorização de tarefas e acompanhamento contínuo do progresso. O quadro de tarefas está organizado no Trello, onde é possível visualizar o backlog, as sprints em andamento e as tarefas concluídas. Essa abordagem garante uma entrega incremental e adaptável, focada na evolução contínua do sistema.
 
 ![Quadro Scrum](./docs/quadroScrum.png)
-*Atualizado em 24/11/2024
+*Atualizado em 25/10/2024
 
 ### Diagrama de Casos de Uso
 
