@@ -1,7 +1,10 @@
 package com.cantarino.souza;
 
+import com.cantarino.souza.view.FrLogin;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        FrLogin frame = new FrLogin();
+        frame.setVisible(true);
     }
 }
