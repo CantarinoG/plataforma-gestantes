@@ -29,13 +29,13 @@ O desenvolvimento do BemGestar segue a metodologia ágil Scrum, permitindo um ge
 ### Protótipo do Projeto
 O protótipo do BemGestar foi desenvolvido no Figma, projetado com uma interface amigável e acessível, especialmente focada na experiência de gestantes e profissionais de saúde. As telas têm um design leve e acolhedor, com uma paleta de cores suaves, voltada para criar um ambiente seguro e confortável para o acompanhamento gestacional. Para acessar o protótipo completo, acesse o nosso [Figma](https://www.figma.com/design/42ONyUTdi21II9Jtm1otPi/bemGestar?node-id=0-1&t=Wt3N6IyvLFxZVIoe-1).
 
-![Protótipo do Projeto](./docs/Pag_inicial.png)
+![Protótipo do Projeto](./docs/prototipo.png)
 
 ### Diagrama de Casos de Uso
 
 O Diagrama de Casos de Uso do BemGestar apresenta as principais interações entre os usuários e o sistema, ilustrando de forma clara os diferentes cenários de uso e as funcionalidades disponíveis. Através desse diagrama, é possível visualizar como gestantes, profissionais de saúde e administradores interagem com o sistema, desde o cadastro de gestantes até o acesso aos relatórios e à comunidade de apoio. Essa representação gráfica auxilia no entendimento do fluxo de operações e no planejamento das funcionalidades do sistema.
 
-![Diagrama de Casos de Uso](./docs/bemgestarDiagramaUso.png)
+![Diagrama de Casos de Uso](./docs/bemGestarDiagramaUso.png)
 
 ### Diagrama de Classes
 
