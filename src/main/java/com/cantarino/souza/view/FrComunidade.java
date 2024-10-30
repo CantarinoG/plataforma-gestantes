@@ -17,7 +17,6 @@ public class FrComunidade extends JFrame {
     JPanel panRight;
     JLabel lblAction;
     JLabel lblDescription;
-    JButton btnOrientations;
     JLabel lblImage;
     JLabel lblType;
     JPanel panOptions;
@@ -101,17 +100,6 @@ public class FrComunidade extends JFrame {
         panInnerLeft.add(lblDescription);
         panInnerLeft.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        btnOrientations = new RoundedButton("Conferir Dicas e Orientações", 50);
-        btnOrientations.setPreferredSize(new Dimension(200, 50));
-        btnOrientations.setMaximumSize(new Dimension(200, 50));
-        btnOrientations.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnOrientations.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnOrientations.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOrientationsActionPerformed(evt);
-            }
-        });
-        panInnerLeft.add(btnOrientations);
         panInnerLeft.add(Box.createRigidArea(new Dimension(0, 20)));
 
         lblImage = new JLabel(new ImageIcon(getClass().getResource("/images/community.png")));
@@ -193,10 +181,6 @@ public class FrComunidade extends JFrame {
 
     private void btnMineActionPerformed(ActionEvent evt) {
         System.out.println("Clicou nos meus");
-    }
-
-    private void btnOrientationsActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botao");
     }
 
 }
