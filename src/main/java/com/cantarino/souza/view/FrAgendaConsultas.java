@@ -155,9 +155,28 @@ public class FrAgendaConsultas extends JFrame {
 
                 rightGbc.gridy = 1;
                 rightGbc.weighty = 1.0; // Take remaining space
-                panMiddle = new JPanel();
-                panMiddle.setBackground(new Color(255, 218, 185)); // Peach
-                panRight.add(panMiddle, rightGbc);
+                /*
+                 * panMiddle = new JPanel();
+                 * panMiddle.setBackground(new Color(255, 218, 185)); // Peach
+                 * panRight.add(panMiddle, rightGbc);
+                 */
+
+                {// Tabela mockada
+                        String[] columnNames = { "Data", "Hora", "Médico", "Especialidade", "Status" };
+                        Object[][] data = {
+                                        { "2024-03-20", "14:30", "Dr. Silva", "Obstetrícia", "Agendada" },
+                                        { "2024-03-25", "10:00", "Dra. Santos", "Ginecologia", "Agendada" }
+                        };
+
+                        JTable tblConsultas = new JTable(data, columnNames);
+                        tblConsultas.setFillsViewportHeight(true);
+                        tblConsultas.setRowHeight(30);
+                        tblConsultas.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+
+                        JScrollPane scrollPane = new JScrollPane(tblConsultas);
+                        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                        panRight.add(scrollPane, rightGbc);
+                }
 
                 rightGbc.gridy = 2;
                 rightGbc.weighty = 0.0; // Take only needed space
