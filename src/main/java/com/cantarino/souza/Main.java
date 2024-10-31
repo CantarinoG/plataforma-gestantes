@@ -9,7 +9,8 @@ public class Main {
         // FrComunidade frame = new FrComunidade();
         // FrAgendaConsultas frame = new FrAgendaConsultas();
         // FrPagamentos frame = new FrPagamentos();
-        FrConsultas frame = new FrConsultas();
+        // FrConsultas frame = new FrConsultas();
+        FrUsuarios frame = new FrUsuarios();
         frame.setVisible(true);
     }
 }
