@@ -119,12 +119,29 @@ public class FrUsuarios extends JFrame {
         });
         panCategories.add(btnAdmin);
 
-        panTable = new JPanel();
-        panTable.setBackground(AppColors.TITLE_BLUE);
         gbc.gridy = 2;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        panContent.add(panTable, gbc);
+        // panTable = new JPanel();
+        // panTable.setBackground(AppColors.TITLE_BLUE);
+        // panContent.add(panTable, gbc);
+
+        {// Tabela mockada
+            String[] columnNames = { "Data", "Hora", "Médico", "Especialidade", "Status" };
+            Object[][] data = {
+                    { "2024-03-20", "14:30", "Dr. Silva", "Obstetrícia", "Agendada" },
+                    { "2024-03-25", "10:00", "Dra. Santos", "Ginecologia", "Agendada" }
+            };
+
+            JTable tblConsultas = new JTable(data, columnNames);
+            tblConsultas.setFillsViewportHeight(true);
+            tblConsultas.setRowHeight(30);
+            tblConsultas.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+
+            JScrollPane scrollPane = new JScrollPane(tblConsultas);
+            scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            panContent.add(scrollPane, gbc);
+        }
 
         panOptions = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panOptions.setBackground(AppColors.TRANSPARENT);
