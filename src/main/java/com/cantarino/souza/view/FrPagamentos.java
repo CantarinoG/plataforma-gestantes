@@ -20,7 +20,7 @@ public class FrPagamentos extends JFrame {
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Login");
+        setTitle("BemGestar | Pagamentos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1920, 800);
         setExtendedState(JFrame.MAXIMIZED_BOTH);

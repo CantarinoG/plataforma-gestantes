@@ -51,7 +51,7 @@ public class FrAgendaConsultas extends JFrame {
         }
 
         private void initComponents() {
-                setTitle("BemGestar | Login");
+                setTitle("BemGestar | Agenda");
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 setSize(1920, 800);
                 setExtendedState(JFrame.MAXIMIZED_BOTH);
