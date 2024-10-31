@@ -7,6 +7,7 @@
     - [Protótipo do Projeto](#protótipo-do-projeto)
     - [Diagrama de Casos de Uso](#diagrama-de-casos-de-uso)
     - [Diagrama de Classes](#diagrama-de-classes)
+    - [Diagramas de Sequência](#diagramas-de-sequência)
 3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
 4. [Instalação](#instalação)
 5. [Uso](#uso)
@@ -42,6 +43,28 @@ O Diagrama de Casos de Uso do BemGestar apresenta as principais interações ent
 A seção de Diagrama de Classes do BemGestar apresenta a estrutura de classes que compõem o sistema, detalhando as relações entre os diferentes tipos de usuários (como gestantes, médicos e administradores) e os principais componentes do sistema. Este diagrama demonstra a hierarquia de herança e a organização das classes, ilustrando como cada uma delas interage para possibilitar funcionalidades como gerenciamento de contas, registro de consultas e geração de relatórios. Essa visão estrutural do sistema facilita o entendimento do modelo de dados e da lógica de negócio por trás do BemGestar.
 
 ![Diagrama de Classes](./docs/bemGestarDiagramaClasse.png)
+
+### Diagramas de Sequência
+
+Abaixo estão os diagramas de sequência principais do BemGestar, que ilustram o fluxo detalhado de algumas interações fundamentais no sistema. Esses diagramas ajudam a entender como o sistema gerencia os processos de criação de contas e visualização de agenda, evidenciando a comunicação entre diferentes componentes.
+
+#### 1. Criação de Conta de Gestante
+Este diagrama detalha o processo de criação de conta para uma gestante, mostrando como o sistema valida e armazena as informações de cadastro.
+
+![image](https://github.com/user-attachments/assets/4df50e14-d95e-491d-ab72-b60d9c592a94)
+
+
+#### 2. Criação de Conta de Médico
+Este diagrama ilustra o fluxo para criação de uma conta de médico, incluindo as validações necessárias e o armazenamento de dados de acesso.
+
+![image](https://github.com/user-attachments/assets/e7611350-1847-4a8e-a273-3b2ba27763e6)
+
+
+#### 3. Visualização da Agenda
+Este diagrama descreve o processo de visualização da agenda de procedimentos da clínica, incluindo a interação do usuário, podendo ser um médico, gestante ou a secretária, com o sistema e a exibição dos processedimentos agendados.
+
+![image](https://github.com/user-attachments/assets/a2d61cf6-a535-426b-8d0e-445a1fd33147)
+
 
 ## Tecnologias Utilizadas
 
