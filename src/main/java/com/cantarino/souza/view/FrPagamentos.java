@@ -22,7 +22,7 @@ public class FrPagamentos extends JFrame {
     private void initComponents() {
         setTitle("BemGestar | Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 1080);
+        setSize(1920, 800);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
