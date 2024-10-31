@@ -25,10 +25,10 @@ Além disso, o BemGestar oferece uma comunidade de apoio, onde as gestantes pode
 O desenvolvimento do BemGestar segue a metodologia ágil Scrum, permitindo um gerenciamento eficiente do projeto através de sprints, priorização de tarefas e acompanhamento contínuo do progresso. O quadro de tarefas está organizado no Trello, onde é possível visualizar o backlog, as sprints em andamento e as tarefas concluídas. Essa abordagem garante uma entrega incremental e adaptável, focada na evolução contínua do sistema.
 
 ![Quadro Scrum](./docs/quadroScrum.png)
-*Atualizado em 27/10/2024
+*Atualizado em 31/10/2024
 
 ### Protótipo do Projeto
-O protótipo do BemGestar foi desenvolvido no Figma, projetado com uma interface amigável e acessível, especialmente focada na experiência de gestantes e profissionais de saúde. As telas têm um design leve e acolhedor, com uma paleta de cores suaves, voltada para criar um ambiente seguro e confortável para o acompanhamento gestacional. Para acessar o protótipo completo, acesse o nosso [Figma](https://www.figma.com/design/42ONyUTdi21II9Jtm1otPi/bemGestar?node-id=0-1&t=Wt3N6IyvLFxZVIoe-1).
+O protótipo do BemGestar foi desenvolvido no Figma, projetado com uma interface amigável e acessível, especialmente focada na experiência de gestantes e profissionais de saúde. As telas têm um design leve e acolhedor, com uma paleta de cores suaves, voltada para criar um ambiente seguro e confortável para o acompanhamento gestacional. Para acessar o protótipo completo, acesse o nosso [Figma](https://www.figma.com/design/42ONyUTdi21II9Jtm1otPi/bemGestar?node-id=2077-341&node-type=canvas&t=Okix4vPe28b4qhUG-0).
 
 ![Protótipo do Projeto](./docs/prototipo.png)
 
@@ -51,19 +51,19 @@ Abaixo estão os diagramas de sequência principais do BemGestar, que ilustram o
 #### 1. Criação de Conta de Gestante
 Este diagrama detalha o processo de criação de conta para uma gestante, mostrando como o sistema valida e armazena as informações de cadastro.
 
-![image](https://github.com/user-attachments/assets/4df50e14-d95e-491d-ab72-b60d9c592a94)
+![Diagrama de sequência de criação de conta de gestantes](./docs/diagramaSequenciaCriarContaGestante.png)
 
 
 #### 2. Criação de Conta de Médico
 Este diagrama ilustra o fluxo para criação de uma conta de médico, incluindo as validações necessárias e o armazenamento de dados de acesso.
 
-![image](https://github.com/user-attachments/assets/e7611350-1847-4a8e-a273-3b2ba27763e6)
+![Diagrama de sequência de criação de conta de médicos](./docs/diagramaSequenciaCriarContaMedica.png)
 
 
 #### 3. Visualização da Agenda
 Este diagrama descreve o processo de visualização da agenda de procedimentos da clínica, incluindo a interação do usuário, podendo ser um médico, gestante ou a secretária, com o sistema e a exibição dos processedimentos agendados.
 
-![image](https://github.com/user-attachments/assets/a2d61cf6-a535-426b-8d0e-445a1fd33147)
+![Diagrama de sequência de visualização de agenda](./docs/diagramaSequenciaVisualizarAgenda.png)
 
 
 ## Tecnologias Utilizadas
