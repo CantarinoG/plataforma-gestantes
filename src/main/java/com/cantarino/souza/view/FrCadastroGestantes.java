@@ -70,7 +70,7 @@ public class FrCadastroGestantes extends JFrame {
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(10, 0, 10, 0); 
+        gbc.insets = new java.awt.Insets(10, 0, 10, 0); 
 
         // Adiciona o título
         lblAction = new JLabel("Cadastrar Gestante");
@@ -197,7 +197,7 @@ public class FrCadastroGestantes extends JFrame {
         gbcButton.weightx = 1.0;
         gbcButton.weighty = 1.0;
         gbcButton.anchor = GridBagConstraints.CENTER;
-        gbcButton.insets = new Insets(20, 0, 0, 0); 
+        gbcButton.insets = new java.awt.Insets(20, 0, 0, 0); 
 
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
