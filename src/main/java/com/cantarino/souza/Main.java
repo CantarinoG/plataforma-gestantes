@@ -9,8 +9,8 @@ public class Main {
         // FrComunidade frame = new FrComunidade();
         // FrAgendaConsultas frame = new FrAgendaConsultas();
         //FrPagamentos frame = new FrPagamentos();
-        //FrCadastroGestantes frame = new FrCadastroGestantes();
-        FrTrocaSenha frame = new FrTrocaSenha();
+        FrCadastroGestantes frame = new FrCadastroGestantes();
+       // FrTrocaSenha frame = new FrTrocaSenha();
         frame.setVisible(true);
     }
 }

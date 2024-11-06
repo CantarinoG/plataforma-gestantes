@@ -110,6 +110,13 @@ public class FrCadastroGestantes extends JFrame {
         JPanel panEmailField = createCustomTextfield("Email", edtEmail);
         panColumn.add(panEmailField);
 
+        edtPass = new JPasswordField();
+        edtPass.setFont(new Font("Arial", Font.PLAIN, 22));
+        edtPass.setBackground(AppColors.FIELD_PINK);
+        edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panPassField = createCustomTextfield("Senha", edtPass);
+        panColumn.add(panPassField);
+
         try {
             MaskFormatter maskData = new MaskFormatter("##/##/####");
             maskData.setPlaceholderCharacter('_');  
