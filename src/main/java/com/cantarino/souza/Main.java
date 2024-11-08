@@ -12,7 +12,8 @@ public class Main {
         //FrCadastroGestantes frame = new FrCadastroGestantes();
        // FrTrocaSenha frame = new FrTrocaSenha();
        // FrCadastroPagamentos frame = new FrCadastroPagamentos();
-       FrCadastroConsultas frame = new FrCadastroConsultas();
+       // FrCadastroConsultas frame = new FrCadastroConsultas();
+       FrCadastroRelatorio frame = new FrCadastroRelatorio();
         frame.setVisible(true);
     }
 }
