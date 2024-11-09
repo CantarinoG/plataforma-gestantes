@@ -10,11 +10,12 @@ public class Main {
         // FrAgendaConsultas frame = new FrAgendaConsultas();
         //FrPagamentos frame = new FrPagamentos();
         //FrCadastroGestantes frame = new FrCadastroGestantes();
-       // FrTrocaSenha frame = new FrTrocaSenha();
-       // FrCadastroPagamentos frame = new FrCadastroPagamentos();
-       // FrCadastroConsultas frame = new FrCadastroConsultas();
-      // FrCadastroRelatorio frame = new FrCadastroRelatorio();
-      FrCadastroMedicos frame = new FrCadastroMedicos();
+        // FrTrocaSenha frame = new FrTrocaSenha();
+        // FrCadastroPagamentos frame = new FrCadastroPagamentos();
+        // FrCadastroConsultas frame = new FrCadastroConsultas();
+        // FrCadastroRelatorio frame = new FrCadastroRelatorio();
+        //FrCadastroMedicos frame = new FrCadastroMedicos();
+        FrViewInicial frame = new FrViewInicial();
         frame.setVisible(true);
     }
 }
