@@ -13,13 +13,13 @@ public class Main {
                 // FrUsuarios frame = new FrUsuarios();
                 // FrPagamentos frame = new FrPagamentos();
 
-                FrCadastroGestantes frame = new FrCadastroGestantes();
+                // FrCadastroGestantes frame = new FrCadastroGestantes();
                 // FrTrocaSenha frame = new FrTrocaSenha();
                 // FrCadastroPagamentos frame = new FrCadastroPagamentos();
                 // FrCadastroConsultas frame = new FrCadastroConsultas();
                 // FrCadastroRelatorio frame = new FrCadastroRelatorio();
                 // FrCadastroMedicos frame = new FrCadastroMedicos();
-                // FrViewInicial frame = new FrViewInicial();
+                FrViewInicial frame = new FrViewInicial();
                 frame.setVisible(true);
         }
 }
