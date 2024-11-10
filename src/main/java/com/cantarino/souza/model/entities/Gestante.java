@@ -8,6 +8,11 @@ import lombok.ToString;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+@Entity
+@DiscriminatorValue("GESTANTE")
 @Setter
 @Getter
 @ToString(callSuper = true)
