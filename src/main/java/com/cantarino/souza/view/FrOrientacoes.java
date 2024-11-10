@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
 
-import com.cantarino.souza.components.*;
+import com.cantarino.souza.view.components.*;
 
 public class FrOrientacoes extends JFrame {
 

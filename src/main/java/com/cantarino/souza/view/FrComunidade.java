@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
-import com.cantarino.souza.components.*;
+import com.cantarino.souza.view.components.*;
 
 public class FrComunidade extends JFrame {
 

@@ -3,7 +3,7 @@ package com.cantarino.souza.view;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
-import com.cantarino.souza.components.*;
+import com.cantarino.souza.view.components.*;
 import java.awt.event.ActionEvent;
 
 public class FrCadastroPagamentos extends JFrame {
