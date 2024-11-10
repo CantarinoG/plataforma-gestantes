@@ -2,7 +2,7 @@ package com.cantarino.souza.view;
 
 import java.awt.*;
 import javax.swing.*;
-import com.cantarino.souza.components.*;
+import com.cantarino.souza.view.components.*;
 
 public class FrPagamentos extends JFrame {
 

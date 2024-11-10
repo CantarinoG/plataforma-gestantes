@@ -1,6 +1,6 @@
 package com.cantarino.souza.view;
 
-import com.cantarino.souza.components.*;
+import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -1,4 +1,4 @@
-package com.cantarino.souza.components;
+package com.cantarino.souza.view.components;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
