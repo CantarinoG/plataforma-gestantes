@@ -1,4 +1,4 @@
-package com.cantarino.souza.view;
+package com.cantarino.souza.view.screens;
 
 import java.awt.*;
 import javax.swing.*;
