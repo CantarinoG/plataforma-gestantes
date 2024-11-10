@@ -1,11 +1,10 @@
 package com.cantarino.souza.view;
+
 import com.cantarino.souza.components.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
-
-
 
 public class FrTrocaSenha extends JFrame {
     JPanel panBackground;
@@ -17,7 +16,8 @@ public class FrTrocaSenha extends JFrame {
     JPasswordField edtNovaSenha;
     JPanel panButton;
     RoundedButton btnTrocarSenha;
-  
+    JLabel lblHint;
+    JPanel panField;
 
     public FrTrocaSenha() {
         initComponents();
@@ -26,7 +26,8 @@ public class FrTrocaSenha extends JFrame {
     private void initComponents() {
         setTitle("BemGestar | Trocar Senha");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 400);
+        setSize(1920, 1080);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
@@ -57,27 +58,24 @@ public class FrTrocaSenha extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(10, 0, 10, 0);
 
-
-        JPasswordField edtSenhaAtual = new JPasswordField();
+        edtSenhaAtual = new JPasswordField();
         configurarCampoSenha(edtSenhaAtual);
         panContent.add(createCustomTextfield("Senha Atual", edtSenhaAtual), gbc);
 
-    
         gbc.gridy++;
-        JPasswordField edtNovaSenha = new JPasswordField();
+        edtNovaSenha = new JPasswordField();
         configurarCampoSenha(edtNovaSenha);
         panContent.add(createCustomTextfield("Nova Senha", edtNovaSenha), gbc);
 
-
         gbc.gridy++;
-        RoundedButton btnTrocarSenha = new RoundedButton("Trocar Senha", 50);
+        btnTrocarSenha = new RoundedButton("Trocar Senha", 50);
         btnTrocarSenha.setBackground(AppColors.BUTTON_PINK);
         btnTrocarSenha.setFont(new Font("Arial", Font.BOLD, 15));
         btnTrocarSenha.setFocusPainted(false);
         btnTrocarSenha.setBorderPainted(false);
         btnTrocarSenha.setPreferredSize(new Dimension(200, 40));
         btnTrocarSenha.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnTrocarSenha.addActionListener(evt -> trocarSenhaActionPerformed(evt));
+        btnTrocarSenha.addActionListener(evt -> btnTrocarSenhaActionPerformed(evt));
         panContent.add(btnTrocarSenha, gbc);
     }
 
@@ -88,25 +86,25 @@ public class FrTrocaSenha extends JFrame {
     }
 
     private JPanel createCustomTextfield(String hint, JComponent textField) {
-        JPanel fieldPanel = new JPanel();
-        fieldPanel.setLayout(new BorderLayout());
-        fieldPanel.setBorder(BorderFactory.createCompoundBorder(
+        panField = new JPanel();
+        panField.setLayout(new BorderLayout());
+        panField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.BLACK, 1, true),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)));
-        
-        fieldPanel.setPreferredSize(new Dimension(400, 50));
-        fieldPanel.setBackground(AppColors.FIELD_PINK);
 
-        JLabel hintLabel = new JLabel(hint);
-        hintLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        fieldPanel.add(hintLabel, BorderLayout.NORTH);
+        panField.setPreferredSize(new Dimension(400, 50));
+        panField.setBackground(AppColors.FIELD_PINK);
 
-        fieldPanel.add(textField, BorderLayout.CENTER);
+        lblHint = new JLabel(hint);
+        lblHint.setFont(new Font("Arial", Font.BOLD, 12));
+        panField.add(lblHint, BorderLayout.NORTH);
 
-        return fieldPanel;
+        panField.add(textField, BorderLayout.CENTER);
+
+        return panField;
     }
 
-    private void trocarSenhaActionPerformed(ActionEvent evt) {
+    private void btnTrocarSenhaActionPerformed(ActionEvent evt) {
         System.out.println("Clicou em Trocar Senha");
     }
 }

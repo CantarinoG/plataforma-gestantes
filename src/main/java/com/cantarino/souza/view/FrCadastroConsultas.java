@@ -1,4 +1,5 @@
 package com.cantarino.souza.view;
+
 import com.cantarino.souza.components.*;
 
 import java.awt.*;
@@ -21,7 +22,16 @@ public class FrCadastroConsultas extends JFrame {
     private JTextField txtValor;
     private JTextField txtMedico;
     private JFormattedTextField txtDataRetorno;
-
+    private JPanel panPacienteField;
+    private JPanel panDescricaoField;
+    private JPanel panDataField;
+    private JPanel panValorField;
+    private JPanel panMedicoField;
+    private JPanel panDataRetornoField;
+    private JPanel panResultadoContent;
+    private JTextField txtArquivoSelecionado;
+    private JButton btnSelecionarArquivo;
+    private JPanel panResultadoField;
 
     public FrCadastroConsultas() {
         initComponents();
@@ -83,7 +93,7 @@ public class FrCadastroConsultas extends JFrame {
         txtPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
         txtPaciente.setBackground(AppColors.FIELD_PINK);
         txtPaciente.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panPacienteField = createCustomTextfield("Paciente", txtPaciente);
+        panPacienteField = createCustomTextfield("Paciente", txtPaciente);
         panColumn.add(panPacienteField);
 
         // Campo Descrição da Consulta
@@ -93,7 +103,7 @@ public class FrCadastroConsultas extends JFrame {
         txtDescricao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         txtDescricao.setLineWrap(true);
         txtDescricao.setWrapStyleWord(true);
-        JPanel panDescricaoField = createCustomTextfield("Descrição da Consulta", txtDescricao);
+        panDescricaoField = createCustomTextfield("Descrição da Consulta", txtDescricao);
         panColumn.add(panDescricaoField);
 
         // Campo Data
@@ -104,7 +114,7 @@ public class FrCadastroConsultas extends JFrame {
             txtData.setFont(new Font("Arial", Font.PLAIN, 22));
             txtData.setBackground(AppColors.FIELD_PINK);
             txtData.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            JPanel panDataField = createCustomTextfield("Data", txtData);
+            panDataField = createCustomTextfield("Data", txtData);
             panColumn.add(panDataField);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -115,7 +125,7 @@ public class FrCadastroConsultas extends JFrame {
         txtValor.setFont(new Font("Arial", Font.PLAIN, 22));
         txtValor.setBackground(AppColors.FIELD_PINK);
         txtValor.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panValorField = createCustomTextfield("Valor", txtValor);
+        panValorField = createCustomTextfield("Valor", txtValor);
         panColumn.add(panValorField);
 
         // Campo Médico
@@ -123,7 +133,7 @@ public class FrCadastroConsultas extends JFrame {
         txtMedico.setFont(new Font("Arial", Font.PLAIN, 22));
         txtMedico.setBackground(AppColors.FIELD_PINK);
         txtMedico.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panMedicoField = createCustomTextfield("Médico", txtMedico);
+        panMedicoField = createCustomTextfield("Médico", txtMedico);
         panColumn.add(panMedicoField);
 
         // Campo Data de Retorno
@@ -134,32 +144,32 @@ public class FrCadastroConsultas extends JFrame {
             txtDataRetorno.setFont(new Font("Arial", Font.PLAIN, 22));
             txtDataRetorno.setBackground(AppColors.FIELD_PINK);
             txtDataRetorno.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            JPanel panDataRetornoField = createCustomTextfield("Data de Retorno", txtDataRetorno);
+            panDataRetornoField = createCustomTextfield("Data de Retorno", txtDataRetorno);
             panColumn.add(panDataRetornoField);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        JPanel panResultadoContent = new JPanel(new BorderLayout(10, 0));
+        panResultadoContent = new JPanel(new BorderLayout(10, 0));
         panResultadoContent.setBackground(AppColors.FIELD_PINK);
-        
-        JTextField txtArquivoSelecionado = new JTextField("Nenhum arquivo selecionado");
+
+        txtArquivoSelecionado = new JTextField("Nenhum arquivo selecionado");
         txtArquivoSelecionado.setEditable(false);
         txtArquivoSelecionado.setBackground(AppColors.FIELD_PINK);
         txtArquivoSelecionado.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
         txtArquivoSelecionado.setFont(new Font("Arial", Font.PLAIN, 14));
-        
-        JButton btnSelecionarArquivo = new JButton("Selecionar Arquivo");
+
+        btnSelecionarArquivo = new JButton("Selecionar Arquivo");
         btnSelecionarArquivo.setBackground(AppColors.BUTTON_PINK);
         btnSelecionarArquivo.setFont(new Font("Arial", Font.BOLD, 12));
         btnSelecionarArquivo.setFocusPainted(false);
         btnSelecionarArquivo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnSelecionarArquivo.setPreferredSize(new Dimension(130, 30));
-        
+
         panResultadoContent.add(txtArquivoSelecionado, BorderLayout.CENTER);
         panResultadoContent.add(btnSelecionarArquivo, BorderLayout.EAST);
-        
-        JPanel panResultadoField = createCustomTextfield("Resultado (PDF, DOC, DOCX)", panResultadoContent);
+
+        panResultadoField = createCustomTextfield("Resultado (PDF, DOC, DOCX)", panResultadoContent);
         panColumn.add(panResultadoField);
 
         // Botão
@@ -206,10 +216,10 @@ public class FrCadastroConsultas extends JFrame {
         } else if (textField instanceof JTextArea) {
             ((JTextArea) textField).setFont(new Font("Arial", Font.PLAIN, 14));
         }
-        
+
         textField.setBackground(AppColors.FIELD_PINK);
         textField.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        
+
         fieldPanel.add(textField, BorderLayout.CENTER);
 
         return fieldPanel;

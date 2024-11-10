@@ -19,6 +19,9 @@ public class FrViewInicial extends JFrame {
     JLabel lblDescription;
     JLabel lblImage;
     JLabel lblImageRight;
+    JPanel buttonPanel;
+    RoundedButton btnCriarConta;
+    RoundedButton btnConferirDicas;
 
     public FrViewInicial() {
         initComponents();
@@ -94,13 +97,12 @@ public class FrViewInicial extends JFrame {
         panInnerLeft.add(lblDescription);
         panInnerLeft.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        // Painel para os botões
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
         buttonPanel.setBackground(AppColors.TRANSPARENT);
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        RoundedButton btnCriarConta = new RoundedButton("Criar Conta", 50);
+        btnCriarConta = new RoundedButton("Criar Conta", 50);
         btnCriarConta.setBackground(AppColors.BUTTON_PINK);
         btnCriarConta.setForeground(Color.WHITE);
         btnCriarConta.setPreferredSize(new Dimension(200, 50));
@@ -109,7 +111,7 @@ public class FrViewInicial extends JFrame {
         btnCriarConta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCriarConta.addActionListener(evt -> btnCriarContaActionPerformed(evt));
 
-        RoundedButton btnConferirDicas = new RoundedButton("Conferir Dicas", 50);
+        btnConferirDicas = new RoundedButton("Conferir Dicas", 50);
         btnConferirDicas.setBackground(AppColors.TRANSPARENT);
         btnConferirDicas.setForeground(AppColors.BUTTON_PINK);
         btnConferirDicas.setBorder(BorderFactory.createLineBorder(new Color(255, 153, 153), 1));
@@ -118,16 +120,16 @@ public class FrViewInicial extends JFrame {
         btnConferirDicas.setOpaque(true);
         btnConferirDicas.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnConferirDicas.addActionListener(evt -> btnConferirDicasActionPerformed(evt));
-        
+
         panInnerLeft.add(buttonPanel);
         panInnerLeft.add(Box.createRigidArea(new Dimension(0, 20)));
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.CENTER;
         panLeft.add(panInnerLeft, gbc);
-        
+
         lblImageRight = new JLabel(new ImageIcon(getClass().getResource("/images/maternitypose.png")));
         lblImageRight.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
@@ -136,11 +138,11 @@ public class FrViewInicial extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
         panRight.add(lblImageRight, gbc);
     }
-        
+
     private void btnConferirDicasActionPerformed(ActionEvent evt) {
         System.out.println("Clicou em Conferir Dicas");
     }
-        
+
     private void btnCriarContaActionPerformed(ActionEvent evt) {
         System.out.println("Clicou em Criar Conta");
     }

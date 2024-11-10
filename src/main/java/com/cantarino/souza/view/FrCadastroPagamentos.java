@@ -1,30 +1,10 @@
 package com.cantarino.souza.view;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.text.*;
+import com.cantarino.souza.components.*;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.BorderFactory;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.DocumentFilter;
-import com.cantarino.souza.components.AppColors;
-import com.cantarino.souza.components.BackgroundPanel;
-import com.cantarino.souza.components.RoundedButton;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.AttributeSet;
-import javax.swing.SwingConstants;
 
 public class FrCadastroPagamentos extends JFrame {
     JPanel panBackground;
@@ -39,6 +19,10 @@ public class FrCadastroPagamentos extends JFrame {
     JTextField txtPaciente;
     JComboBox<String> cmbStatus;
     JComboBox<String> cmbMetodoPagamento;
+    JPanel panValorField;
+    JPanel panPacienteField;
+    JPanel panStatusField;
+    JPanel panMetodoField;
 
     public FrCadastroPagamentos() {
         initComponents();
@@ -95,26 +79,25 @@ public class FrCadastroPagamentos extends JFrame {
         txtValor.setFont(new Font("Arial", Font.PLAIN, 22));
         txtValor.setBackground(AppColors.FIELD_PINK);
         ((AbstractDocument) txtValor.getDocument()).setDocumentFilter(new NumericDocumentFilter());
-        JPanel panValorField = createCustomTextfield("Valor", txtValor);
+        panValorField = createCustomTextfield("Valor", txtValor);
         panColumn.add(panValorField);
 
         txtPaciente = new JTextField();
         txtPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
         txtPaciente.setBackground(AppColors.FIELD_PINK);
-        JPanel panPacienteField = createCustomTextfield("Paciente", txtPaciente);
+        panPacienteField = createCustomTextfield("Paciente", txtPaciente);
         panColumn.add(panPacienteField);
 
-        cmbStatus = new JComboBox<>(new String[]{"Ativo", "Inativo"});
+        cmbStatus = new JComboBox<>(new String[] { "Ativo", "Inativo" });
         cmbStatus.setFont(new Font("Arial", Font.PLAIN, 22));
         cmbStatus.setBackground(AppColors.FIELD_PINK);
-        JPanel panStatusField = createCustomTextfield("Status", cmbStatus);
+        panStatusField = createCustomTextfield("Status", cmbStatus);
         panColumn.add(panStatusField);
 
-
-        cmbMetodoPagamento = new JComboBox<>(new String[]{"Cartão", "Dinheiro", "Transferência Pix"});
+        cmbMetodoPagamento = new JComboBox<>(new String[] { "Cartão", "Dinheiro", "Transferência Pix" });
         cmbMetodoPagamento.setFont(new Font("Arial", Font.PLAIN, 22));
         cmbMetodoPagamento.setBackground(AppColors.FIELD_PINK);
-        JPanel panMetodoField = createCustomTextfield("Método de Pagamento", cmbMetodoPagamento);
+        panMetodoField = createCustomTextfield("Método de Pagamento", cmbMetodoPagamento);
         panColumn.add(panMetodoField);
 
         // Botão
@@ -161,31 +144,33 @@ public class FrCadastroPagamentos extends JFrame {
         } else if (textField instanceof JComboBox) {
             ((JComboBox<?>) textField).setFont(new Font("Arial", Font.PLAIN, 14));
         }
-        
+
         textField.setBackground(AppColors.FIELD_PINK);
         textField.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        
+
         fieldPanel.add(textField, BorderLayout.CENTER);
 
         return fieldPanel;
     }
 
     private void btnCadastrarPagamentoActionPerformed(ActionEvent evt) {
-       
+
         System.out.println("Clicou em Cadastrar Pagamento");
     }
 }
 
 class NumericDocumentFilter extends DocumentFilter {
     @Override
-    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+            throws BadLocationException {
         if (isNumeric(string)) {
             super.insertString(fb, offset, string, attr);
         }
     }
 
     @Override
-    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+            throws BadLocationException {
         if (isNumeric(text)) {
             super.replace(fb, offset, length, text, attrs);
         }
@@ -197,6 +182,6 @@ class NumericDocumentFilter extends DocumentFilter {
     }
 
     private boolean isNumeric(String text) {
-        return text.matches("\\d*"); 
+        return text.matches("\\d*");
     }
 }

@@ -1,4 +1,5 @@
 package com.cantarino.souza.view;
+
 import com.cantarino.souza.components.*;
 
 import java.awt.*;
@@ -22,6 +23,17 @@ public class FrCadastroMedicos extends JFrame {
     JPanel panButton;
     JButton btnCriarConta;
     JPanel panDateField;
+    JPanel panCPFField;
+    JPanel panCRMField;
+    JComboBox<String> edtEspecializacao;
+    JPanel panEspecializacaoField;
+    JTextField edtEmail;
+    JPanel panEmailField;
+    JFormattedTextField edtDataNascimento;
+    JFormattedTextField edtTelefone;
+    JPanel panTelefoneField;
+    JTextField edtEndereco;
+    JPanel panEnderecoField;
 
     public FrCadastroMedicos() {
         initComponents();
@@ -81,20 +93,20 @@ public class FrCadastroMedicos extends JFrame {
         panColumn.setBackground(AppColors.TRANSPARENT);
         panContent.add(panColumn, gbc);
 
-        //CPF
+        // CPF
         edtCPF = new JFormattedTextField();
         edtCPF.setFont(new Font("Arial", Font.PLAIN, 22));
         edtCPF.setBackground(AppColors.FIELD_PINK);
         edtCPF.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panCPFField = createCustomTextfield("CPF", edtCPF);
+        panCPFField = createCustomTextfield("CPF", edtCPF);
         panColumn.add(panCPFField);
 
-        //CRM
+        // CRM
         edtCRM = new JFormattedTextField();
         edtCRM.setFont(new Font("Arial", Font.PLAIN, 22));
         edtCRM.setBackground(AppColors.FIELD_PINK);
         edtCRM.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panCRMField = createCustomTextfield("CRM", edtCRM);
+        panCRMField = createCustomTextfield("CRM", edtCRM);
         panColumn.add(panCRMField);
 
         // Campo para Nome
@@ -107,28 +119,28 @@ public class FrCadastroMedicos extends JFrame {
 
         // Especialização
         String[] especialidades = {
-            "Selecione",
-            "Obstetrícia",
-            "Ginecologia",
-            "Obstetrícia e Ginecologia",
-            "Medicina Fetal",
-            "Outro"
+                "Selecione",
+                "Obstetrícia",
+                "Ginecologia",
+                "Obstetrícia e Ginecologia",
+                "Medicina Fetal",
+                "Outro"
         };
 
-        JComboBox<String> edtEspecializacao = new JComboBox<>(especialidades);
+        edtEspecializacao = new JComboBox<>(especialidades);
         edtEspecializacao.setFont(new Font("Arial", Font.PLAIN, 22));
         edtEspecializacao.setBackground(AppColors.FIELD_PINK);
         edtEspecializacao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         edtEspecializacao.setEditable(false);
-        JPanel panEspecializacaoField = createCustomTextfield("Especialização", edtEspecializacao);
+        panEspecializacaoField = createCustomTextfield("Especialização", edtEspecializacao);
         panColumn.add(panEspecializacaoField);
 
         // Campo para Email
-        JTextField edtEmail = new JTextField();
+        edtEmail = new JTextField();
         edtEmail.setFont(new Font("Arial", Font.PLAIN, 22));
         edtEmail.setBackground(AppColors.FIELD_PINK);
         edtEmail.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panEmailField = createCustomTextfield("Email", edtEmail);
+        panEmailField = createCustomTextfield("Email", edtEmail);
         panColumn.add(panEmailField);
 
         edtPass = new JPasswordField();
@@ -140,14 +152,14 @@ public class FrCadastroMedicos extends JFrame {
 
         try {
             MaskFormatter maskData = new MaskFormatter("##/##/####");
-            maskData.setPlaceholderCharacter('_');  
-            
-            JFormattedTextField edtDataNascimento = new JFormattedTextField(maskData);
+            maskData.setPlaceholderCharacter('_');
+
+            edtDataNascimento = new JFormattedTextField(maskData);
             edtDataNascimento.setFont(new Font("Arial", Font.PLAIN, 22));
             edtDataNascimento.setBackground(AppColors.FIELD_PINK);
             edtDataNascimento.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             edtDataNascimento.setToolTipText("Digite a data no formato: dd/mm/aaaa");
-            
+
             panDateField = createCustomTextfield("Data de Nascimento", edtDataNascimento);
             panColumn.add(panDateField);
         } catch (ParseException e) {
@@ -155,19 +167,19 @@ public class FrCadastroMedicos extends JFrame {
         }
 
         // Campo para Telefone
-        JFormattedTextField edtTelefone = new JFormattedTextField();
+        edtTelefone = new JFormattedTextField();
         edtTelefone.setFont(new Font("Arial", Font.PLAIN, 22));
         edtTelefone.setBackground(AppColors.FIELD_PINK);
         edtTelefone.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panTelefoneField = createCustomTextfield("Telefone", edtTelefone);
+        panTelefoneField = createCustomTextfield("Telefone", edtTelefone);
         panColumn.add(panTelefoneField);
 
         // Campo para Endereço
-        JTextField edtEndereco = new JTextField();
+        edtEndereco = new JTextField();
         edtEndereco.setFont(new Font("Arial", Font.PLAIN, 22));
         edtEndereco.setBackground(AppColors.FIELD_PINK);
         edtEndereco.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panEnderecoField = createCustomTextfield("Endereço", edtEndereco);
+        panEnderecoField = createCustomTextfield("Endereço", edtEndereco);
         panColumn.add(panEnderecoField);
 
         GridBagConstraints gbcButton = new GridBagConstraints();
@@ -176,7 +188,7 @@ public class FrCadastroMedicos extends JFrame {
         gbcButton.weightx = 1.0;
         gbcButton.weighty = 1.0;
         gbcButton.anchor = GridBagConstraints.CENTER;
-        gbcButton.insets = new java.awt.Insets(20, 0, 0, 0); 
+        gbcButton.insets = new java.awt.Insets(20, 0, 0, 0);
 
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
@@ -214,10 +226,10 @@ public class FrCadastroMedicos extends JFrame {
         } else if (textField instanceof JTextArea) {
             ((JTextArea) textField).setFont(new Font("Arial", Font.PLAIN, 14));
         }
-        
+
         textField.setBackground(AppColors.FIELD_PINK);
         textField.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        
+
         fieldPanel.add(textField, BorderLayout.CENTER);
 
         return fieldPanel;

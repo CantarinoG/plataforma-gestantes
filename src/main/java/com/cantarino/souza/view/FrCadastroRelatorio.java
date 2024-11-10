@@ -19,6 +19,13 @@ public class FrCadastroRelatorio extends JFrame {
     private JFormattedTextField txtDataEmissao;
     private JTextField txtProcedimento;
     private JTextArea txtObservacoes;
+    private JPanel panDataEmissaoField;
+    private JPanel panProcedimentoField;
+    private JPanel panResultadoContent;
+    private JTextField txtArquivoSelecionado;
+    private JButton btnSelecionarArquivo;
+    private JPanel panResultadoField;
+    private JPanel panObservacoesField;
 
     public FrCadastroRelatorio() {
         initComponents();
@@ -83,7 +90,7 @@ public class FrCadastroRelatorio extends JFrame {
             txtDataEmissao.setFont(new Font("Arial", Font.PLAIN, 22));
             txtDataEmissao.setBackground(AppColors.FIELD_PINK);
             txtDataEmissao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            JPanel panDataEmissaoField = createCustomTextfield("Data de Emissão", txtDataEmissao);
+            panDataEmissaoField = createCustomTextfield("Data de Emissão", txtDataEmissao);
             panColumn.add(panDataEmissaoField);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -94,30 +101,30 @@ public class FrCadastroRelatorio extends JFrame {
         txtProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
         txtProcedimento.setBackground(AppColors.FIELD_PINK);
         txtProcedimento.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        JPanel panProcedimentoField = createCustomTextfield("Procedimento", txtProcedimento);
+        panProcedimentoField = createCustomTextfield("Procedimento", txtProcedimento);
         panColumn.add(panProcedimentoField);
 
-        // Campo Resultado 
-        JPanel panResultadoContent = new JPanel(new BorderLayout(10, 0));
+        // Campo Resultado
+        panResultadoContent = new JPanel(new BorderLayout(10, 0));
         panResultadoContent.setBackground(AppColors.FIELD_PINK);
-        
-        JTextField txtArquivoSelecionado = new JTextField("Nenhum arquivo selecionado");
+
+        txtArquivoSelecionado = new JTextField("Nenhum arquivo selecionado");
         txtArquivoSelecionado.setEditable(false);
         txtArquivoSelecionado.setBackground(AppColors.FIELD_PINK);
         txtArquivoSelecionado.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
         txtArquivoSelecionado.setFont(new Font("Arial", Font.PLAIN, 14));
-        
-        JButton btnSelecionarArquivo = new JButton("Selecionar Arquivo");
+
+        btnSelecionarArquivo = new JButton("Selecionar Arquivo");
         btnSelecionarArquivo.setBackground(AppColors.BUTTON_PINK);
         btnSelecionarArquivo.setFont(new Font("Arial", Font.BOLD, 12));
         btnSelecionarArquivo.setFocusPainted(false);
         btnSelecionarArquivo.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnSelecionarArquivo.setPreferredSize(new Dimension(130, 30));
-        
+
         panResultadoContent.add(txtArquivoSelecionado, BorderLayout.CENTER);
         panResultadoContent.add(btnSelecionarArquivo, BorderLayout.EAST);
-        
-        JPanel panResultadoField = createCustomTextfield("Resultado (PDF, DOC, DOCX)", panResultadoContent);
+
+        panResultadoField = createCustomTextfield("Resultado (PDF, DOC, DOCX)", panResultadoContent);
         panColumn.add(panResultadoField);
 
         // Campo Observações
@@ -127,8 +134,8 @@ public class FrCadastroRelatorio extends JFrame {
         txtObservacoes.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         txtObservacoes.setLineWrap(true);
         txtObservacoes.setWrapStyleWord(true);
-        JPanel panObservacoesField = createCustomTextfield("Observações", txtObservacoes); 
-        
+        panObservacoesField = createCustomTextfield("Observações", txtObservacoes);
+
         panColumn.add(panObservacoesField);
 
         // Botão
@@ -175,10 +182,10 @@ public class FrCadastroRelatorio extends JFrame {
         } else if (textField instanceof JTextArea) {
             ((JTextArea) textField).setFont(new Font("Arial", Font.PLAIN, 14));
         }
-        
+
         textField.setBackground(AppColors.FIELD_PINK);
         textField.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
-        
+
         fieldPanel.add(textField, BorderLayout.CENTER);
 
         return fieldPanel;
