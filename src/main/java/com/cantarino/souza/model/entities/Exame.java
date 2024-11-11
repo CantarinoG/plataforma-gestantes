@@ -27,10 +27,10 @@ public class Exame extends Procedimento {
     @JoinColumn(name = "requisitado_por_id")
     private Usuario requisitadoPor;
 
-    public Exame(int id, Gestante paciente, String descricao, LocalDateTime data, double valor, String status,
+    public Exame(Gestante paciente, String descricao, LocalDateTime data, double valor, String status,
             Relatorio relatorio, LocalDateTime deletadoEm, LocalDateTime dataColeta, LocalDateTime dataResultado,
             String tipoAmostra, Usuario requisitadoPor) {
-        super(id, paciente, descricao, dataResultado, valor, status, relatorio, deletadoEm);
+        super(0, paciente, descricao, dataResultado, valor, status, relatorio, deletadoEm);
         this.dataColeta = dataColeta;
         this.dataResultado = dataResultado;
         this.tipoAmostra = tipoAmostra;
