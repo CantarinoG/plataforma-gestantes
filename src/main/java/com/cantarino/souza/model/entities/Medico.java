@@ -22,9 +22,9 @@ public class Medico extends Usuario {
     private String especializacao;
     private String crm;
 
-    public Medico(int id, String cpf, String nome, String email, String senha, LocalDate dataNascimento,
+    public Medico(String cpf, String nome, String email, String senha, LocalDate dataNascimento,
             String telefone, String endereco, LocalDateTime deletadoEm, String especializacao, String crm) {
-        super(id, cpf, nome, email, senha, dataNascimento, telefone, endereco, deletadoEm);
+        super(0, cpf, nome, email, senha, dataNascimento, telefone, endereco, deletadoEm);
         this.especializacao = especializacao;
         this.crm = crm;
     }

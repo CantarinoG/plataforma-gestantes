@@ -21,9 +21,9 @@ public class Secretario extends Usuario {
 
     private LocalDate dataContratacao;
 
-    public Secretario(int id, String cpf, String nome, String email, String senha, LocalDate dataNascimento,
+    public Secretario(String cpf, String nome, String email, String senha, LocalDate dataNascimento,
             String telefone, String endereco, LocalDateTime deletadoEm, LocalDate dataContratacao) {
-        super(id, cpf, nome, email, senha, dataNascimento, telefone, endereco, deletadoEm);
+        super(0, cpf, nome, email, senha, dataNascimento, telefone, endereco, deletadoEm);
         this.dataContratacao = dataContratacao;
     }
 

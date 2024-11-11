@@ -24,11 +24,11 @@ public class Gestante extends Usuario {
     private String historicoMedico;
     private String tipoSanguineo;
 
-    public Gestante(int id, String cpf, String nome, String email, String senha, LocalDate dataNascimento,
+    public Gestante(String cpf, String nome, String email, String senha, LocalDate dataNascimento,
             String telefone, String endereco, LocalDateTime deletadoEm, LocalDate previsaoParto,
             String contatoEmergencia,
             String historicoMedico, String tipoSanguineo) {
-        super(id, cpf, nome, email, senha, dataNascimento, telefone, endereco, deletadoEm);
+        super(0, cpf, nome, email, senha, dataNascimento, telefone, endereco, deletadoEm);
         this.previsaoParto = previsaoParto;
         this.contatoEmergencia = contatoEmergencia;
         this.historicoMedico = historicoMedico;
