@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class Procedimento {
-    private int id;
-    private Gestante paciente;
-    private String descricao;
-    private LocalDateTime data;
-    private double valor;
-    private String status;
-    private Relatorio relatorio;
-    private LocalDateTime deletadoEm;
+    protected int id;
+    protected Gestante paciente;
+    protected String descricao;
+    protected LocalDateTime data;
+    protected double valor;
+    protected String status;
+    protected Relatorio relatorio;
+    protected LocalDateTime deletadoEm;
 }
