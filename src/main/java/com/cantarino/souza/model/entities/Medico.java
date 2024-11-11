@@ -3,11 +3,16 @@ package com.cantarino.souza.model.entities;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@Entity
+@DiscriminatorValue("MEDICO")
 @Setter
 @Getter
 @ToString(callSuper = true)
