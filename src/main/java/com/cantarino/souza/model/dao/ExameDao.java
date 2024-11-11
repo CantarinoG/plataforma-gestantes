@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 
 import com.cantarino.souza.factory.DatabaseJPA;
 import com.cantarino.souza.model.entities.Exame;
-import com.cantarino.souza.model.entities.Gestante;
 
 public class ExameDao implements IDao<Exame> {
 
