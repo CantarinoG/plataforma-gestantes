@@ -22,13 +22,13 @@ import javax.persistence.InheritanceType;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
-    private String cpf;
-    private String nome;
-    private String email;
-    private String senha;
-    private LocalDate dataNascimento;
-    private String telefone;
-    private String endereco;
-    private LocalDateTime deletadoEm;
+    protected int id;
+    protected String cpf;
+    protected String nome;
+    protected String email;
+    protected String senha;
+    protected LocalDate dataNascimento;
+    protected String telefone;
+    protected String endereco;
+    protected LocalDateTime deletadoEm;
 }
