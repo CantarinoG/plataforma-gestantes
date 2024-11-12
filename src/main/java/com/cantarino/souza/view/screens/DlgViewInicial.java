@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
 
-public class FrViewInicial extends JFrame {
+public class DlgViewInicial extends JDialog {
 
     JPanel panBackground;
     JPanel panHeader;
@@ -23,15 +23,15 @@ public class FrViewInicial extends JFrame {
     RoundedButton btnCriarConta;
     RoundedButton btnConferirDicas;
 
-    public FrViewInicial() {
+    public DlgViewInicial(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Início");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Início");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");

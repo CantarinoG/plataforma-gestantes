@@ -1,7 +1,6 @@
 package com.cantarino.souza.view.screens;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
@@ -144,7 +143,7 @@ public class FrMenu extends JFrame {
     // TODO: Assim está mockado. Refazer depois quando a autenticação estiver
     // pronta.
     private void initUserCoponents() {
-        String userType = "ADM";
+        String userType = "GESTANTE";
 
         if (userType == "GESTANTE") {
             initGestanteComponents();
@@ -256,7 +255,8 @@ public class FrMenu extends JFrame {
     }
 
     private void btnAgendaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de agenda!");
+        DlgAgendaConsultas dialog = new DlgAgendaConsultas(this, true);
+        dialog.setVisible(true);
     }
 
     private void btnPagamentosActionPerformed(java.awt.event.ActionEvent evt) {

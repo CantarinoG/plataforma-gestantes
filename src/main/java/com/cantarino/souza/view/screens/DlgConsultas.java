@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
 
-public class FrConsultas extends JFrame {
+public class DlgConsultas extends JDialog {
 
     JPanel panBackground;
     JPanel panHeader;
@@ -20,15 +20,15 @@ public class FrConsultas extends JFrame {
     JButton btnEditarConsulta;
     JButton btnDeletarConsulta;
 
-    public FrConsultas() {
+    public DlgConsultas(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Consultas");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 800);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setTitle("Gerenciador de Consultas");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1920, 1080);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");

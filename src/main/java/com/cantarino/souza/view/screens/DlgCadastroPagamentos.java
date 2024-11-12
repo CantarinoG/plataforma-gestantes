@@ -6,7 +6,7 @@ import javax.swing.text.*;
 import com.cantarino.souza.view.components.*;
 import java.awt.event.ActionEvent;
 
-public class FrCadastroPagamentos extends JFrame {
+public class DlgCadastroPagamentos extends JDialog {
     JPanel panBackground;
     JPanel panColumn;
     JPanel panHeader;
@@ -24,15 +24,15 @@ public class FrCadastroPagamentos extends JFrame {
     JPanel panStatusField;
     JPanel panMetodoField;
 
-    public FrCadastroPagamentos() {
+    public DlgCadastroPagamentos(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Cadastrar Pagamento");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Cadastro de Pagamento");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");

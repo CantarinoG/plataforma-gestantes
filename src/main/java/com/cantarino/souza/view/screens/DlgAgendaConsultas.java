@@ -52,8 +52,9 @@ public class DlgAgendaConsultas extends JDialog {
         }
 
         private void initComponents() {
+                setTitle("Agenda");
                 setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                setSize(1920, 800);
+                setSize(1920, 1080);
                 setLocationRelativeTo(null);
 
                 panBackground = new BackgroundPanel("/images/background.png");

@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
 
-public class FrPagamentos extends JFrame {
+public class DlgPagamentos extends JDialog {
 
     JPanel panBackground;
     JPanel panHeader;
@@ -15,15 +15,15 @@ public class FrPagamentos extends JFrame {
     JPanel panOptions;
     JButton btnEmitirRecibo;
 
-    public FrPagamentos() {
+    public DlgPagamentos(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Pagamentos");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 800);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setTitle("Gestão de Pagamentos");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1920, 1080);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");

@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
 
-public class FrComunidade extends JFrame {
+public class DlgComunidade extends JDialog {
 
     JPanel panBackground;
     JPanel panHeader;
@@ -26,15 +26,15 @@ public class FrComunidade extends JFrame {
     JPanel panPosts;
     JScrollPane scrArea;
 
-    public FrComunidade() {
+    public DlgComunidade(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Comunidade");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 800);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setTitle("Comunidade");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1920, 1080);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
