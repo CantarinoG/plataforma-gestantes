@@ -51,7 +51,7 @@ public class ValidateProcedimento {
             try {
                 deleteDate = LocalDateTime.parse(deletadoEm);
             } catch (DateTimeParseException e) {
-                throw new UsuarioException("ERRO: Formato de data inválido.");
+                throw new UsuarioException("ERRO: Formato de data de delete inválido.");
             }
             procedimento.setDeletadoEm(deleteDate);
         }

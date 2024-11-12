@@ -1,5 +1,6 @@
 package com.cantarino.souza.model.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.DiscriminatorValue;
@@ -19,8 +20,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class Exame extends Procedimento {
-    private LocalDateTime dataColeta;
-    private LocalDateTime dataResultado;
+    private LocalDate dataResultado;
     private String tipoAmostra;
 
     @ManyToOne
@@ -28,10 +28,9 @@ public class Exame extends Procedimento {
     private Usuario requisitadoPor;
 
     public Exame(Gestante paciente, String descricao, LocalDateTime data, double valor, String status,
-            Relatorio relatorio, LocalDateTime deletadoEm, LocalDateTime dataColeta, LocalDateTime dataResultado,
+            Relatorio relatorio, LocalDateTime deletadoEm, LocalDate dataResultado,
             String tipoAmostra, Usuario requisitadoPor) {
-        super(0, paciente, descricao, dataResultado, valor, status, relatorio, deletadoEm);
-        this.dataColeta = dataColeta;
+        super(0, paciente, descricao, data, valor, status, relatorio, deletadoEm);
         this.dataResultado = dataResultado;
         this.tipoAmostra = tipoAmostra;
         this.requisitadoPor = requisitadoPor;
