@@ -27,7 +27,7 @@ public class FrMenu extends JFrame {
     private void initComponents() {
         setTitle("BemGestar");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 1080);
+        setSize(1920, 1070);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
@@ -119,7 +119,7 @@ public class FrMenu extends JFrame {
             }
         });
 
-        btnConsultas = new RoundedButton("Consultas", 50);
+        btnConsultas = new RoundedButton("Procedimentos", 50);
         btnConsultas.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnConsultas.setPreferredSize(new Dimension(200, 40));
         btnConsultas.addActionListener(new java.awt.event.ActionListener() {
@@ -143,7 +143,7 @@ public class FrMenu extends JFrame {
     // TODO: Assim está mockado. Refazer depois quando a autenticação estiver
     // pronta.
     private void initUserCoponents() {
-        String userType = "GESTANTE";
+        String userType = "ADM";
 
         if (userType == "GESTANTE") {
             initGestanteComponents();
@@ -247,11 +247,13 @@ public class FrMenu extends JFrame {
     }
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de login!");
+        DlgLogin dialog = new DlgLogin(this, true);
+        dialog.setVisible(true);
     }
 
     private void btnOrientacoesActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de orientações!");
+        DlgOrientacoes dialog = new DlgOrientacoes(this, true);
+        dialog.setVisible(true);
     }
 
     private void btnAgendaActionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,23 +262,28 @@ public class FrMenu extends JFrame {
     }
 
     private void btnPagamentosActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de pagamentos!");
+        DlgPagamentos dialog = new DlgPagamentos(this, true);
+        dialog.setVisible(true);
     }
 
     private void btnComunidadeActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de comunidade!");
+        DlgComunidade dialog = new DlgComunidade(this, true);
+        dialog.setVisible(true);
     }
 
     private void btnTrocarSenhaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de trocar senha!");
+        DlgTrocaSenha dialog = new DlgTrocaSenha(this, true);
+        dialog.setVisible(true);
     }
 
     private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de consultas!");
+        DlgConsultas dialog = new DlgConsultas(this, true);
+        dialog.setVisible(true);
     }
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de usuários!");
+        DlgUsuarios dialog = new DlgUsuarios(this, true);
+        dialog.setVisible(true);
     }
 
 }
