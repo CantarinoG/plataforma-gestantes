@@ -1,6 +1,6 @@
 package com.cantarino.souza.model.exceptions;
 
-public class ExameException extends RuntimeException {
+public class ExameException extends ProcedimentoException {
 
     public ExameException(String msg) {
         super(msg);
