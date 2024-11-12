@@ -6,7 +6,7 @@ import javax.swing.text.*;
 
 import com.cantarino.souza.view.components.*;
 
-public class FrOrientacoes extends JFrame {
+public class DlgOrientacoes extends JDialog {
 
         JPanel panBackground;
         JPanel panHeader;
@@ -27,15 +27,15 @@ public class FrOrientacoes extends JFrame {
         Style stlDefault;
         Style stlTitle;
 
-        public FrOrientacoes() {
+        public DlgOrientacoes(JFrame parent, boolean modal) {
+                super(parent, modal);
                 initComponents();
         }
 
         private void initComponents() {
-                setTitle("BemGestar | Orientações");
-                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                setSize(1920, 800);
-                setExtendedState(JFrame.MAXIMIZED_BOTH);
+                setTitle("Orientações");
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                setSize(1920, 1080);
                 setLocationRelativeTo(null);
 
                 panBackground = new BackgroundPanel("/images/background.png");

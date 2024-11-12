@@ -7,7 +7,7 @@ import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
-public class FrCadastroRelatorio extends JFrame {
+public class DlgCadastroConsultas extends JDialog {
     private JPanel panBackground;
     private JPanel panHeader;
     private JLabel lblTitle;
@@ -15,27 +15,33 @@ public class FrCadastroRelatorio extends JFrame {
     private JPanel panColumn;
     private JLabel lblAction;
     private JPanel panButton;
-    private JButton btnCadastrarRelatorio;
-    private JFormattedTextField txtDataEmissao;
-    private JTextField txtProcedimento;
-    private JTextArea txtObservacoes;
-    private JPanel panDataEmissaoField;
-    private JPanel panProcedimentoField;
+    private JButton btnCadastrarConsulta;
+    private JTextField txtPaciente;
+    private JTextArea txtDescricao;
+    private JFormattedTextField txtData;
+    private JTextField txtValor;
+    private JTextField txtMedico;
+    private JFormattedTextField txtDataRetorno;
+    private JPanel panPacienteField;
+    private JPanel panDescricaoField;
+    private JPanel panDataField;
+    private JPanel panValorField;
+    private JPanel panMedicoField;
+    private JPanel panDataRetornoField;
     private JPanel panResultadoContent;
     private JTextField txtArquivoSelecionado;
     private JButton btnSelecionarArquivo;
     private JPanel panResultadoField;
-    private JPanel panObservacoesField;
 
-    public FrCadastroRelatorio() {
+    public DlgCadastroConsultas(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Cadastrar Relatório");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Cadastro de Consulta");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
@@ -68,7 +74,7 @@ public class FrCadastroRelatorio extends JFrame {
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
         // Título
-        lblAction = new JLabel("Cadastrar Relatório");
+        lblAction = new JLabel("Cadastrar Consulta");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -78,33 +84,72 @@ public class FrCadastroRelatorio extends JFrame {
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(4, 1, 20, 5));
+        panColumn.setLayout(new GridLayout(7, 1, 20, 5));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panContent.add(panColumn, gbc);
 
-        // Campo Data de Emissão
+        // Campo Paciente
+        txtPaciente = new JTextField();
+        txtPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
+        txtPaciente.setBackground(AppColors.FIELD_PINK);
+        txtPaciente.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panPacienteField = createCustomTextfield("Paciente", txtPaciente);
+        panColumn.add(panPacienteField);
+
+        // Campo Descrição da Consulta
+        txtDescricao = new JTextArea();
+        txtDescricao.setFont(new Font("Arial", Font.PLAIN, 22));
+        txtDescricao.setBackground(AppColors.FIELD_PINK);
+        txtDescricao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        txtDescricao.setLineWrap(true);
+        txtDescricao.setWrapStyleWord(true);
+        panDescricaoField = createCustomTextfield("Descrição da Consulta", txtDescricao);
+        panColumn.add(panDescricaoField);
+
+        // Campo Data
         try {
             MaskFormatter maskData = new MaskFormatter("##/##/####");
             maskData.setPlaceholderCharacter('_');
-            txtDataEmissao = new JFormattedTextField(maskData);
-            txtDataEmissao.setFont(new Font("Arial", Font.PLAIN, 22));
-            txtDataEmissao.setBackground(AppColors.FIELD_PINK);
-            txtDataEmissao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            panDataEmissaoField = createCustomTextfield("Data de Emissão", txtDataEmissao);
-            panColumn.add(panDataEmissaoField);
+            txtData = new JFormattedTextField(maskData);
+            txtData.setFont(new Font("Arial", Font.PLAIN, 22));
+            txtData.setBackground(AppColors.FIELD_PINK);
+            txtData.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panDataField = createCustomTextfield("Data", txtData);
+            panColumn.add(panDataField);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        // Campo Procedimento
-        txtProcedimento = new JTextField();
-        txtProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
-        txtProcedimento.setBackground(AppColors.FIELD_PINK);
-        txtProcedimento.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panProcedimentoField = createCustomTextfield("Procedimento", txtProcedimento);
-        panColumn.add(panProcedimentoField);
+        // Campo Valor
+        txtValor = new JTextField();
+        txtValor.setFont(new Font("Arial", Font.PLAIN, 22));
+        txtValor.setBackground(AppColors.FIELD_PINK);
+        txtValor.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panValorField = createCustomTextfield("Valor", txtValor);
+        panColumn.add(panValorField);
 
-        // Campo Resultado
+        // Campo Médico
+        txtMedico = new JTextField();
+        txtMedico.setFont(new Font("Arial", Font.PLAIN, 22));
+        txtMedico.setBackground(AppColors.FIELD_PINK);
+        txtMedico.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panMedicoField = createCustomTextfield("Médico", txtMedico);
+        panColumn.add(panMedicoField);
+
+        // Campo Data de Retorno
+        try {
+            MaskFormatter maskDataRetorno = new MaskFormatter("##/##/####");
+            maskDataRetorno.setPlaceholderCharacter('_');
+            txtDataRetorno = new JFormattedTextField(maskDataRetorno);
+            txtDataRetorno.setFont(new Font("Arial", Font.PLAIN, 22));
+            txtDataRetorno.setBackground(AppColors.FIELD_PINK);
+            txtDataRetorno.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panDataRetornoField = createCustomTextfield("Data de Retorno", txtDataRetorno);
+            panColumn.add(panDataRetornoField);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         panResultadoContent = new JPanel(new BorderLayout(10, 0));
         panResultadoContent.setBackground(AppColors.FIELD_PINK);
 
@@ -127,17 +172,6 @@ public class FrCadastroRelatorio extends JFrame {
         panResultadoField = createCustomTextfield("Resultado (PDF, DOC, DOCX)", panResultadoContent);
         panColumn.add(panResultadoField);
 
-        // Campo Observações
-        txtObservacoes = new JTextArea();
-        txtObservacoes.setFont(new Font("Arial", Font.PLAIN, 22));
-        txtObservacoes.setBackground(AppColors.FIELD_PINK);
-        txtObservacoes.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        txtObservacoes.setLineWrap(true);
-        txtObservacoes.setWrapStyleWord(true);
-        panObservacoesField = createCustomTextfield("Observações", txtObservacoes);
-
-        panColumn.add(panObservacoesField);
-
         // Botão
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
@@ -150,17 +184,17 @@ public class FrCadastroRelatorio extends JFrame {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarRelatorio = new RoundedButton("Cadastrar Relatório", 50);
-        btnCadastrarRelatorio.setBackground(AppColors.BUTTON_PINK);
-        btnCadastrarRelatorio.setFont(new Font("Arial", Font.BOLD, 15));
-        btnCadastrarRelatorio.setFocusPainted(false);
-        btnCadastrarRelatorio.setBorderPainted(false);
-        btnCadastrarRelatorio.setPreferredSize(new Dimension(200, 55));
-        btnCadastrarRelatorio.setOpaque(true);
-        btnCadastrarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCadastrarRelatorio.addActionListener(evt -> btnCadastrarRelatorioActionPerformed(evt));
+        btnCadastrarConsulta = new RoundedButton("Cadastrar Consulta", 50);
+        btnCadastrarConsulta.setBackground(AppColors.BUTTON_PINK);
+        btnCadastrarConsulta.setFont(new Font("Arial", Font.BOLD, 15));
+        btnCadastrarConsulta.setFocusPainted(false);
+        btnCadastrarConsulta.setBorderPainted(false);
+        btnCadastrarConsulta.setPreferredSize(new Dimension(200, 55));
+        btnCadastrarConsulta.setOpaque(true);
+        btnCadastrarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrarConsulta.addActionListener(evt -> btnCadastrarConsultaActionPerformed(evt));
 
-        panButton.add(btnCadastrarRelatorio);
+        panButton.add(btnCadastrarConsulta);
         panContent.add(panButton, gbcButton);
     }
 
@@ -191,7 +225,7 @@ public class FrCadastroRelatorio extends JFrame {
         return fieldPanel;
     }
 
-    private void btnCadastrarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de Cadastrar Relatório!");
+    private void btnCadastrarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("Clicou no botão de Cadastrar Consulta!");
     }
 }

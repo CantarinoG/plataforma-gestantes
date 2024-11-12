@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
 
-public class FrUsuarios extends JFrame {
+public class DlgUsuarios extends JDialog {
 
     JPanel panBackground;
     JPanel panHeader;
@@ -22,15 +22,15 @@ public class FrUsuarios extends JFrame {
     JButton btnEditarUsuario;
     JButton btnDeletarUsuario;
 
-    public FrUsuarios() {
+    public DlgUsuarios(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Usuários");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1920, 800);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setTitle("Gestão de Usuários");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1920, 1080);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");

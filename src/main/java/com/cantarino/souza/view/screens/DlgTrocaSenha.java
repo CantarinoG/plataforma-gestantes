@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 
-public class FrTrocaSenha extends JFrame {
+public class DlgTrocaSenha extends JDialog {
     JPanel panBackground;
     JPanel panHeader;
     JLabel lblTitle;
@@ -19,15 +19,15 @@ public class FrTrocaSenha extends JFrame {
     JLabel lblHint;
     JPanel panField;
 
-    public FrTrocaSenha() {
+    public DlgTrocaSenha(JFrame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("BemGestar | Trocar Senha");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Troca de Senha");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
