@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
 
-public class FrAgendaConsultas extends JFrame {
+public class DlgAgendaConsultas extends JDialog {
 
         JPanel panBackground;
         JPanel panHeader;
@@ -46,15 +46,14 @@ public class FrAgendaConsultas extends JFrame {
         JLabel lblCanceladas;
         JLabel lblCanceladasAmount;
 
-        public FrAgendaConsultas() {
+        public DlgAgendaConsultas(JFrame parent, boolean modal) {
+                super(parent, modal);
                 initComponents();
         }
 
         private void initComponents() {
-                setTitle("BemGestar | Agenda");
-                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 setSize(1920, 800);
-                setExtendedState(JFrame.MAXIMIZED_BOTH);
                 setLocationRelativeTo(null);
 
                 panBackground = new BackgroundPanel("/images/background.png");
