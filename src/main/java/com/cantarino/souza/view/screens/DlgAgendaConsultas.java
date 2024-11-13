@@ -43,7 +43,6 @@ public class DlgAgendaConsultas extends JDialog {
         JButton btnVerDadosMedico;
         JButton btnVerDadosPaciente;
         JButton btnCadastrarRelatorio;
-        JButton btnEditarRelatorio;
         JPanel panConcluidas;
         JLabel lblConcluidasIcon;
         JLabel lblConcluidas;
@@ -125,10 +124,10 @@ public class DlgAgendaConsultas extends JDialog {
                 panInnerTop.setBackground(AppColors.TRANSPARENT);
                 panRight.add(panInnerTop, rightGbc);
 
-                lblAction = new JLabel("Consultas");
+                lblAction = new JLabel();
                 lblAction.setFont(new Font("Arial", Font.BOLD, 64));
-                lblAction.setForeground(
-                                AppColors.TITLE_BLUE);
+                lblAction.setForeground(AppColors.TITLE_BLUE);
+                lblAction.setText("Consultas");
                 panInnerTop.add(lblAction);
 
                 rightGbc.gridy = 1;
@@ -151,6 +150,7 @@ public class DlgAgendaConsultas extends JDialog {
                         }
                 });
                 grdProcedimentos.setFillsViewportHeight(true);
+                grdProcedimentos.setBackground(AppColors.FIELD_PINK);
                 scrollPane = new JScrollPane();
                 scrollPane.setViewportView(grdProcedimentos);
                 scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -173,7 +173,7 @@ public class DlgAgendaConsultas extends JDialog {
                 panLeft.add(panProfile);
 
                 panCategories = new JPanel();
-                panCategories.setBackground(AppColors.TRANSPARENT);
+                panCategories.setBackground(AppColors.FIELD_PINK);
                 panCategories.setLayout(new GridLayout(4, 1, 0, 0));
                 panLeft.add(panCategories);
 
@@ -299,7 +299,7 @@ public class DlgAgendaConsultas extends JDialog {
         }
 
         private void initUserCoponents() {
-                String userType = "GESTANTE";
+                String userType = "MEDICO";
 
                 if (userType == "GESTANTE") {
                         initGestanteComponents();
@@ -411,7 +411,7 @@ public class DlgAgendaConsultas extends JDialog {
                 });
                 panActions.add(btnVerDadosPaciente);
 
-                btnCadastrarRelatorio = new RoundedButton("Cadastrar Relatório", 50);
+                btnCadastrarRelatorio = new RoundedButton("Cadastrar/Editar Relatório", 50);
                 btnCadastrarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 btnCadastrarRelatorio
                                 .setPreferredSize(new Dimension(btnCadastrarRelatorio.getPreferredSize().width, 55));
@@ -421,24 +421,31 @@ public class DlgAgendaConsultas extends JDialog {
                         }
                 });
                 panActions.add(btnCadastrarRelatorio);
-
-                btnEditarRelatorio = new RoundedButton("Ver Dados do Paciente", 50);
-                btnEditarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                btnEditarRelatorio.setPreferredSize(new Dimension(btnEditarRelatorio.getPreferredSize().width, 55));
-                btnEditarRelatorio.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnEditarRelatorioActionPerformed(evt);
-                        }
-                });
-                panActions.add(btnEditarRelatorio);
-
         }
 
         private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {
+                lblAction.setText("Consultas");
+                lblTodas.setText("Todas as Consultas");
+                lblAgendadas.setText("Consultas Agendadas");
+                lblConcluidas.setText("Consultas Concluídas");
+                lblCanceladas.setText("Consultas Canceladas");
+                btnCancelarConsulta.setText("Cancelar Consulta");
+                btnVerDadosMedico.setEnabled(true);
+                btnVerDadosMedico.setVisible(true);
+                panBackground.repaint();
                 consultaController.atualizarTabela(grdProcedimentos);
         }
 
         private void btnExamesActionPerformed(java.awt.event.ActionEvent evt) {
+                lblAction.setText("Exames");
+                lblTodas.setText("Todos os Exames");
+                lblAgendadas.setText("Exames Agendados");
+                lblConcluidas.setText("Exames Concluídos");
+                lblCanceladas.setText("Exames Cancelados");
+                btnCancelarConsulta.setText("Cancelar Exame");
+                btnVerDadosMedico.setEnabled(false);
+                btnVerDadosMedico.setVisible(false);
+                panBackground.repaint();
                 exameController.atualizarTabela(grdProcedimentos);
         }
 
@@ -476,10 +483,6 @@ public class DlgAgendaConsultas extends JDialog {
 
         private void btnCadastrarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
                 System.out.println("Clicou no botão de cadastrar relatorios!");
-        }
-
-        private void btnEditarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("Clicou no botão de editar relatorios!");
         }
 
         private void grdProcedimentosMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_grdAlunosMouseClicked
