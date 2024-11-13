@@ -2,6 +2,9 @@ package com.cantarino.souza.view.screens;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.view.components.*;
 
 public class DlgAgendaConsultas extends JDialog {
@@ -48,10 +51,16 @@ public class DlgAgendaConsultas extends JDialog {
         JLabel lblCanceladasIcon;
         JLabel lblCanceladas;
         JLabel lblCanceladasAmount;
+        JTable grdConsultas;
+        JScrollPane scrollPane;
+
+        ConsultaController consultaController;
 
         public DlgAgendaConsultas(JFrame parent, boolean modal) {
                 super(parent, modal);
+                consultaController = new ConsultaController();
                 initComponents();
+                consultaController.atualizarTabela(grdConsultas);
         }
 
         private void initComponents() {
@@ -108,9 +117,9 @@ public class DlgAgendaConsultas extends JDialog {
                 rightGbc.gridy = 0;
                 rightGbc.fill = GridBagConstraints.BOTH;
                 rightGbc.weightx = 1.0;
-                rightGbc.weighty = 0.0; // Take only needed space
+                rightGbc.weighty = 0.0;
                 panInnerTop = new JPanel();
-                panInnerTop.setBackground(AppColors.TRANSPARENT); // Light pink
+                panInnerTop.setBackground(AppColors.TRANSPARENT);
                 panRight.add(panInnerTop, rightGbc);
 
                 lblAction = new JLabel("Consultas");
@@ -120,34 +129,34 @@ public class DlgAgendaConsultas extends JDialog {
                 panInnerTop.add(lblAction);
 
                 rightGbc.gridy = 1;
-                rightGbc.weighty = 1.0; // Take remaining space
-                /*
-                 * panMiddle = new JPanel();
-                 * panMiddle.setBackground(new Color(255, 218, 185)); // Peach
-                 * panRight.add(panMiddle, rightGbc);
-                 */
+                rightGbc.weighty = 1.0;
 
-                {// Tabela mockada
-                        String[] columnNames = { "Data", "Hora", "Médico", "Especialidade", "Status" };
-                        Object[][] data = {
-                                        { "2024-03-20", "14:30", "Dr. Silva", "Obstetrícia", "Agendada" },
-                                        { "2024-03-25", "10:00", "Dra. Santos", "Ginecologia", "Agendada" }
-                        };
+                grdConsultas = new JTable();
+                grdConsultas.setModel(new DefaultTableModel(
+                                new Object[][] {
+                                                {},
+                                                {},
+                                                {},
+                                                {}
+                                },
+                                new String[] {
 
-                        JTable tblConsultas = new JTable(data, columnNames);
-                        tblConsultas.setFillsViewportHeight(true);
-                        tblConsultas.setRowHeight(30);
-                        tblConsultas.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-
-                        JScrollPane scrollPane = new JScrollPane(tblConsultas);
-                        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-                        panRight.add(scrollPane, rightGbc);
-                }
+                                }));
+                grdConsultas.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                grdConsultasMouseClicked(evt);
+                        }
+                });
+                grdConsultas.setFillsViewportHeight(true);
+                scrollPane = new JScrollPane();
+                scrollPane.setViewportView(grdConsultas);
+                scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                panRight.add(scrollPane, rightGbc);
 
                 rightGbc.gridy = 2;
-                rightGbc.weighty = 0.0; // Take only needed space
+                rightGbc.weighty = 0.0;
                 panInnerBottom = new JPanel();
-                panInnerBottom.setBackground(AppColors.TRANSPARENT); // Pink
+                panInnerBottom.setBackground(AppColors.TRANSPARENT);
                 panRight.add(panInnerBottom, rightGbc);
                 panBottom.add(panRight, gbc);
 
@@ -287,7 +296,7 @@ public class DlgAgendaConsultas extends JDialog {
         }
 
         private void initUserCoponents() {
-                String userType = "MEDICO";
+                String userType = "GESTANTE";
 
                 if (userType == "GESTANTE") {
                         initGestanteComponents();
@@ -469,5 +478,11 @@ public class DlgAgendaConsultas extends JDialog {
         private void btnEditarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
                 System.out.println("Clicou no botão de editar relatorios!");
         }
+
+        private void grdConsultasMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_grdAlunosMouseClicked
+                if (evt.getClickCount() == 2) {
+
+                }
+        }// GE
 
 }
