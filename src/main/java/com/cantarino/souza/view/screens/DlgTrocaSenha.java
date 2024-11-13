@@ -8,9 +8,6 @@ import javax.swing.*;
 
 public class DlgTrocaSenha extends JDialog {
     JPanel panBackground;
-    JPanel panHeader;
-    JLabel lblTitle;
-    JPanel panContent;
     JPanel panColumn;
     JPasswordField edtSenhaAtual;
     JPasswordField edtNovaSenha;
@@ -31,25 +28,8 @@ public class DlgTrocaSenha extends JDialog {
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
+        panBackground.setLayout(new GridBagLayout());
         setContentPane(panBackground);
-
-        panHeader = new JPanel();
-        panHeader.setLayout(new BorderLayout());
-        panHeader.setBackground(AppColors.DARKER);
-        panHeader.setPreferredSize(new Dimension(getWidth(), 74));
-        panHeader.setBorder(BorderFactory.createEmptyBorder(15, 64, 15, 64));
-        panBackground.add(panHeader, BorderLayout.NORTH);
-
-        lblTitle = new JLabel("Bem Gestar");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 32));
-        panHeader.add(lblTitle, BorderLayout.WEST);
-
-        panContent = new JPanel();
-        panContent.setLayout(new GridBagLayout());
-        panContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panContent.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panContent, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -60,12 +40,12 @@ public class DlgTrocaSenha extends JDialog {
 
         edtSenhaAtual = new JPasswordField();
         configurarCampoSenha(edtSenhaAtual);
-        panContent.add(createCustomTextfield("Senha Atual", edtSenhaAtual), gbc);
+        panBackground.add(createCustomTextfield("Senha Atual", edtSenhaAtual), gbc);
 
         gbc.gridy++;
         edtNovaSenha = new JPasswordField();
         configurarCampoSenha(edtNovaSenha);
-        panContent.add(createCustomTextfield("Nova Senha", edtNovaSenha), gbc);
+        panBackground.add(createCustomTextfield("Nova Senha", edtNovaSenha), gbc);
 
         gbc.gridy++;
         btnTrocarSenha = new RoundedButton("Trocar Senha", 50);
@@ -76,7 +56,7 @@ public class DlgTrocaSenha extends JDialog {
         btnTrocarSenha.setPreferredSize(new Dimension(200, 40));
         btnTrocarSenha.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTrocarSenha.addActionListener(evt -> btnTrocarSenhaActionPerformed(evt));
-        panContent.add(btnTrocarSenha, gbc);
+        panBackground.add(btnTrocarSenha, gbc);
     }
 
     private void configurarCampoSenha(JPasswordField campo) {

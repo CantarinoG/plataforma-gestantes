@@ -9,9 +9,6 @@ import javax.swing.text.MaskFormatter;
 
 public class DlgCadastroMedicos extends JDialog {
     JPanel panBackground;
-    JPanel panHeader;
-    JLabel lblTitle;
-    JPanel panContent;
     JPanel panColumn;
     JLabel lblAction;
     JTextField edtNome;
@@ -47,25 +44,8 @@ public class DlgCadastroMedicos extends JDialog {
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
+        panBackground.setLayout(new GridBagLayout());
         setContentPane(panBackground);
-
-        panHeader = new JPanel();
-        panHeader.setLayout(new BorderLayout());
-        panHeader.setBackground(AppColors.DARKER);
-        panHeader.setPreferredSize(new Dimension(getWidth(), 74));
-        panHeader.setBorder(BorderFactory.createEmptyBorder(15, 64, 15, 64));
-        panBackground.add(panHeader, BorderLayout.NORTH);
-
-        lblTitle = new JLabel("BemGestar");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 32));
-        panHeader.add(lblTitle, BorderLayout.WEST);
-
-        panContent = new JPanel();
-        panContent.setLayout(new GridBagLayout());
-        panContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panContent.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panContent, BorderLayout.CENTER);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -78,13 +58,13 @@ public class DlgCadastroMedicos extends JDialog {
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panContent.add(lblAction, gbc);
+        panBackground.add(lblAction, gbc);
 
         gbc.gridy = 1;
         panColumn = new JPanel();
         panColumn.setLayout(new GridLayout(6, 2, 20, 10));
         panColumn.setBackground(AppColors.TRANSPARENT);
-        panContent.add(panColumn, gbc);
+        panBackground.add(panColumn, gbc);
 
         // CPF
         edtCPF = new JFormattedTextField();
@@ -198,7 +178,7 @@ public class DlgCadastroMedicos extends JDialog {
 
         panButton.add(btnCriarConta);
 
-        panContent.add(panButton, gbcButton);
+        panBackground.add(panButton, gbcButton);
 
         try {
             MaskFormatter maskCPF = new MaskFormatter("###.###.###-##");
