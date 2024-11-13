@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.ConsultaController;
+import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.view.components.*;
 
 public class DlgAgendaConsultas extends JDialog {
@@ -51,16 +52,18 @@ public class DlgAgendaConsultas extends JDialog {
         JLabel lblCanceladasIcon;
         JLabel lblCanceladas;
         JLabel lblCanceladasAmount;
-        JTable grdConsultas;
+        JTable grdProcedimentos;
         JScrollPane scrollPane;
 
         ConsultaController consultaController;
+        ExameController exameController;
 
         public DlgAgendaConsultas(JFrame parent, boolean modal) {
                 super(parent, modal);
                 consultaController = new ConsultaController();
+                exameController = new ExameController();
                 initComponents();
-                consultaController.atualizarTabela(grdConsultas);
+                consultaController.atualizarTabela(grdProcedimentos);
         }
 
         private void initComponents() {
@@ -131,8 +134,8 @@ public class DlgAgendaConsultas extends JDialog {
                 rightGbc.gridy = 1;
                 rightGbc.weighty = 1.0;
 
-                grdConsultas = new JTable();
-                grdConsultas.setModel(new DefaultTableModel(
+                grdProcedimentos = new JTable();
+                grdProcedimentos.setModel(new DefaultTableModel(
                                 new Object[][] {
                                                 {},
                                                 {},
@@ -142,14 +145,14 @@ public class DlgAgendaConsultas extends JDialog {
                                 new String[] {
 
                                 }));
-                grdConsultas.addMouseListener(new java.awt.event.MouseAdapter() {
+                grdProcedimentos.addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                grdConsultasMouseClicked(evt);
+                                grdProcedimentosMouseClicked(evt);
                         }
                 });
-                grdConsultas.setFillsViewportHeight(true);
+                grdProcedimentos.setFillsViewportHeight(true);
                 scrollPane = new JScrollPane();
-                scrollPane.setViewportView(grdConsultas);
+                scrollPane.setViewportView(grdProcedimentos);
                 scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 panRight.add(scrollPane, rightGbc);
 
@@ -432,11 +435,11 @@ public class DlgAgendaConsultas extends JDialog {
         }
 
         private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("Clicou no botão de consultas!");
+                consultaController.atualizarTabela(grdProcedimentos);
         }
 
         private void btnExamesActionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("Clicou no botão de exames!");
+                exameController.atualizarTabela(grdProcedimentos);
         }
 
         private void panTodasActionPerformed(java.awt.event.MouseEvent evt) {
@@ -479,7 +482,7 @@ public class DlgAgendaConsultas extends JDialog {
                 System.out.println("Clicou no botão de editar relatorios!");
         }
 
-        private void grdConsultasMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_grdAlunosMouseClicked
+        private void grdProcedimentosMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_grdAlunosMouseClicked
                 if (evt.getClickCount() == 2) {
 
                 }
