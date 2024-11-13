@@ -4,6 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.GestanteController;
+import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.controller.SecretarioController;
 import com.cantarino.souza.view.components.*;
 
 public class DlgUsuarios extends JDialog {
@@ -23,9 +26,17 @@ public class DlgUsuarios extends JDialog {
     JTable grdUsuarios;
     JScrollPane scrollPane;
 
+    GestanteController gestanteController;
+    MedicoController medicoController;
+    SecretarioController secretarioController;
+
     public DlgUsuarios(JFrame parent, boolean modal) {
         super(parent, modal);
+        gestanteController = new GestanteController();
+        medicoController = new MedicoController();
+        secretarioController = new SecretarioController();
         initComponents();
+        gestanteController.atualizarTabela(grdUsuarios);
     }
 
     private void initComponents() {
@@ -180,6 +191,7 @@ public class DlgUsuarios extends JDialog {
         btnCadastrarUsuario.setText("Cadastrar Usuário");
         btnEditarUsuario.setText("Editar Usuário");
         btnDeletarUsuario.setText("Deletar Usuário");
+        gestanteController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
     }
 
@@ -188,6 +200,7 @@ public class DlgUsuarios extends JDialog {
         btnCadastrarUsuario.setText("Cadastrar Médico(a)");
         btnEditarUsuario.setText("Editar Médico(a)");
         btnDeletarUsuario.setText("Deletar Médico(a)");
+        medicoController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
     }
 
@@ -196,6 +209,7 @@ public class DlgUsuarios extends JDialog {
         btnCadastrarUsuario.setText("Cadastrar Secretário(a)");
         btnEditarUsuario.setText("Editar Secretário(a)");
         btnDeletarUsuario.setText("Deletar Secretário(a)");
+        secretarioController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
     }
 

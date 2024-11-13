@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Exame;
 
 public class TMExame extends AbstractTableModel {
