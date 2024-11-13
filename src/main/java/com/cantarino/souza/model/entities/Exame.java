@@ -21,7 +21,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Exame extends Procedimento {
     private LocalDate dataResultado;
-    private String tipoAmostra;
 
     @ManyToOne
     @JoinColumn(name = "requisitado_por_id")
@@ -29,10 +28,9 @@ public class Exame extends Procedimento {
 
     public Exame(Gestante paciente, String descricao, LocalDateTime data, double valor, String status,
             Relatorio relatorio, LocalDateTime deletadoEm, LocalDate dataResultado,
-            String tipoAmostra, Usuario requisitadoPor) {
+            Usuario requisitadoPor) {
         super(0, paciente, descricao, data, valor, status, relatorio, deletadoEm);
         this.dataResultado = dataResultado;
-        this.tipoAmostra = tipoAmostra;
         this.requisitadoPor = requisitadoPor;
     }
 
