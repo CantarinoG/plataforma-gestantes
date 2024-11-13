@@ -1,7 +1,6 @@
 package com.cantarino.souza.view.screens;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
