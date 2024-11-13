@@ -485,10 +485,10 @@ public class DlgAgendaConsultas extends JDialog {
                 System.out.println("Clicou no botão de cadastrar relatorios!");
         }
 
-        private void grdProcedimentosMouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_grdAlunosMouseClicked
+        private void grdProcedimentosMouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
 
                 }
-        }// GE
+        }
 
 }
