@@ -41,7 +41,7 @@ public class DlgConsultas extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        lblAction = new JLabel("Gestão de Procedimentos");
+        lblAction = new JLabel("Gestão de Consultas");
         lblAction.setFont(new Font("Arial", Font.BOLD, 64));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
