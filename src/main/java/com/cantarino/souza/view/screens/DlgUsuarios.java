@@ -4,6 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.AdminController;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.controller.SecretarioController;
@@ -29,12 +30,14 @@ public class DlgUsuarios extends JDialog {
     GestanteController gestanteController;
     MedicoController medicoController;
     SecretarioController secretarioController;
+    AdminController adminController;
 
     public DlgUsuarios(JFrame parent, boolean modal) {
         super(parent, modal);
         gestanteController = new GestanteController();
         medicoController = new MedicoController();
         secretarioController = new SecretarioController();
+        adminController = new AdminController();
         initComponents();
         gestanteController.atualizarTabela(grdUsuarios);
     }
@@ -218,6 +221,7 @@ public class DlgUsuarios extends JDialog {
         btnCadastrarUsuario.setText("Cadastrar Administador(a)");
         btnEditarUsuario.setText("Editar Administrador(a)");
         btnDeletarUsuario.setText("Deletar Administrador(a)");
+        adminController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
     }
 
