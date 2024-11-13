@@ -2,22 +2,23 @@ package com.cantarino.souza.view.screens;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 import com.cantarino.souza.view.components.*;
 
 public class DlgLogin extends JDialog {
 
     JPanel panBackground;
-    JPanel panHeader;
-    JLabel lblTitle;
-    JPanel panContent;
     JPanel panColumn;
     JLabel lblAction;
-    JTextField edtLogin;
+    JFormattedTextField edtLogin;
     JPanel panLoginField;
     JPasswordField edtPass;
     JPanel panPassField;
+    JPanel panUserType;
     JPanel panButton;
     JButton btnLogin;
+    JComboBox<String> cmbUserType;
 
     public DlgLogin(JFrame parent, boolean modal) {
         super(parent, modal);
@@ -31,30 +32,13 @@ public class DlgLogin extends JDialog {
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
+        panBackground.setLayout(new GridBagLayout());
         setContentPane(panBackground);
 
-        panHeader = new JPanel();
-        panHeader.setLayout(new BorderLayout());
-        panHeader.setBackground(AppColors.DARKER);
-        panHeader.setPreferredSize(new Dimension(getWidth(), 74));
-        panHeader.setBorder(BorderFactory.createEmptyBorder(15, 64, 15, 64));
-        panBackground.add(panHeader, BorderLayout.NORTH);
-
-        lblTitle = new JLabel("BemGestar");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 32));
-        panHeader.add(lblTitle, BorderLayout.WEST);
-
-        panContent = new JPanel();
-        panContent.setLayout(new GridBagLayout());
-        panContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panContent.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panContent, BorderLayout.CENTER);
-
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(4, 1, 0, 20));
+        panColumn.setLayout(new GridLayout(5, 1, 0, 20));
         panColumn.setBackground(AppColors.TRANSPARENT);
-        panContent.add(panColumn);
+        panBackground.add(panColumn);
 
         lblAction = new JLabel("Login");
         lblAction.setFont(new Font("Arial", Font.BOLD, 64));
@@ -62,10 +46,19 @@ public class DlgLogin extends JDialog {
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
         panColumn.add(lblAction);
 
-        edtLogin = new JTextField();
+        edtLogin = new JFormattedTextField();
         edtLogin.setFont(new Font("Arial", Font.PLAIN, 22));
         edtLogin.setBackground(AppColors.FIELD_PINK);
         edtLogin.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
+        try {
+            MaskFormatter cpfMask = new MaskFormatter("###.###.###-##");
+            cpfMask.setPlaceholderCharacter('_');
+            edtLogin.setFormatterFactory(new DefaultFormatterFactory(cpfMask));
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+
         panLoginField = createCustomTextfield("CPF", edtLogin);
         panColumn.add(panLoginField);
 
@@ -75,6 +68,18 @@ public class DlgLogin extends JDialog {
         edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         panPassField = createCustomTextfield("Senha", edtPass);
         panColumn.add(panPassField);
+
+        String[] userTypes = { "Gestante", "Médico(a)", "Secretário(a)", "Administrador(a)" };
+        cmbUserType = new JComboBox<>(userTypes);
+        cmbUserType.setFont(new Font("Arial", Font.PLAIN, 22));
+        cmbUserType.setBackground(AppColors.FIELD_PINK);
+        cmbUserType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbUserTypeActionPerformed(evt);
+            }
+        });
+        panUserType = createCustomTextfield("Tipo de Usuário", cmbUserType);
+        panColumn.add(panUserType);
 
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panButton.setBackground(AppColors.TRANSPARENT);
@@ -109,6 +114,15 @@ public class DlgLogin extends JDialog {
         loginHintLabel.setFont(new Font("Arial", Font.BOLD, 22));
         fieldPanel.add(loginHintLabel, BorderLayout.WEST);
 
+        if (textField instanceof JTextField) {
+            ((JTextField) textField).setFont(new Font("Arial", Font.PLAIN, 14));
+        } else if (textField instanceof JComboBox) {
+            ((JComboBox<?>) textField).setFont(new Font("Arial", Font.PLAIN, 14));
+        }
+
+        textField.setBackground(AppColors.FIELD_PINK);
+        textField.setBorder(BorderFactory.createEmptyBorder(2, 5, 2, 5));
+
         fieldPanel.add(textField, BorderLayout.CENTER);
 
         return fieldPanel;
@@ -116,6 +130,13 @@ public class DlgLogin extends JDialog {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         System.out.println("Clicou no botão de Login!");
+    }
+
+    private void cmbUserTypeActionPerformed(java.awt.event.ActionEvent evt) {
+        panBackground.repaint();
+        // String selectedType = (String) cmbUserType.getSelectedItem();
+        // System.out.println("Selected user type: " + selectedType);
+
     }
 
 }
