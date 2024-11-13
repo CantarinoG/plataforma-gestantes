@@ -5,11 +5,11 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.entities.Admin;
 
-public class TMSecretario extends AbstractTableModel {
+public class TMAdmin extends AbstractTableModel {
 
-    private List<Secretario> lista;
+    private List<Admin> lista;
 
     private final int id = 0;
     private final int cpf = 1;
@@ -18,15 +18,14 @@ public class TMSecretario extends AbstractTableModel {
     private final int dataNascimento = 4;
     private final int telefone = 5;
     private final int endereco = 6;
-    private final int dataContratacao = 7;
 
-    public TMSecretario(List<Secretario> listaSecretarios) {
-        lista = listaSecretarios;
+    public TMAdmin(List<Admin> listaAdmin) {
+        lista = listaAdmin;
     }
 
     @Override
     public int getColumnCount() {
-        return 8;
+        return 7;
     }
 
     @Override
@@ -51,8 +50,6 @@ public class TMSecretario extends AbstractTableModel {
                 return "Telefone";
             case endereco:
                 return "Endereço";
-            case dataContratacao:
-                return "Data de Contratação";
             default:
                 return "";
         }
@@ -60,7 +57,7 @@ public class TMSecretario extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Secretario aux = new Secretario();
+        Admin aux = new Admin();
         if (lista.isEmpty()) {
             return aux;
         } else {
@@ -85,10 +82,6 @@ public class TMSecretario extends AbstractTableModel {
                     return aux.getTelefone();
                 case endereco:
                     return aux.getEndereco();
-                case dataContratacao:
-                    return aux.getDataContratacao() != null
-                            ? aux.getDataContratacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                            : "-";
                 default:
                     return null;
             }
