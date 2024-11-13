@@ -45,7 +45,7 @@ public class FrMenu extends JFrame {
         gbc.gridy = 0;
         gbc.weighty = 0.0;
         lblTitle = new JLabel("Bem-vindo(a) ao BemGestar");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 64));
         lblTitle.setForeground(AppColors.TITLE_BLUE);
         lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.anchor = GridBagConstraints.CENTER;
@@ -143,7 +143,7 @@ public class FrMenu extends JFrame {
     // TODO: Assim está mockado. Refazer depois quando a autenticação estiver
     // pronta.
     private void initUserCoponents() {
-        String userType = "ADM";
+        String userType = "GESTANTE";
 
         if (userType == "GESTANTE") {
             initGestanteComponents();

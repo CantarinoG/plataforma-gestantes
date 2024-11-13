@@ -37,6 +37,9 @@ public class DlgAgendaConsultas extends JDialog {
         JButton btnCancelarConsulta;
         JButton btnVerRelatorio;
         JButton btnVerDadosMedico;
+        JButton btnVerDadosPaciente;
+        JButton btnCadastrarRelatorio;
+        JButton btnEditarRelatorio;
         JPanel panConcluidas;
         JLabel lblConcluidasIcon;
         JLabel lblConcluidas;
@@ -59,24 +62,9 @@ public class DlgAgendaConsultas extends JDialog {
 
                 panBackground = new BackgroundPanel("/images/background.png");
                 panBackground.setLayout(new BorderLayout());
+                panBackground.setLayout(new GridBagLayout());
+                panBackground.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
                 setContentPane(panBackground);
-
-                panHeader = new JPanel();
-                panHeader.setLayout(new BorderLayout());
-                panHeader.setBackground(AppColors.DARKER);
-                panHeader.setPreferredSize(new Dimension(getWidth(), 74));
-                panHeader.setBorder(BorderFactory.createEmptyBorder(15, 64, 15, 64));
-                panBackground.add(panHeader, BorderLayout.NORTH);
-
-                lblTitle = new JLabel("BemGestar");
-                lblTitle.setFont(new Font("Arial", Font.BOLD, 32));
-                panHeader.add(lblTitle, BorderLayout.WEST);
-
-                panContent = new JPanel();
-                panContent.setLayout(new GridBagLayout());
-                panContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                panContent.setBackground(AppColors.TRANSPARENT);
-                panBackground.add(panContent, BorderLayout.CENTER);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -87,35 +75,13 @@ public class DlgAgendaConsultas extends JDialog {
                 gbc.weighty = 0.0;
                 panTop = new JPanel();
                 panTop.setBackground(AppColors.TRANSPARENT);
-                panContent.add(panTop, gbc);
-
-                btnConsultas = new RoundedButton("Consultas", 50);
-                btnConsultas.setBackground(AppColors.BUTTON_PINK);
-                btnConsultas.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                btnConsultas.setPreferredSize(new Dimension(btnConsultas.getPreferredSize().width, 55));
-                btnConsultas.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnConsultasActionPerformed(evt);
-                        }
-                });
-                panTop.add(btnConsultas);
-
-                btnExames = new RoundedButton("Exames", 50);
-                btnExames.setBackground(AppColors.BUTTON_PINK);
-                btnExames.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                btnExames.setPreferredSize(new Dimension(btnExames.getPreferredSize().width, 55));
-                btnExames.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnExamesActionPerformed(evt);
-                        }
-                });
-                panTop.add(btnExames);
+                panBackground.add(panTop, gbc);
 
                 gbc.gridy = 1;
                 gbc.weighty = 1.0;
                 panBottom = new JPanel(new GridBagLayout());
                 panBottom.setBackground(AppColors.TRANSPARENT);
-                panContent.add(panBottom, gbc);
+                panBackground.add(panBottom, gbc);
 
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -185,51 +151,14 @@ public class DlgAgendaConsultas extends JDialog {
                 panRight.add(panInnerBottom, rightGbc);
                 panBottom.add(panRight, gbc);
 
-                panActions = new JPanel(new GridLayout(1, 3, 10, 0));
+                panActions = new JPanel();
                 panActions.setBackground(AppColors.TRANSPARENT);
                 panInnerBottom.add(panActions);
-
-                btnCancelarConsulta = new RoundedButton("Cancelar Consulta", 50);
-                btnCancelarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                btnCancelarConsulta.setPreferredSize(new Dimension(btnCancelarConsulta.getPreferredSize().width, 55));
-                btnCancelarConsulta.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnCancelarConsultaActionPerformed(evt);
-                        }
-                });
-                panActions.add(btnCancelarConsulta);
-
-                btnVerRelatorio = new RoundedButton("Ver Relatório", 50);
-                btnVerRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                btnVerRelatorio.setPreferredSize(new Dimension(btnVerRelatorio.getPreferredSize().width, 55));
-                btnVerRelatorio.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnVerRelatorioActionPerformed(evt);
-                        }
-                });
-                panActions.add(btnVerRelatorio);
-
-                btnVerDadosMedico = new RoundedButton("Ver Dados do Médico", 50);
-                btnVerDadosMedico.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                btnVerDadosMedico.setPreferredSize(new Dimension(btnVerDadosMedico.getPreferredSize().width, 55));
-                btnVerDadosMedico.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                btnVerDadosMedicoActionPerformed(evt);
-                        }
-                });
-                panActions.add(btnVerDadosMedico);
 
                 panProfile = new JPanel();
                 panProfile.setBackground(AppColors.TRANSPARENT);
                 panProfile.setLayout(new GridLayout(1, 2, 10, 0));
                 panLeft.add(panProfile);
-
-                lblProfileImg = new JLabel(new ImageIcon(getClass().getResource("/images/profile.png")));
-                panProfile.add(lblProfileImg);
-
-                lblUserData = new JLabel(
-                                "<html>Paciente: Maria José<br>Clínica: BemGestar<br>Nascimento: 17/09/2001</html>");
-                panProfile.add(lblUserData);
 
                 panCategories = new JPanel();
                 panCategories.setBackground(AppColors.TRANSPARENT);
@@ -353,6 +282,144 @@ public class DlgAgendaConsultas extends JDialog {
                 panEmpty = new JPanel();
                 panEmpty.setBackground(AppColors.TRANSPARENT);
                 panLeft.add(panEmpty);
+
+                initUserCoponents();
+        }
+
+        private void initUserCoponents() {
+                String userType = "MEDICO";
+
+                if (userType == "GESTANTE") {
+                        initGestanteComponents();
+                } else if (userType == "MEDICO") {
+                        initMedicoComponents();
+                }
+        }
+
+        private void initGestanteComponents() {
+                lblProfileImg = new JLabel(new ImageIcon(getClass().getResource("/images/profile.png")));
+                panProfile.add(lblProfileImg);
+
+                // TODO: Botar dados reais do usuário
+                lblUserData = new JLabel(
+                                "<html>Paciente: Maria José<br>Clínica: BemGestar<br>Nascimento: 17/09/2001</html>");
+                panProfile.add(lblUserData);
+
+                btnConsultas = new RoundedButton("Consultas", 50);
+                btnConsultas.setBackground(AppColors.BUTTON_PINK);
+                btnConsultas.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnConsultas.setPreferredSize(new Dimension(btnConsultas.getPreferredSize().width, 55));
+                btnConsultas.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnConsultasActionPerformed(evt);
+                        }
+                });
+                panTop.add(btnConsultas);
+
+                btnExames = new RoundedButton("Exames", 50);
+                btnExames.setBackground(AppColors.BUTTON_PINK);
+                btnExames.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnExames.setPreferredSize(new Dimension(btnExames.getPreferredSize().width, 55));
+                btnExames.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnExamesActionPerformed(evt);
+                        }
+                });
+                panTop.add(btnExames);
+
+                panActions.setLayout(new GridLayout(1, 3, 10, 0));
+                btnCancelarConsulta = new RoundedButton("Cancelar Consulta", 50);
+                btnCancelarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnCancelarConsulta.setPreferredSize(new Dimension(btnCancelarConsulta.getPreferredSize().width, 55));
+                btnCancelarConsulta.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnCancelarConsultaActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnCancelarConsulta);
+
+                btnVerRelatorio = new RoundedButton("Ver Relatório", 50);
+                btnVerRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnVerRelatorio.setPreferredSize(new Dimension(btnVerRelatorio.getPreferredSize().width, 55));
+                btnVerRelatorio.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnVerRelatorioActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnVerRelatorio);
+
+                btnVerDadosMedico = new RoundedButton("Ver Dados do Médico", 50);
+                btnVerDadosMedico.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnVerDadosMedico.setPreferredSize(new Dimension(btnVerDadosMedico.getPreferredSize().width, 55));
+                btnVerDadosMedico.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnVerDadosMedicoActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnVerDadosMedico);
+        }
+
+        private void initMedicoComponents() {
+                lblProfileImg = new JLabel(new ImageIcon(getClass().getResource("/images/profile_doctor.png")));
+                panProfile.add(lblProfileImg);
+
+                // TODO: Botar dados reais do usuários
+                lblUserData = new JLabel(
+                                "<html>Médico(a): Maria José<br>Clínica: BemGestar<br>Nascimento: 17/09/2001</html>");
+                panProfile.add(lblUserData);
+
+                panActions.setLayout(new GridLayout(1, 5, 10, 0));
+                btnCancelarConsulta = new RoundedButton("Cancelar Consulta", 50);
+                btnCancelarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnCancelarConsulta.setPreferredSize(new Dimension(btnCancelarConsulta.getPreferredSize().width, 55));
+                btnCancelarConsulta.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnCancelarConsultaActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnCancelarConsulta);
+
+                btnVerRelatorio = new RoundedButton("Ver Relatório", 50);
+                btnVerRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnVerRelatorio.setPreferredSize(new Dimension(btnVerRelatorio.getPreferredSize().width, 55));
+                btnVerRelatorio.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnVerRelatorioActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnVerRelatorio);
+
+                btnVerDadosPaciente = new RoundedButton("Ver Dados do Paciente", 50);
+                btnVerDadosPaciente.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnVerDadosPaciente.setPreferredSize(new Dimension(btnVerDadosPaciente.getPreferredSize().width, 55));
+                btnVerDadosPaciente.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnVerDadosPacienteActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnVerDadosPaciente);
+
+                btnCadastrarRelatorio = new RoundedButton("Cadastrar Relatório", 50);
+                btnCadastrarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnCadastrarRelatorio
+                                .setPreferredSize(new Dimension(btnCadastrarRelatorio.getPreferredSize().width, 55));
+                btnCadastrarRelatorio.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnCadastrarRelatorioActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnCadastrarRelatorio);
+
+                btnEditarRelatorio = new RoundedButton("Ver Dados do Paciente", 50);
+                btnEditarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnEditarRelatorio.setPreferredSize(new Dimension(btnEditarRelatorio.getPreferredSize().width, 55));
+                btnEditarRelatorio.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                btnEditarRelatorioActionPerformed(evt);
+                        }
+                });
+                panActions.add(btnEditarRelatorio);
+
         }
 
         private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {
@@ -389,6 +456,18 @@ public class DlgAgendaConsultas extends JDialog {
 
         private void btnVerDadosMedicoActionPerformed(java.awt.event.ActionEvent evt) {
                 System.out.println("Clicou no botão de ver dados medicos!");
+        }
+
+        private void btnVerDadosPacienteActionPerformed(java.awt.event.ActionEvent evt) {
+                System.out.println("Clicou no botão de ver dados do paciente!");
+        }
+
+        private void btnCadastrarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+                System.out.println("Clicou no botão de cadastrar relatorios!");
+        }
+
+        private void btnEditarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+                System.out.println("Clicou no botão de editar relatorios!");
         }
 
 }
