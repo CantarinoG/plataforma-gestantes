@@ -9,9 +9,6 @@ import com.cantarino.souza.view.components.*;
 public class DlgOrientacoes extends JDialog {
 
         JPanel panBackground;
-        JPanel panHeader;
-        JLabel lblTitle;
-        JPanel panContent;
         JPanel panLeft;
         JLabel lblImage;
         JLabel lblAction;
@@ -39,25 +36,8 @@ public class DlgOrientacoes extends JDialog {
                 setLocationRelativeTo(null);
 
                 panBackground = new BackgroundPanel("/images/background.png");
-                panBackground.setLayout(new BorderLayout());
+                panBackground.setLayout(new GridBagLayout());
                 setContentPane(panBackground);
-
-                panHeader = new JPanel();
-                panHeader.setLayout(new BorderLayout());
-                panHeader.setBackground(AppColors.DARKER);
-                panHeader.setPreferredSize(new Dimension(getWidth(), 74));
-                panHeader.setBorder(BorderFactory.createEmptyBorder(15, 64, 15, 64));
-                panBackground.add(panHeader, BorderLayout.NORTH);
-
-                lblTitle = new JLabel("BemGestar");
-                lblTitle.setFont(new Font("Arial", Font.BOLD, 32));
-                panHeader.add(lblTitle, BorderLayout.WEST);
-
-                panContent = new JPanel();
-                panContent.setLayout(new GridBagLayout());
-                panContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                panContent.setBackground(AppColors.TRANSPARENT);
-                panBackground.add(panContent, BorderLayout.CENTER);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -70,14 +50,14 @@ public class DlgOrientacoes extends JDialog {
                 panLeft.setBackground(AppColors.TRANSPARENT);
                 panLeft.setPreferredSize(new Dimension(0, 0));
                 panLeft.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                panContent.add(panLeft, gbc);
+                panBackground.add(panLeft, gbc);
 
                 gbc.gridx = 1;
                 gbc.weightx = 0.35;
                 gbc.insets = new Insets(0, 0, 0, 0);
                 lblImage = new JLabel(new ImageIcon(getClass().getResource("/images/orientations.png")));
                 lblImage.setPreferredSize(new Dimension(0, 0));
-                panContent.add(lblImage, gbc);
+                panBackground.add(lblImage, gbc);
 
                 panLeft.setLayout(new GridBagLayout());
 
