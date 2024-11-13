@@ -11,9 +11,6 @@ import com.cantarino.souza.view.components.*;
 public class DlgAgendaConsultas extends JDialog {
 
         JPanel panBackground;
-        JPanel panHeader;
-        JLabel lblTitle;
-        JPanel panContent;
         JPanel panLeft;
         JPanel panRight;
         JPanel panProfile;

@@ -9,9 +9,6 @@ import javax.swing.text.MaskFormatter;
 
 public class DlgCadastroConsultas extends JDialog {
     private JPanel panBackground;
-    private JPanel panHeader;
-    private JLabel lblTitle;
-    private JPanel panContent;
     private JPanel panColumn;
     private JLabel lblAction;
     private JPanel panButton;
@@ -45,27 +42,9 @@ public class DlgCadastroConsultas extends JDialog {
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
+        panBackground.setLayout(new GridBagLayout());
         setContentPane(panBackground);
 
-        panHeader = new JPanel();
-        panHeader.setLayout(new BorderLayout());
-        panHeader.setBackground(AppColors.DARKER);
-        panHeader.setPreferredSize(new Dimension(getWidth(), 74));
-        panHeader.setBorder(BorderFactory.createEmptyBorder(15, 64, 15, 64));
-        panBackground.add(panHeader, BorderLayout.NORTH);
-
-        lblTitle = new JLabel("BemGestar");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 32));
-        panHeader.add(lblTitle, BorderLayout.WEST);
-
-        panContent = new JPanel();
-        panContent.setLayout(new GridBagLayout());
-        panContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panContent.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panContent, BorderLayout.CENTER);
-
-        // Configuração do GridBagConstraints
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -78,7 +57,7 @@ public class DlgCadastroConsultas extends JDialog {
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panContent.add(lblAction, gbc);
+        panBackground.add(lblAction, gbc);
 
         // Configuração para o painel de campos
         gbc.gridy = 1;
@@ -86,7 +65,7 @@ public class DlgCadastroConsultas extends JDialog {
         panColumn = new JPanel();
         panColumn.setLayout(new GridLayout(7, 1, 20, 5));
         panColumn.setBackground(AppColors.TRANSPARENT);
-        panContent.add(panColumn, gbc);
+        panBackground.add(panColumn, gbc);
 
         // Campo Paciente
         txtPaciente = new JTextField();
@@ -195,7 +174,7 @@ public class DlgCadastroConsultas extends JDialog {
         btnCadastrarConsulta.addActionListener(evt -> btnCadastrarConsultaActionPerformed(evt));
 
         panButton.add(btnCadastrarConsulta);
-        panContent.add(panButton, gbcButton);
+        panBackground.add(panButton, gbcButton);
     }
 
     private JPanel createCustomTextfield(String hint, JComponent textField) {
