@@ -241,18 +241,22 @@ public class DlgUsuarios extends JDialog {
             case GERENCIANDO_GESTANTE:
                 DlgCadastroGestantes dlgGestante = new DlgCadastroGestantes(this, true);
                 dlgGestante.setVisible(true);
+                gestanteController.atualizarTabela(grdUsuarios);
                 break;
             case GERENCIANDO_MEDICO:
                 DlgCadastroMedicos dlgMedico = new DlgCadastroMedicos(this, true);
                 dlgMedico.setVisible(true);
+                medicoController.atualizarTabela(grdUsuarios);
                 break;
             case GERENCIANDO_SECRETARIO:
                 DlgCadastroSecretarios dlgSecretario = new DlgCadastroSecretarios(this, true);
                 dlgSecretario.setVisible(true);
+                secretarioController.atualizarTabela(grdUsuarios);
                 break;
             case GERENCIANDO_ADM:
                 DlgCadastroAdm dlgAdm = new DlgCadastroAdm(this, true);
                 dlgAdm.setVisible(true);
+                adminController.atualizarTabela(grdUsuarios);
                 break;
             default:
         }

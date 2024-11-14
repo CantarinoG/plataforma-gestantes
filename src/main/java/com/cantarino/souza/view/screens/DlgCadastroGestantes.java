@@ -1,5 +1,7 @@
 package com.cantarino.souza.view.screens;
 
+import com.cantarino.souza.controller.GestanteController;
+import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -39,13 +41,17 @@ public class DlgCadastroGestantes extends JDialog {
     JPanel panTipoSanguineoField;
     JPanel panHistoricoMedicoField;
 
+    private GestanteController gestanteController;
+
     public DlgCadastroGestantes(JFrame parent, boolean modal) {
         super(parent, modal);
+        gestanteController = new GestanteController();
         initComponents();
     }
 
     public DlgCadastroGestantes(JDialog parent, boolean modal) {
         super(parent, modal);
+        gestanteController = new GestanteController();
         initComponents();
     }
 
@@ -168,7 +174,6 @@ public class DlgCadastroGestantes extends JDialog {
         panColumn.add(panContatoEmergenciaField);
 
         String[] tiposSanguineos = {
-                "Selecione",
                 "A+", "A-",
                 "B+", "B-",
                 "AB+", "AB-",
@@ -189,7 +194,7 @@ public class DlgCadastroGestantes extends JDialog {
         edtHistoricoMedico.setFont(new Font("Arial", Font.PLAIN, 22));
         edtHistoricoMedico.setBackground(AppColors.FIELD_PINK);
         edtHistoricoMedico.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panHistoricoMedicoField = createCustomTextfield("Histórico Médico", edtHistoricoMedico);
+        panHistoricoMedicoField = createCustomTextfield("Histórico Médico(Opcional)", edtHistoricoMedico);
         panColumn.add(panHistoricoMedicoField);
 
         GridBagConstraints gbcButton = new GridBagConstraints();
@@ -252,6 +257,33 @@ public class DlgCadastroGestantes extends JDialog {
     }
 
     private void btnCriarContaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de Criar Conta!");
+        try {
+            String cpf = edtCPF.getText().replaceAll("[^0-9]", "");
+
+            String dataNascimento = edtDataNascimento.getText().split("/")[2] + "-" +
+                    edtDataNascimento.getText().split("/")[1] + "-" +
+                    edtDataNascimento.getText().split("/")[0];
+
+            String previsaoParto = edtPrevisaoParto.getText().split("/")[2] + "-" +
+                    edtPrevisaoParto.getText().split("/")[1] + "-" +
+                    edtPrevisaoParto.getText().split("/")[0];
+
+            gestanteController.cadastrar(
+                    cpf,
+                    edtNome.getText(),
+                    edtEmail.getText(),
+                    new String(edtPass.getPassword()),
+                    dataNascimento,
+                    edtTelefone.getText(),
+                    edtEndereco.getText(),
+                    null,
+                    previsaoParto,
+                    edtContatoEmergencia.getText(),
+                    edtHistoricoMedico.getText(),
+                    (String) edtTipoSanguineo.getSelectedItem());
+            dispose();
+        } catch (UsuarioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
