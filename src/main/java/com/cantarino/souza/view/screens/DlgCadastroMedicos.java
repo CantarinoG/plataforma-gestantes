@@ -1,5 +1,7 @@
 package com.cantarino.souza.view.screens;
 
+import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -32,13 +34,17 @@ public class DlgCadastroMedicos extends JDialog {
     JTextField edtEndereco;
     JPanel panEnderecoField;
 
+    private MedicoController medicoController;
+
     public DlgCadastroMedicos(JFrame parent, boolean modal) {
         super(parent, modal);
+        medicoController = new MedicoController();
         initComponents();
     }
 
     public DlgCadastroMedicos(JDialog parent, boolean modal) {
         super(parent, modal);
+        medicoController = new MedicoController();
         initComponents();
     }
 
@@ -97,7 +103,6 @@ public class DlgCadastroMedicos extends JDialog {
 
         // Especialização
         String[] especialidades = {
-                "Selecione",
                 "Obstetrícia",
                 "Ginecologia",
                 "Obstetrícia e Ginecologia",
@@ -187,9 +192,7 @@ public class DlgCadastroMedicos extends JDialog {
 
         try {
             MaskFormatter maskCPF = new MaskFormatter("###.###.###-##");
-            MaskFormatter maskCRM = new MaskFormatter("######-#");
             maskCPF.install(edtCPF);
-            maskCRM.install(edtCRM);
         } catch (Exception e) {
         }
     }
@@ -222,6 +225,27 @@ public class DlgCadastroMedicos extends JDialog {
     }
 
     private void btnCriarContaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de Criar Conta!");
+        try {
+            String cpf = edtCPF.getText().replaceAll("[^0-9]", "");
+
+            String dataNascimento = edtDataNascimento.getText().split("/")[2] + "-" +
+                    edtDataNascimento.getText().split("/")[1] + "-" +
+                    edtDataNascimento.getText().split("/")[0];
+
+            medicoController.cadastrar(
+                    cpf,
+                    edtNome.getText(),
+                    edtEmail.getText(),
+                    new String(edtPass.getPassword()),
+                    dataNascimento,
+                    edtTelefone.getText(),
+                    edtEndereco.getText(),
+                    null,
+                    (String) edtEspecializacao.getSelectedItem(),
+                    edtCRM.getText());
+            dispose();
+        } catch (UsuarioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
