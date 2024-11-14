@@ -27,7 +27,7 @@ public class ValidateMedico extends ValidateUsuario {
 
         if (crm == null || crm.isEmpty())
             throw new MedicoException("ERRO: Campo CRM não pode ser vazio.");
-        if (!crm.matches("^\\d+\\s?[A-Z]{2}$"))
+        if (!crm.matches("^\\d{1,8}$"))
             throw new MedicoException("ERRO: CRM no formato inválido.");
         medico.setCrm(crm);
 
