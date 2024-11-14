@@ -7,43 +7,44 @@ import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
-public class DlgCadastroMedicos extends JDialog {
+import org.jdatepicker.impl.JDatePickerImpl;
+
+public class DlgCadastroSecretarios extends JDialog {
     JPanel panBackground;
     JPanel panColumn;
     JLabel lblAction;
     JTextField edtNome;
     JFormattedTextField edtCPF;
-    JFormattedTextField edtCRM;
     JPanel panNomeField;
     JPasswordField edtPass;
     JPanel panPassField;
     JPanel panButton;
     JButton btnCriarConta;
+    JDatePickerImpl datePicker;
     JPanel panDateField;
-    JPanel panCPFField;
-    JPanel panCRMField;
-    JComboBox<String> edtEspecializacao;
-    JPanel panEspecializacaoField;
     JTextField edtEmail;
-    JPanel panEmailField;
     JFormattedTextField edtDataNascimento;
+    JFormattedTextField edtDataContratacao;
     JFormattedTextField edtTelefone;
-    JPanel panTelefoneField;
     JTextField edtEndereco;
+    JPanel panCPFField;
+    JPanel panEmailField;
+    JPanel panTelefoneField;
     JPanel panEnderecoField;
+    JPanel panDataContratacaoField;
 
-    public DlgCadastroMedicos(JFrame parent, boolean modal) {
+    public DlgCadastroSecretarios(JFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
-    public DlgCadastroMedicos(JDialog parent, boolean modal) {
+    public DlgCadastroSecretarios(JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
     }
 
     private void initComponents() {
-        setTitle("Cadastro de Médico");
+        setTitle("Cadastro de Gestante");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
         setLocationRelativeTo(null);
@@ -59,15 +60,17 @@ public class DlgCadastroMedicos extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel("Cadastrar Médico");
+        // Adiciona o título
+        lblAction = new JLabel("Cadastrar Secretário");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
         panBackground.add(lblAction, gbc);
 
-        gbc.gridy = 1;
+        // Configuração para o painel de campos
+        gbc.gridy = 1; // Próxima linha
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(6, 2, 20, 10));
+        panColumn.setLayout(new GridLayout(7, 2, 20, 10));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -79,14 +82,6 @@ public class DlgCadastroMedicos extends JDialog {
         panCPFField = createCustomTextfield("CPF", edtCPF);
         panColumn.add(panCPFField);
 
-        // CRM
-        edtCRM = new JFormattedTextField();
-        edtCRM.setFont(new Font("Arial", Font.PLAIN, 22));
-        edtCRM.setBackground(AppColors.FIELD_PINK);
-        edtCRM.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panCRMField = createCustomTextfield("CRM", edtCRM);
-        panColumn.add(panCRMField);
-
         // Campo para Nome
         edtNome = new JTextField();
         edtNome.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -94,24 +89,6 @@ public class DlgCadastroMedicos extends JDialog {
         edtNome.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         panNomeField = createCustomTextfield("Nome", edtNome);
         panColumn.add(panNomeField);
-
-        // Especialização
-        String[] especialidades = {
-                "Selecione",
-                "Obstetrícia",
-                "Ginecologia",
-                "Obstetrícia e Ginecologia",
-                "Medicina Fetal",
-                "Outro"
-        };
-
-        edtEspecializacao = new JComboBox<>(especialidades);
-        edtEspecializacao.setFont(new Font("Arial", Font.PLAIN, 22));
-        edtEspecializacao.setBackground(AppColors.FIELD_PINK);
-        edtEspecializacao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        edtEspecializacao.setEditable(false);
-        panEspecializacaoField = createCustomTextfield("Especialização", edtEspecializacao);
-        panColumn.add(panEspecializacaoField);
 
         // Campo para Email
         edtEmail = new JTextField();
@@ -140,6 +117,15 @@ public class DlgCadastroMedicos extends JDialog {
 
             panDateField = createCustomTextfield("Data de Nascimento", edtDataNascimento);
             panColumn.add(panDateField);
+
+            edtDataContratacao = new JFormattedTextField(maskData);
+            edtDataContratacao.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtDataContratacao.setBackground(AppColors.FIELD_PINK);
+            edtDataContratacao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            edtDataContratacao.setToolTipText("Digite a data no formato: dd/mm/aaaa");
+
+            panDataContratacaoField = createCustomTextfield("Data de Contratação", edtDataContratacao);
+            panColumn.add(panDataContratacaoField);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -187,9 +173,7 @@ public class DlgCadastroMedicos extends JDialog {
 
         try {
             MaskFormatter maskCPF = new MaskFormatter("###.###.###-##");
-            MaskFormatter maskCRM = new MaskFormatter("######-#");
             maskCPF.install(edtCPF);
-            maskCRM.install(edtCRM);
         } catch (Exception e) {
         }
     }

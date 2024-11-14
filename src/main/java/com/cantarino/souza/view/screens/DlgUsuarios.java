@@ -32,6 +32,13 @@ public class DlgUsuarios extends JDialog {
     SecretarioController secretarioController;
     AdminController adminController;
 
+    private final int GERENCIANDO_GESTANTE = 0;
+    private final int GERENCIANDO_MEDICO = 1;
+    private final int GERENCIANDO_SECRETARIO = 2;
+    private final int GERENCIANDO_ADM = 3;
+
+    private int gerenciando = GERENCIANDO_GESTANTE;
+
     public DlgUsuarios(JFrame parent, boolean modal) {
         super(parent, modal);
         gestanteController = new GestanteController();
@@ -196,6 +203,7 @@ public class DlgUsuarios extends JDialog {
         btnDeletarUsuario.setText("Deletar Usuário");
         gestanteController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
+        gerenciando = GERENCIANDO_GESTANTE;
     }
 
     private void btnMedicosActionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,6 +213,7 @@ public class DlgUsuarios extends JDialog {
         btnDeletarUsuario.setText("Deletar Médico(a)");
         medicoController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
+        gerenciando = GERENCIANDO_MEDICO;
     }
 
     private void btnSecretariosActionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,6 +223,7 @@ public class DlgUsuarios extends JDialog {
         btnDeletarUsuario.setText("Deletar Secretário(a)");
         secretarioController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
+        gerenciando = GERENCIANDO_SECRETARIO;
     }
 
     private void btnAdminActionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,10 +233,29 @@ public class DlgUsuarios extends JDialog {
         btnDeletarUsuario.setText("Deletar Administrador(a)");
         adminController.atualizarTabela(grdUsuarios);
         panBackground.repaint();
+        gerenciando = GERENCIANDO_ADM;
     }
 
     private void btnCadastrarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de cadastrar usuario");
+        switch (gerenciando) {
+            case GERENCIANDO_GESTANTE:
+                DlgCadastroGestantes dlgGestante = new DlgCadastroGestantes(this, true);
+                dlgGestante.setVisible(true);
+                break;
+            case GERENCIANDO_MEDICO:
+                DlgCadastroMedicos dlgMedico = new DlgCadastroMedicos(this, true);
+                dlgMedico.setVisible(true);
+                break;
+            case GERENCIANDO_SECRETARIO:
+                DlgCadastroSecretarios dlgSecretario = new DlgCadastroSecretarios(this, true);
+                dlgSecretario.setVisible(true);
+                break;
+            case GERENCIANDO_ADM:
+                DlgCadastroAdm dlgAdm = new DlgCadastroAdm(this, true);
+                dlgAdm.setVisible(true);
+                break;
+            default:
+        }
     }
 
     private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {

@@ -44,6 +44,11 @@ public class DlgCadastroGestantes extends JDialog {
         initComponents();
     }
 
+    public DlgCadastroGestantes(JDialog parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+    }
+
     private void initComponents() {
         setTitle("Cadastro de Gestante");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
