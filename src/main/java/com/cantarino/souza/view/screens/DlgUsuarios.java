@@ -301,6 +301,9 @@ public class DlgUsuarios extends JDialog {
             case GERENCIANDO_SECRETARIO:
                 Secretario secretario = (Secretario) selectedObject;
                 id = secretario.getId();
+                DlgCadastroSecretarios dlgSecretarios = new DlgCadastroSecretarios(this, true, id);
+                dlgSecretarios.setVisible(true);
+                secretarioController.atualizarTabela(grdUsuarios);
                 break;
             case GERENCIANDO_ADM:
                 Admin admin = (Admin) selectedObject;
