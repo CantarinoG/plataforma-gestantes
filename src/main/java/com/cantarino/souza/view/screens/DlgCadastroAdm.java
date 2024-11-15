@@ -1,11 +1,14 @@
 package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
@@ -34,16 +37,27 @@ public class DlgCadastroAdm extends JDialog {
     JPanel panEnderecoField;
 
     private AdminController adminController;
+    private Admin atualizando;
 
-    public DlgCadastroAdm(JFrame parent, boolean modal) {
+    public DlgCadastroAdm(JDialog parent, boolean modal, int id) {
         super(parent, modal);
         adminController = new AdminController();
+        atualizando = adminController.buscarPorId(id);
         initComponents();
+
+        edtCPF.setText(atualizando.getCpf());
+        edtNome.setText(atualizando.getNome());
+        edtEmail.setText(atualizando.getEmail());
+        edtPass.setText(atualizando.getSenha());
+        edtDataNascimento.setText(atualizando.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        edtTelefone.setText(atualizando.getTelefone());
+        edtEndereco.setText(atualizando.getEndereco());
     }
 
     public DlgCadastroAdm(JDialog parent, boolean modal) {
         super(parent, modal);
         adminController = new AdminController();
+        atualizando = null;
         initComponents();
     }
 
@@ -65,7 +79,7 @@ public class DlgCadastroAdm extends JDialog {
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
         // Adiciona o título
-        lblAction = new JLabel("Cadastrar Administrador(a)");
+        lblAction = new JLabel(atualizando != null ? "Editar Administrador(a)" : "Cadastrar Administrador(a)");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -152,7 +166,7 @@ public class DlgCadastroAdm extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCriarConta = new RoundedButton("Criar Conta", 50);
+        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 50);
         btnCriarConta.setBackground(AppColors.BUTTON_PINK);
         btnCriarConta.setFont(new Font("Arial", Font.BOLD, 15));
         btnCriarConta.setFocusPainted(false);
@@ -208,16 +222,31 @@ public class DlgCadastroAdm extends JDialog {
                     edtDataNascimento.getText().split("/")[1] + "-" +
                     edtDataNascimento.getText().split("/")[0];
 
-            adminController.cadastrar(
-                    cpf,
-                    edtNome.getText(),
-                    edtEmail.getText(),
-                    new String(edtPass.getPassword()),
-                    dataNascimento,
-                    edtTelefone.getText(),
-                    edtEndereco.getText(),
-                    null);
-            dispose();
+            if (atualizando == null) {
+                adminController.cadastrar(
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null);
+                dispose();
+            } else {
+                adminController.atualizar(
+                        atualizando.getId(),
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null);
+                dispose();
+            }
+
         } catch (UsuarioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
