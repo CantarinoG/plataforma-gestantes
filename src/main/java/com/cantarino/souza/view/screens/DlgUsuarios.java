@@ -334,19 +334,19 @@ public class DlgUsuarios extends JDialog {
             case GERENCIANDO_MEDICO:
                 Medico medico = (Medico) selectedObject;
                 id = medico.getId();
-
+                medicoController.excluir(id);
                 medicoController.atualizarTabela(grdUsuarios);
                 break;
             case GERENCIANDO_SECRETARIO:
                 Secretario secretario = (Secretario) selectedObject;
                 id = secretario.getId();
-
+                secretarioController.excluir(id);
                 secretarioController.atualizarTabela(grdUsuarios);
                 break;
             case GERENCIANDO_ADM:
                 Admin admin = (Admin) selectedObject;
                 id = admin.getId();
-
+                adminController.excluir(id);
                 adminController.atualizarTabela(grdUsuarios);
                 break;
             default:

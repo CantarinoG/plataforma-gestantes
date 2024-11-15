@@ -42,4 +42,9 @@ public class SecretarioController {
         repositorio.update(novoSecretario);
     }
 
+    public void excluir(int id) {
+        Secretario secretario = repositorio.find(id);
+        repositorio.delete(secretario);
+    }
+
 }

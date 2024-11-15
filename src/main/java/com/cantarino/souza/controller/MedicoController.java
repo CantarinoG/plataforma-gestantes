@@ -42,4 +42,9 @@ public class MedicoController {
         repositorio.update(novoMedico);
     }
 
+    public void excluir(int id) {
+        Medico medico = repositorio.find(id);
+        repositorio.delete(medico);
+    }
+
 }
