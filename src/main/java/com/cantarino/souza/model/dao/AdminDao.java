@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 
 import com.cantarino.souza.factory.DatabaseJPA;
 import com.cantarino.souza.model.entities.Admin;
-import com.cantarino.souza.model.entities.Gestante;
 
 public class AdminDao implements IDao<Admin> {
 
