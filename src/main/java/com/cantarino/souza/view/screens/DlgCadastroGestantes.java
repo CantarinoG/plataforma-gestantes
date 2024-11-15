@@ -1,11 +1,14 @@
 package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.GestanteController;
+import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
@@ -42,17 +45,33 @@ public class DlgCadastroGestantes extends JDialog {
     JPanel panHistoricoMedicoField;
 
     private GestanteController gestanteController;
-
-    public DlgCadastroGestantes(JFrame parent, boolean modal) {
-        super(parent, modal);
-        gestanteController = new GestanteController();
-        initComponents();
-    }
+    private Gestante atualizando;
 
     public DlgCadastroGestantes(JDialog parent, boolean modal) {
         super(parent, modal);
         gestanteController = new GestanteController();
+        atualizando = null;
         initComponents();
+    }
+
+    public DlgCadastroGestantes(JDialog parent, boolean modal, int id) {
+        super(parent, modal);
+        gestanteController = new GestanteController();
+        atualizando = gestanteController.buscarPorId(id);
+        initComponents();
+
+        // Fill fields with existing data
+        edtCPF.setText(atualizando.getCpf());
+        edtNome.setText(atualizando.getNome());
+        edtEmail.setText(atualizando.getEmail());
+        edtPass.setText(atualizando.getSenha());
+        edtDataNascimento.setText(atualizando.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        edtTelefone.setText(atualizando.getTelefone());
+        edtEndereco.setText(atualizando.getEndereco());
+        edtPrevisaoParto.setText(atualizando.getPrevisaoParto().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        edtContatoEmergencia.setText(atualizando.getContatoEmergencia());
+        edtHistoricoMedico.setText(atualizando.getHistoricoMedico());
+        edtTipoSanguineo.setSelectedItem(atualizando.getTipoSanguineo());
     }
 
     private void initComponents() {
@@ -73,7 +92,7 @@ public class DlgCadastroGestantes extends JDialog {
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
         // Adiciona o título
-        lblAction = new JLabel("Cadastrar Gestante");
+        lblAction = new JLabel(atualizando != null ? "Editando Gestante" : "Cadastrar Gestante");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -208,7 +227,7 @@ public class DlgCadastroGestantes extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCriarConta = new RoundedButton("Criar Conta", 50);
+        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 50);
         btnCriarConta.setBackground(AppColors.BUTTON_PINK);
         btnCriarConta.setFont(new Font("Arial", Font.BOLD, 15));
         btnCriarConta.setFocusPainted(false);
@@ -268,20 +287,38 @@ public class DlgCadastroGestantes extends JDialog {
                     edtPrevisaoParto.getText().split("/")[1] + "-" +
                     edtPrevisaoParto.getText().split("/")[0];
 
-            gestanteController.cadastrar(
-                    cpf,
-                    edtNome.getText(),
-                    edtEmail.getText(),
-                    new String(edtPass.getPassword()),
-                    dataNascimento,
-                    edtTelefone.getText(),
-                    edtEndereco.getText(),
-                    null,
-                    previsaoParto,
-                    edtContatoEmergencia.getText(),
-                    edtHistoricoMedico.getText(),
-                    (String) edtTipoSanguineo.getSelectedItem());
-            dispose();
+            if (atualizando == null) {
+                gestanteController.cadastrar(
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null,
+                        previsaoParto,
+                        edtContatoEmergencia.getText(),
+                        edtHistoricoMedico.getText(),
+                        (String) edtTipoSanguineo.getSelectedItem());
+                dispose();
+            } else {
+                gestanteController.atualizar(
+                        atualizando.getId(),
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null,
+                        previsaoParto,
+                        edtContatoEmergencia.getText(),
+                        edtHistoricoMedico.getText(),
+                        (String) edtTipoSanguineo.getSelectedItem());
+                dispose();
+            }
         } catch (UsuarioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }

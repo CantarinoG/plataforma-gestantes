@@ -8,6 +8,10 @@ import com.cantarino.souza.controller.AdminController;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.controller.SecretarioController;
+import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.view.components.*;
 
 public class DlgUsuarios extends JDialog {
@@ -262,8 +266,45 @@ public class DlgUsuarios extends JDialog {
         }
     }
 
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdUsuarios.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdUsuarios.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
+    }
+
     private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de editar usuario");
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        switch (gerenciando) {
+            case GERENCIANDO_GESTANTE:
+                Gestante gestante = (Gestante) selectedObject;
+                id = gestante.getId();
+                DlgCadastroGestantes dlgGestante = new DlgCadastroGestantes(this, true, id);
+                dlgGestante.setVisible(true);
+                gestanteController.atualizarTabela(grdUsuarios);
+                break;
+            case GERENCIANDO_MEDICO:
+                Medico medico = (Medico) selectedObject;
+                id = medico.getId();
+                break;
+            case GERENCIANDO_SECRETARIO:
+                Secretario secretario = (Secretario) selectedObject;
+                id = secretario.getId();
+                break;
+            case GERENCIANDO_ADM:
+                Admin admin = (Admin) selectedObject;
+                id = admin.getId();
+                break;
+            default:
+        }
     }
 
     private void btnDeletarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {
