@@ -1,11 +1,14 @@
 package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.SecretarioController;
+import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
@@ -36,16 +39,28 @@ public class DlgCadastroSecretarios extends JDialog {
     JPanel panDataContratacaoField;
 
     SecretarioController secretarioController;
+    Secretario atualizando;
 
-    public DlgCadastroSecretarios(JFrame parent, boolean modal) {
+    public DlgCadastroSecretarios(JDialog parent, boolean modal, int id) {
         super(parent, modal);
         secretarioController = new SecretarioController();
+        atualizando = secretarioController.buscarPorId(id);
         initComponents();
+
+        edtCPF.setText(atualizando.getCpf());
+        edtNome.setText(atualizando.getNome());
+        edtEmail.setText(atualizando.getEmail());
+        edtPass.setText(atualizando.getSenha());
+        edtDataNascimento.setText(atualizando.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        edtDataContratacao.setText(atualizando.getDataContratacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        edtTelefone.setText(atualizando.getTelefone());
+        edtEndereco.setText(atualizando.getEndereco());
     }
 
     public DlgCadastroSecretarios(JDialog parent, boolean modal) {
         super(parent, modal);
         secretarioController = new SecretarioController();
+        atualizando = null;
         initComponents();
     }
 
@@ -67,7 +82,7 @@ public class DlgCadastroSecretarios extends JDialog {
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
         // Adiciona o título
-        lblAction = new JLabel("Cadastrar Secretário");
+        lblAction = new JLabel(atualizando != null ? "Editar Secretário(a)" : "Cadastrar Secretário(a)");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -163,7 +178,7 @@ public class DlgCadastroSecretarios extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCriarConta = new RoundedButton("Criar Conta", 50);
+        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 50);
         btnCriarConta.setBackground(AppColors.BUTTON_PINK);
         btnCriarConta.setFont(new Font("Arial", Font.BOLD, 15));
         btnCriarConta.setFocusPainted(false);
@@ -220,17 +235,33 @@ public class DlgCadastroSecretarios extends JDialog {
             String dataContratacao = edtDataContratacao.getText().split("/")[2] + "-" +
                     edtDataContratacao.getText().split("/")[1] + "-" +
                     edtDataContratacao.getText().split("/")[0];
-            secretarioController.cadastrar(
-                    cpf,
-                    edtNome.getText(),
-                    edtEmail.getText(),
-                    new String(edtPass.getPassword()),
-                    dataNascimento,
-                    edtTelefone.getText(),
-                    edtEndereco.getText(),
-                    null,
-                    dataContratacao);
-            dispose();
+            if (atualizando == null) {
+                secretarioController.cadastrar(
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null,
+                        dataContratacao);
+                dispose();
+            } else {
+                secretarioController.atualizar(
+                        atualizando.getId(),
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null,
+                        dataContratacao);
+                dispose();
+            }
+
         } catch (UsuarioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
