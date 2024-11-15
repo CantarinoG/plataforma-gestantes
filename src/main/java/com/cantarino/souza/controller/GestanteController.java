@@ -31,4 +31,20 @@ public class GestanteController {
 
     }
 
+    public Gestante buscarPorId(int id) {
+        return repositorio.find(id);
+    }
+
+    public void atualizar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
+            String telefone, String endereco, String deletadoEm, String previsaoParto, String contatoEmergencia,
+            String historicoMedico, String tipoSanguineo) {
+
+        Gestante novaGestante = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
+                endereco, deletadoEm, previsaoParto, contatoEmergencia, historicoMedico, tipoSanguineo);
+
+        novaGestante.setId(id);
+        repositorio.update(novaGestante);
+
+    }
+
 }
