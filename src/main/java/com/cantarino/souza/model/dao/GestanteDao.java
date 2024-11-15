@@ -1,5 +1,6 @@
 package com.cantarino.souza.model.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -39,8 +40,8 @@ public class GestanteDao implements IDao<Gestante> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
-        Gestante managedGestante = this.entityManager.merge(obj);
-        this.entityManager.remove(managedGestante);
+        obj.setDeletadoEm(LocalDateTime.now());
+        this.entityManager.merge(obj);
         this.entityManager.getTransaction().commit();
 
         this.entityManager.close();
@@ -64,7 +65,7 @@ public class GestanteDao implements IDao<Gestante> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Gestante> gestantes = this.entityManager
-                .createQuery("FROM Gestante", Gestante.class)
+                .createQuery("FROM Gestante g WHERE g.deletadoEm IS NULL", Gestante.class)
                 .getResultList();
 
         this.entityManager.close();

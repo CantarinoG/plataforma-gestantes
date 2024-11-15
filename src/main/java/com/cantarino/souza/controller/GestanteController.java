@@ -47,4 +47,9 @@ public class GestanteController {
 
     }
 
+    public void excluir(int id) {
+        Gestante gestante = repositorio.find(id);
+        repositorio.delete(gestante);
+    }
+
 }

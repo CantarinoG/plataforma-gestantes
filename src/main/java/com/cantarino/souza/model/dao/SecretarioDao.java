@@ -62,7 +62,7 @@ public class SecretarioDao implements IDao<Secretario> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Secretario> secretarios = this.entityManager
-                .createQuery("FROM Secretario", Secretario.class)
+                .createQuery("FROM Secretario s WHERE s.deletadoEm IS NULL", Secretario.class)
                 .getResultList();
 
         this.entityManager.close();
