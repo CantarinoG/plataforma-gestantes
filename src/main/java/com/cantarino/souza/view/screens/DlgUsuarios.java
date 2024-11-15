@@ -317,7 +317,40 @@ public class DlgUsuarios extends JDialog {
     }
 
     private void btnDeletarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de deletar usuario");
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        switch (gerenciando) {
+            case GERENCIANDO_GESTANTE:
+                Gestante gestante = (Gestante) selectedObject;
+                id = gestante.getId();
+                gestanteController.excluir(id);
+                gestanteController.atualizarTabela(grdUsuarios);
+                break;
+            case GERENCIANDO_MEDICO:
+                Medico medico = (Medico) selectedObject;
+                id = medico.getId();
+
+                medicoController.atualizarTabela(grdUsuarios);
+                break;
+            case GERENCIANDO_SECRETARIO:
+                Secretario secretario = (Secretario) selectedObject;
+                id = secretario.getId();
+
+                secretarioController.atualizarTabela(grdUsuarios);
+                break;
+            case GERENCIANDO_ADM:
+                Admin admin = (Admin) selectedObject;
+                id = admin.getId();
+
+                adminController.atualizarTabela(grdUsuarios);
+                break;
+            default:
+        }
     }
 
     private void grdUsuariosMouseClicked(java.awt.event.MouseEvent evt) {
