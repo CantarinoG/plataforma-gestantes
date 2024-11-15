@@ -4,6 +4,14 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.ConsultaController;
+import com.cantarino.souza.controller.ExameController;
+import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.entities.Consulta;
+import com.cantarino.souza.model.entities.Exame;
+import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
@@ -21,9 +29,20 @@ public class DlgConsultas extends JDialog {
     JTable grdProcedimentos;
     JScrollPane scrollPane;
 
+    ConsultaController consultaController;
+    ExameController exameController;
+
+    private final int GERENCIANDO_CONSULTA = 0;
+    private final int GERENCIANDO_EXAME = 1;
+
+    private int gerenciando = GERENCIANDO_CONSULTA;
+
     public DlgConsultas(JFrame parent, boolean modal) {
         super(parent, modal);
+        consultaController = new ConsultaController();
+        exameController = new ExameController();
         initComponents();
+        consultaController.atualizarTabela(grdProcedimentos);
     }
 
     private void initComponents() {
@@ -34,6 +53,7 @@ public class DlgConsultas extends JDialog {
 
         panBackground = new BackgroundPanel("/images/background.png");
         panBackground.setLayout(new GridBagLayout());
+        panBackground.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         setContentPane(panBackground);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -154,7 +174,8 @@ public class DlgConsultas extends JDialog {
         btnEditarConsulta.setText("Editar Consulta");
         btnDeletarConsulta.setText("Deletar Consulta");
         panBackground.repaint();
-
+        consultaController.atualizarTabela(grdProcedimentos);
+        gerenciando = GERENCIANDO_CONSULTA;
     }
 
     private void btnExamesActionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,10 +184,33 @@ public class DlgConsultas extends JDialog {
         btnEditarConsulta.setText("Editar Exame");
         btnDeletarConsulta.setText("Deletar Exame");
         panBackground.repaint();
+        exameController.atualizarTabela(grdProcedimentos);
+        gerenciando = GERENCIANDO_EXAME;
+    }
+
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdProcedimentos.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdProcedimentos.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
     }
 
     private void btnCadastrarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de cadastrar consulta");
+        switch (gerenciando) {
+            case GERENCIANDO_CONSULTA:
+                DlgCadastroConsultas dlgConsulta = new DlgCadastroConsultas(this, true);
+                dlgConsulta.setVisible(true);
+                consultaController.atualizarTabela(grdProcedimentos);
+                break;
+            case GERENCIANDO_EXAME:
+                DlgCadastroExames dlgExame = new DlgCadastroExames(this, true);
+                dlgExame.setVisible(true);
+                exameController.atualizarTabela(grdProcedimentos);
+                break;
+            default:
+        }
     }
 
     private void btnEditarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,7 +218,28 @@ public class DlgConsultas extends JDialog {
     }
 
     private void btnDeletarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de deletar consulta");
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        switch (gerenciando) {
+            case GERENCIANDO_CONSULTA:
+                Consulta consulta = (Consulta) selectedObject;
+                id = consulta.getId();
+                consultaController.excluir(id);
+                consultaController.atualizarTabela(grdProcedimentos);
+                break;
+            case GERENCIANDO_EXAME:
+                Exame exame = (Exame) selectedObject;
+                id = exame.getId();
+                exameController.excluir(id);
+                exameController.atualizarTabela(grdProcedimentos);
+                break;
+            default:
+        }
     }
 
     private void grdProcedimentosMouseClicked(java.awt.event.MouseEvent evt) {

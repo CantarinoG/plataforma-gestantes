@@ -20,15 +20,17 @@ public class ValidateExame extends ValidateProcedimento {
         exame.setStatus(base.getStatus());
         exame.setDeletadoEm(base.getDeletadoEm());
 
-        if (dataResultado == null || dataResultado.isEmpty())
-            throw new ExameException("ERRO: Campo previsão de resultado não pode ser vazio.");
-        LocalDate date;
-        try {
-            date = LocalDate.parse(dataResultado);
-        } catch (DateTimeParseException e) {
-            throw new ExameException("ERRO: Formato de data de resultado inválido.");
+        if (dataResultado != null) {
+            if (dataResultado.isEmpty())
+                throw new ExameException("ERRO: Campo previsão de resultado não pode ser vazio.");
+            LocalDate date;
+            try {
+                date = LocalDate.parse(dataResultado);
+            } catch (DateTimeParseException e) {
+                throw new ExameException("ERRO: Formato de data de resultado inválido.");
+            }
+            exame.setDataResultado(date);
         }
-        exame.setDataResultado(date);
 
         return exame;
 
