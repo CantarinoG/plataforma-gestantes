@@ -33,9 +33,22 @@ public class ConsultaController {
 
     }
 
+    public void atualizar(int id, Gestante paciente, String descricao, String data, String valor, String status,
+            Relatorio relatorio, String deletadoEm, Medico medico, String dataRetorno) {
+        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataRetorno);
+        novaConsulta.setPaciente(paciente);
+        novaConsulta.setMedico(medico);
+        novaConsulta.setId(id);
+        repositorio.update(novaConsulta);
+    }
+
     public void excluir(int id) {
         Consulta consulta = repositorio.find(id);
         repositorio.delete(consulta);
+    }
+
+    public Consulta buscarPorId(int id) {
+        return repositorio.find(id);
     }
 
 }
