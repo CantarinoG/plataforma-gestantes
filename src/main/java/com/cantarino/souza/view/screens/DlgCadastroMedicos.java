@@ -1,11 +1,14 @@
 package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
@@ -35,17 +38,30 @@ public class DlgCadastroMedicos extends JDialog {
     JPanel panEnderecoField;
 
     private MedicoController medicoController;
-
-    public DlgCadastroMedicos(JFrame parent, boolean modal) {
-        super(parent, modal);
-        medicoController = new MedicoController();
-        initComponents();
-    }
+    private Medico atualizando;
 
     public DlgCadastroMedicos(JDialog parent, boolean modal) {
         super(parent, modal);
         medicoController = new MedicoController();
+        atualizando = null;
         initComponents();
+    }
+
+    public DlgCadastroMedicos(JDialog parent, boolean modal, int id) {
+        super(parent, modal);
+        medicoController = new MedicoController();
+        atualizando = medicoController.buscarPorId(id);
+        initComponents();
+
+        edtCPF.setText(atualizando.getCpf());
+        edtCRM.setText(atualizando.getCrm());
+        edtNome.setText(atualizando.getNome());
+        edtEmail.setText(atualizando.getEmail());
+        edtPass.setText(atualizando.getSenha());
+        edtDataNascimento.setText(atualizando.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        edtTelefone.setText(atualizando.getTelefone());
+        edtEndereco.setText(atualizando.getEndereco());
+        edtEspecializacao.setSelectedItem(atualizando.getEspecializacao());
     }
 
     private void initComponents() {
@@ -65,7 +81,7 @@ public class DlgCadastroMedicos extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel("Cadastrar Médico");
+        lblAction = new JLabel(atualizando != null ? "Editar Médico(a)" : "Cadastrar Médico(a)");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -176,7 +192,7 @@ public class DlgCadastroMedicos extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCriarConta = new RoundedButton("Criar Conta", 50);
+        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 50);
         btnCriarConta.setBackground(AppColors.BUTTON_PINK);
         btnCriarConta.setFont(new Font("Arial", Font.BOLD, 15));
         btnCriarConta.setFocusPainted(false);
@@ -231,19 +247,35 @@ public class DlgCadastroMedicos extends JDialog {
             String dataNascimento = edtDataNascimento.getText().split("/")[2] + "-" +
                     edtDataNascimento.getText().split("/")[1] + "-" +
                     edtDataNascimento.getText().split("/")[0];
+            if (atualizando == null) {
+                medicoController.cadastrar(
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null,
+                        (String) edtEspecializacao.getSelectedItem(),
+                        edtCRM.getText());
+                dispose();
+            } else {
+                medicoController.atualizar(
+                        atualizando.getId(),
+                        cpf,
+                        edtNome.getText(),
+                        edtEmail.getText(),
+                        new String(edtPass.getPassword()),
+                        dataNascimento,
+                        edtTelefone.getText(),
+                        edtEndereco.getText(),
+                        null,
+                        (String) edtEspecializacao.getSelectedItem(),
+                        edtCRM.getText());
+                dispose();
+            }
 
-            medicoController.cadastrar(
-                    cpf,
-                    edtNome.getText(),
-                    edtEmail.getText(),
-                    new String(edtPass.getPassword()),
-                    dataNascimento,
-                    edtTelefone.getText(),
-                    edtEndereco.getText(),
-                    null,
-                    (String) edtEspecializacao.getSelectedItem(),
-                    edtCRM.getText());
-            dispose();
         } catch (UsuarioException e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }

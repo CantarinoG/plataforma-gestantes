@@ -294,6 +294,9 @@ public class DlgUsuarios extends JDialog {
             case GERENCIANDO_MEDICO:
                 Medico medico = (Medico) selectedObject;
                 id = medico.getId();
+                DlgCadastroMedicos dlgMedicos = new DlgCadastroMedicos(this, true, id);
+                dlgMedicos.setVisible(true);
+                medicoController.atualizarTabela(grdUsuarios);
                 break;
             case GERENCIANDO_SECRETARIO:
                 Secretario secretario = (Secretario) selectedObject;

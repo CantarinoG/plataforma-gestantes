@@ -30,4 +30,16 @@ public class MedicoController {
 
     }
 
+    public Medico buscarPorId(int id) {
+        return repositorio.find(id);
+    }
+
+    public void atualizar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
+            String telefone, String endereco, String deletadoEm, String especializacao, String crm) {
+        Medico novoMedico = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+                deletadoEm, especializacao, crm);
+        novoMedico.setId(id);
+        repositorio.update(novoMedico);
+    }
+
 }
