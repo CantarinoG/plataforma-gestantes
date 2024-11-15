@@ -27,7 +27,18 @@ public class AdminController {
                 deletadoEm);
 
         repositorio.save(novoAdm);
+    }
 
+    public Admin buscarPorId(int id) {
+        return repositorio.find(id);
+    }
+
+    public void atualizar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
+            String telefone, String endereco, String deletadoEm) {
+        Admin novoAdm = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+                deletadoEm);
+        novoAdm.setId(id);
+        repositorio.update(novoAdm);
     }
 
 }

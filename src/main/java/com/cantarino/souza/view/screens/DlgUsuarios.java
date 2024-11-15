@@ -308,6 +308,9 @@ public class DlgUsuarios extends JDialog {
             case GERENCIANDO_ADM:
                 Admin admin = (Admin) selectedObject;
                 id = admin.getId();
+                DlgCadastroAdm dlgAdm = new DlgCadastroAdm(this, true, id);
+                dlgAdm.setVisible(true);
+                adminController.atualizarTabela(grdUsuarios);
                 break;
             default:
         }
