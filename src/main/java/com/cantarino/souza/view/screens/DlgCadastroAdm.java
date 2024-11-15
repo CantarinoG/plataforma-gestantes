@@ -1,5 +1,7 @@
 package com.cantarino.souza.view.screens;
 
+import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -31,13 +33,17 @@ public class DlgCadastroAdm extends JDialog {
     JPanel panTelefoneField;
     JPanel panEnderecoField;
 
+    private AdminController adminController;
+
     public DlgCadastroAdm(JFrame parent, boolean modal) {
         super(parent, modal);
+        adminController = new AdminController();
         initComponents();
     }
 
     public DlgCadastroAdm(JDialog parent, boolean modal) {
         super(parent, modal);
+        adminController = new AdminController();
         initComponents();
     }
 
@@ -195,6 +201,25 @@ public class DlgCadastroAdm extends JDialog {
     }
 
     private void btnCriarContaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de Criar Conta!");
+        try {
+            String cpf = edtCPF.getText().replaceAll("[^0-9]", "");
+
+            String dataNascimento = edtDataNascimento.getText().split("/")[2] + "-" +
+                    edtDataNascimento.getText().split("/")[1] + "-" +
+                    edtDataNascimento.getText().split("/")[0];
+
+            adminController.cadastrar(
+                    cpf,
+                    edtNome.getText(),
+                    edtEmail.getText(),
+                    new String(edtPass.getPassword()),
+                    dataNascimento,
+                    edtTelefone.getText(),
+                    edtEndereco.getText(),
+                    null);
+            dispose();
+        } catch (UsuarioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
