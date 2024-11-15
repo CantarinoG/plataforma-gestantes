@@ -1,5 +1,6 @@
 package com.cantarino.souza.model.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -38,8 +39,8 @@ public class SecretarioDao implements IDao<Secretario> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
-        Secretario managedSecretario = this.entityManager.merge(obj);
-        this.entityManager.remove(managedSecretario);
+        obj.setDeletadoEm(LocalDateTime.now());
+        this.entityManager.merge(obj);
         this.entityManager.getTransaction().commit();
 
         this.entityManager.close();

@@ -41,4 +41,9 @@ public class AdminController {
         repositorio.update(novoAdm);
     }
 
+    public void excluir(int id) {
+        Admin adm = repositorio.find(id);
+        repositorio.delete(adm);
+    }
+
 }
