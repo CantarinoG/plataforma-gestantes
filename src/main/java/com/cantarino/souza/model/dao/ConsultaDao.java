@@ -1,5 +1,6 @@
 package com.cantarino.souza.model.dao;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -38,8 +39,8 @@ public class ConsultaDao implements IDao<Consulta> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
-        Consulta managedConsulta = this.entityManager.merge(obj);
-        this.entityManager.remove(managedConsulta);
+        obj.setDeletadoEm(LocalDateTime.now());
+        this.entityManager.merge(obj);
         this.entityManager.getTransaction().commit();
 
         this.entityManager.close();
@@ -62,7 +63,7 @@ public class ConsultaDao implements IDao<Consulta> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
-                .createQuery("FROM Consulta", Consulta.class)
+                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL", Consulta.class)
                 .getResultList();
 
         this.entityManager.close();

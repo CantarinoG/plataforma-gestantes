@@ -1,11 +1,10 @@
 package com.cantarino.souza.view.screens;
 
-import com.cantarino.souza.controller.ConsultaController;
+import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
-import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -13,7 +12,7 @@ import java.text.ParseException;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
-public class DlgCadastroConsultas extends JDialog {
+public class DlgCadastroExames extends JDialog {
     private JPanel panBackground;
     private JPanel panColumn;
     private JLabel lblAction;
@@ -32,13 +31,13 @@ public class DlgCadastroConsultas extends JDialog {
 
     private MedicoController medicoController;
     private GestanteController gestanteController;
-    private ConsultaController consultaController;
+    private ExameController exameController;
 
-    public DlgCadastroConsultas(JDialog parent, boolean modal) {
+    public DlgCadastroExames(JDialog parent, boolean modal) {
         super(parent, modal);
         medicoController = new MedicoController();
         gestanteController = new GestanteController();
-        consultaController = new ConsultaController();
+        exameController = new ExameController();
         initComponents();
     }
 
@@ -54,10 +53,11 @@ public class DlgCadastroConsultas extends JDialog {
 
     private String[] getMedicosOptions() {
         java.util.List<Medico> medicos = medicoController.buscarTodas();
-        String[] options = new String[medicos.size()];
+        String[] options = new String[medicos.size() + 1];
+        options[0] = "Requisição Própria";
         for (int i = 0; i < medicos.size(); i++) {
             Medico medico = medicos.get(i);
-            options[i] = medico.getId() + " | " + medico.getNome();
+            options[i + 1] = medico.getId() + " | " + medico.getNome();
         }
         return options;
     }
@@ -80,7 +80,7 @@ public class DlgCadastroConsultas extends JDialog {
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
         // Título
-        lblAction = new JLabel("Cadastrar Consulta");
+        lblAction = new JLabel("Cadastrar Exame");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -108,7 +108,7 @@ public class DlgCadastroConsultas extends JDialog {
         txtDescricao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         txtDescricao.setLineWrap(true);
         txtDescricao.setWrapStyleWord(true);
-        panDescricaoField = createCustomTextfield("Descrição da Consulta", txtDescricao);
+        panDescricaoField = createCustomTextfield("Descrição do Exame", txtDescricao);
         panColumn.add(panDescricaoField);
 
         // Campo Data
@@ -137,7 +137,7 @@ public class DlgCadastroConsultas extends JDialog {
         cbMedico = new JComboBox<>(getMedicosOptions());
         cbMedico.setFont(new Font("Arial", Font.PLAIN, 22));
         cbMedico.setBackground(AppColors.FIELD_PINK);
-        panMedicoField = createCustomTextfield("Médico", cbMedico);
+        panMedicoField = createCustomTextfield("Requisitado por:", cbMedico);
         panColumn.add(panMedicoField);
 
         // Botão
@@ -152,7 +152,7 @@ public class DlgCadastroConsultas extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarConsulta = new RoundedButton("Cadastrar Consulta", 50);
+        btnCadastrarConsulta = new RoundedButton("Cadastrar Exame", 50);
         btnCadastrarConsulta.setBackground(AppColors.BUTTON_PINK);
         btnCadastrarConsulta.setFont(new Font("Arial", Font.BOLD, 15));
         btnCadastrarConsulta.setFocusPainted(false);
@@ -202,8 +202,11 @@ public class DlgCadastroConsultas extends JDialog {
             Gestante paciente = gestanteController.buscarPorId(pacienteId);
 
             String selectedMedico = (String) cbMedico.getSelectedItem();
-            int medicoId = Integer.parseInt(selectedMedico.split(" \\| ")[0]);
-            Medico medico = medicoController.buscarPorId(medicoId);
+            Medico medico = null;
+            if (!selectedMedico.equals("Requisição Própria")) {
+                int medicoId = Integer.parseInt(selectedMedico.split(" \\| ")[0]);
+                medico = medicoController.buscarPorId(medicoId);
+            }
 
             String dataStr = txtData.getText(); // Format: dd/MM/yyyy HH:mm
             String[] dateParts = dataStr.split(" ")[0].split("/");
@@ -217,7 +220,7 @@ public class DlgCadastroConsultas extends JDialog {
                     timeParts[1] // minute
             );
 
-            consultaController.cadastrar(
+            exameController.cadastrar(
                     paciente,
                     txtDescricao.getText(),
                     formattedData,
@@ -225,8 +228,8 @@ public class DlgCadastroConsultas extends JDialog {
                     "AGENDADA",
                     null,
                     null,
-                    medico,
-                    null);
+                    null,
+                    medico);
             dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);

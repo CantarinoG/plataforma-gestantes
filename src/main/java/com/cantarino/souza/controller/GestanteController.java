@@ -1,5 +1,7 @@
 package com.cantarino.souza.controller;
 
+import java.util.List;
+
 import javax.swing.JTable;
 
 import com.cantarino.souza.model.dao.GestanteDao;
@@ -33,6 +35,10 @@ public class GestanteController {
 
     public Gestante buscarPorId(int id) {
         return repositorio.find(id);
+    }
+
+    public List<Gestante> buscarTodas() {
+        return repositorio.findAll();
     }
 
     public void atualizar(int id, String cpf, String nome, String email, String senha, String dataNascimento,

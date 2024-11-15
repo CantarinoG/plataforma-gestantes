@@ -1,5 +1,7 @@
 package com.cantarino.souza.controller;
 
+import java.util.List;
+
 import javax.swing.JTable;
 
 import com.cantarino.souza.model.dao.MedicoDao;
@@ -32,6 +34,10 @@ public class MedicoController {
 
     public Medico buscarPorId(int id) {
         return repositorio.find(id);
+    }
+
+    public List<Medico> buscarTodas() {
+        return repositorio.findAll();
     }
 
     public void atualizar(int id, String cpf, String nome, String email, String senha, String dataNascimento,

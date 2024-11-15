@@ -21,15 +21,17 @@ public class ValidateConsulta extends ValidateProcedimento {
         consulta.setStatus(base.getStatus());
         consulta.setDeletadoEm(base.getDeletadoEm());
 
-        if (dataRetorno == null || dataRetorno.isEmpty())
-            throw new ProcedimentoException("ERRO: Campo data de retorno não pode ser vazio.");
-        LocalDateTime validDate;
-        try {
-            validDate = LocalDateTime.parse(dataRetorno);
-        } catch (DateTimeParseException e) {
-            throw new ProcedimentoException("ERRO: Formato de data inválido.");
+        if (dataRetorno != null) {
+            if (dataRetorno.isEmpty())
+                throw new ProcedimentoException("ERRO: Campo data de retorno não pode ser vazio.");
+            LocalDateTime validDate;
+            try {
+                validDate = LocalDateTime.parse(dataRetorno);
+            } catch (DateTimeParseException e) {
+                throw new ProcedimentoException("ERRO: Formato de data inválido.");
+            }
+            consulta.setDataRetorno(validDate);
         }
-        consulta.setDataRetorno(validDate);
 
         return consulta;
 
