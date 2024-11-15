@@ -3,13 +3,15 @@ package com.cantarino.souza.view.screens;
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
-import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
@@ -34,12 +36,31 @@ public class DlgCadastroConsultas extends JDialog {
     private GestanteController gestanteController;
     private ConsultaController consultaController;
 
+    private Consulta atualizando;
+
     public DlgCadastroConsultas(JDialog parent, boolean modal) {
         super(parent, modal);
         medicoController = new MedicoController();
         gestanteController = new GestanteController();
         consultaController = new ConsultaController();
+        atualizando = null;
         initComponents();
+    }
+
+    public DlgCadastroConsultas(JDialog parent, boolean modal, int id) {
+        super(parent, modal);
+        medicoController = new MedicoController();
+        gestanteController = new GestanteController();
+        consultaController = new ConsultaController();
+        atualizando = consultaController.buscarPorId(id);
+        initComponents();
+
+        // Fill fields with existing data
+        cbPaciente.setSelectedItem(atualizando.getPaciente().getId() + " | " + atualizando.getPaciente().getNome());
+        txtDescricao.setText(atualizando.getDescricao());
+        txtData.setText(atualizando.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        txtValor.setText(String.valueOf(atualizando.getValor()));
+        cbMedico.setSelectedItem(atualizando.getMedico().getId() + " | " + atualizando.getMedico().getNome());
     }
 
     private String[] getGestantesOptions() {
@@ -80,7 +101,7 @@ public class DlgCadastroConsultas extends JDialog {
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
         // Título
-        lblAction = new JLabel("Cadastrar Consulta");
+        lblAction = new JLabel(atualizando != null ? "Editar Consulta" : "Cadastrar Consulta");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -152,7 +173,7 @@ public class DlgCadastroConsultas extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarConsulta = new RoundedButton("Cadastrar Consulta", 50);
+        btnCadastrarConsulta = new RoundedButton(atualizando != null ? "Editar Consulta" : "Cadastrar Consulta", 50);
         btnCadastrarConsulta.setBackground(AppColors.BUTTON_PINK);
         btnCadastrarConsulta.setFont(new Font("Arial", Font.BOLD, 15));
         btnCadastrarConsulta.setFocusPainted(false);
@@ -217,18 +238,35 @@ public class DlgCadastroConsultas extends JDialog {
                     timeParts[1] // minute
             );
 
-            consultaController.cadastrar(
-                    paciente,
-                    txtDescricao.getText(),
-                    formattedData,
-                    txtValor.getText(),
-                    "AGENDADA",
-                    null,
-                    null,
-                    medico,
-                    null);
-            dispose();
+            if (atualizando == null) {
+                consultaController.cadastrar(
+                        paciente,
+                        txtDescricao.getText(),
+                        formattedData,
+                        txtValor.getText(),
+                        "AGENDADA",
+                        null,
+                        null,
+                        medico,
+                        null);
+                dispose();
+            } else {
+                consultaController.atualizar(
+                        atualizando.getId(),
+                        paciente,
+                        txtDescricao.getText(),
+                        formattedData,
+                        txtValor.getText(),
+                        "AGENDADA",
+                        null,
+                        null,
+                        medico,
+                        null);
+                dispose();
+            }
+
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }

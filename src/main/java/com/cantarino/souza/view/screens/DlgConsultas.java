@@ -214,7 +214,30 @@ public class DlgConsultas extends JDialog {
     }
 
     private void btnEditarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de editar consulta");
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        switch (gerenciando) {
+            case GERENCIANDO_CONSULTA:
+                Consulta consulta = (Consulta) selectedObject;
+                id = consulta.getId();
+                DlgCadastroConsultas dlgConsulta = new DlgCadastroConsultas(this, true, id);
+                dlgConsulta.setVisible(true);
+                consultaController.atualizarTabela(grdProcedimentos);
+                break;
+            case GERENCIANDO_EXAME:
+                Exame exame = (Exame) selectedObject;
+                id = exame.getId();
+                // DlgCadastroMedicos dlgMedicos = new DlgCadastroMedicos(this, true, id);
+                // dlgMedicos.setVisible(true);
+                exameController.atualizarTabela(grdProcedimentos);
+                break;
+            default:
+        }
     }
 
     private void btnDeletarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
