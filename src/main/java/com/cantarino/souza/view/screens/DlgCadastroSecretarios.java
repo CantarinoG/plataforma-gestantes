@@ -1,5 +1,7 @@
 package com.cantarino.souza.view.screens;
 
+import com.cantarino.souza.controller.SecretarioController;
+import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -33,13 +35,17 @@ public class DlgCadastroSecretarios extends JDialog {
     JPanel panEnderecoField;
     JPanel panDataContratacaoField;
 
+    SecretarioController secretarioController;
+
     public DlgCadastroSecretarios(JFrame parent, boolean modal) {
         super(parent, modal);
+        secretarioController = new SecretarioController();
         initComponents();
     }
 
     public DlgCadastroSecretarios(JDialog parent, boolean modal) {
         super(parent, modal);
+        secretarioController = new SecretarioController();
         initComponents();
     }
 
@@ -206,6 +212,27 @@ public class DlgCadastroSecretarios extends JDialog {
     }
 
     private void btnCriarContaActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de Criar Conta!");
+        try {
+            String cpf = edtCPF.getText().replaceAll("[^0-9]", "");
+            String dataNascimento = edtDataNascimento.getText().split("/")[2] + "-" +
+                    edtDataNascimento.getText().split("/")[1] + "-" +
+                    edtDataNascimento.getText().split("/")[0];
+            String dataContratacao = edtDataContratacao.getText().split("/")[2] + "-" +
+                    edtDataContratacao.getText().split("/")[1] + "-" +
+                    edtDataContratacao.getText().split("/")[0];
+            secretarioController.cadastrar(
+                    cpf,
+                    edtNome.getText(),
+                    edtEmail.getText(),
+                    new String(edtPass.getPassword()),
+                    dataNascimento,
+                    edtTelefone.getText(),
+                    edtEndereco.getText(),
+                    null,
+                    dataContratacao);
+            dispose();
+        } catch (UsuarioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
