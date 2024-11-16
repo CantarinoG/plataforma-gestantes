@@ -6,12 +6,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.controller.ExameController;
-import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Exame;
-import com.cantarino.souza.model.entities.Gestante;
-import com.cantarino.souza.model.entities.Medico;
-import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
@@ -232,8 +228,8 @@ public class DlgConsultas extends JDialog {
             case GERENCIANDO_EXAME:
                 Exame exame = (Exame) selectedObject;
                 id = exame.getId();
-                // DlgCadastroMedicos dlgMedicos = new DlgCadastroMedicos(this, true, id);
-                // dlgMedicos.setVisible(true);
+                DlgCadastroExames dlgExame = new DlgCadastroExames(this, true, id);
+                dlgExame.setVisible(true);
                 exameController.atualizarTabela(grdProcedimentos);
                 break;
             default:

@@ -34,6 +34,20 @@ public class ExameController {
 
     }
 
+    public Exame buscarPorId(int id) {
+        return repositorio.find(id);
+    }
+
+    public void atualizar(int id, Gestante paciente, String descricao, String data, String valor, String status,
+            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor) {
+        Exame novoExame = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataResultado,
+                dataResultado);
+        novoExame.setPaciente(paciente);
+        novoExame.setRequisitadoPor(requisitadoPor);
+        novoExame.setId(id);
+        repositorio.update(novoExame);
+    }
+
     public void excluir(int id) {
         Exame exame = repositorio.find(id);
         repositorio.delete(exame);
