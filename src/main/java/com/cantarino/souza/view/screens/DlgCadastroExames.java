@@ -3,12 +3,15 @@ package com.cantarino.souza.view.screens;
 import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
@@ -33,12 +36,36 @@ public class DlgCadastroExames extends JDialog {
     private GestanteController gestanteController;
     private ExameController exameController;
 
+    private Exame atualizando;
+
     public DlgCadastroExames(JDialog parent, boolean modal) {
         super(parent, modal);
         medicoController = new MedicoController();
         gestanteController = new GestanteController();
         exameController = new ExameController();
+        atualizando = null;
         initComponents();
+    }
+
+    public DlgCadastroExames(JDialog parent, boolean modal, int id) {
+        super(parent, modal);
+        medicoController = new MedicoController();
+        gestanteController = new GestanteController();
+        exameController = new ExameController();
+        atualizando = exameController.buscarPorId(id);
+        initComponents();
+
+        txtDescricao.setText(atualizando.getDescricao());
+        txtData.setText(atualizando.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        txtValor.setText(String.valueOf(atualizando.getValor()));
+        Gestante gestante = atualizando.getPaciente();
+        cbPaciente.setSelectedItem(gestante.getId() + " | " + gestante.getNome());
+        Medico medico = (Medico) atualizando.getRequisitadoPor();
+        if (medico != null) {
+            cbMedico.setSelectedItem(medico.getId() + " | " + medico.getNome());
+        } else {
+            cbMedico.setSelectedItem("Requisição Própria");
+        }
     }
 
     private String[] getGestantesOptions() {
@@ -80,7 +107,7 @@ public class DlgCadastroExames extends JDialog {
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
         // Título
-        lblAction = new JLabel("Cadastrar Exame");
+        lblAction = new JLabel(atualizando != null ? "Editar Exame" : "Cadastrar Exame");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -152,7 +179,7 @@ public class DlgCadastroExames extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarConsulta = new RoundedButton("Cadastrar Exame", 50);
+        btnCadastrarConsulta = new RoundedButton(atualizando != null ? "Editar Exame" : "Cadastrar Exame", 50);
         btnCadastrarConsulta.setBackground(AppColors.BUTTON_PINK);
         btnCadastrarConsulta.setFont(new Font("Arial", Font.BOLD, 15));
         btnCadastrarConsulta.setFocusPainted(false);
@@ -220,17 +247,33 @@ public class DlgCadastroExames extends JDialog {
                     timeParts[1] // minute
             );
 
-            exameController.cadastrar(
-                    paciente,
-                    txtDescricao.getText(),
-                    formattedData,
-                    txtValor.getText(),
-                    "AGENDADA",
-                    null,
-                    null,
-                    null,
-                    medico);
-            dispose();
+            if (atualizando == null) {
+                exameController.cadastrar(
+                        paciente,
+                        txtDescricao.getText(),
+                        formattedData,
+                        txtValor.getText(),
+                        "AGENDADA",
+                        null,
+                        null,
+                        null,
+                        medico);
+                dispose();
+            } else {
+                exameController.atualizar(
+                        atualizando.getId(),
+                        paciente,
+                        txtDescricao.getText(),
+                        formattedData,
+                        txtValor.getText(),
+                        "AGENDADA",
+                        null,
+                        null,
+                        null,
+                        medico);
+                dispose();
+            }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
