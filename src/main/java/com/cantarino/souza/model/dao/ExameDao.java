@@ -71,4 +71,31 @@ public class ExameDao implements IDao<Exame> {
         return exames;
     }
 
+    public List<Exame> findAllWithGestanteId(int id) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Exame> consultas = this.entityManager
+                .createQuery("FROM Exame e WHERE e.deletadoEm IS NULL AND e.paciente.id = :id", Exame.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
+    public List<Exame> findAllWithGestanteIdStatus(int id, String status) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Exame> consultas = this.entityManager
+                .createQuery(
+                        "FROM Exame e WHERE e.deletadoEm IS NULL AND e.paciente.id = :id AND e.status = :status",
+                        Exame.class)
+                .setParameter("id", id)
+                .setParameter("status", status)
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
 }

@@ -70,4 +70,58 @@ public class ConsultaDao implements IDao<Consulta> {
         return consultas;
     }
 
+    public List<Consulta> findAllWithMedicoId(int id) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Consulta> consultas = this.entityManager
+                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id", Consulta.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
+    public List<Consulta> findAllWithGestanteId(int id) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Consulta> consultas = this.entityManager
+                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id", Consulta.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
+    public List<Consulta> findAllWithMedicoIdStatus(int id, String status) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Consulta> consultas = this.entityManager
+                .createQuery(
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id AND c.status = :status",
+                        Consulta.class)
+                .setParameter("id", id)
+                .setParameter("status", status)
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
+    public List<Consulta> findAllWithGestanteIdStatus(int id, String status) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Consulta> consultas = this.entityManager
+                .createQuery(
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id AND c.status = :status",
+                        Consulta.class)
+                .setParameter("id", id)
+                .setParameter("status", status)
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
 }

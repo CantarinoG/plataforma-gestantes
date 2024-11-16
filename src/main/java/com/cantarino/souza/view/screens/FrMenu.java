@@ -143,7 +143,7 @@ public class FrMenu extends JFrame {
     // TODO: Assim está mockado. Refazer depois quando a autenticação estiver
     // pronta.
     private void initUserCoponents() {
-        String userType = "ADM";
+        String userType = "GESTANTE";
 
         if (userType == "GESTANTE") {
             initGestanteComponents();
