@@ -51,4 +51,20 @@ public class ConsultaController {
         return repositorio.find(id);
     }
 
+    public void atualizarTabelaPorMedicoId(JTable grd, int id) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithMedicoId(id)), null);
+    }
+
+    public void atualizarTabelaPorMedicoIdStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithMedicoIdStatus(id, status)), null);
+    }
+
+    public void atualizarTabelaPorGestanteId(JTable grd, int id) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithGestanteId(id)), null);
+    }
+
+    public void atualizarTabelaPorGestanteIdStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithGestanteIdStatus(id, status)), null);
+    }
+
 }

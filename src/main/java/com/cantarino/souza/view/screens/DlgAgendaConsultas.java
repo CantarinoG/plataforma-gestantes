@@ -1,11 +1,16 @@
 package com.cantarino.souza.view.screens;
 
 import java.awt.*;
+import java.time.LocalDate;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.controller.ExameController;
+import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.view.components.*;
 
 public class DlgAgendaConsultas extends JDialog {
@@ -53,13 +58,24 @@ public class DlgAgendaConsultas extends JDialog {
 
         ConsultaController consultaController;
         ExameController exameController;
+        boolean isConsulta;
+
+        // TODO: Esse está mockado, alterar quando implementar sistema de autenticação.
+        Usuario usuarioAutenticado;
 
         public DlgAgendaConsultas(JFrame parent, boolean modal) {
                 super(parent, modal);
+                isConsulta = true;
                 consultaController = new ConsultaController();
                 exameController = new ExameController();
+
+                // Mockado
+                usuarioAutenticado = new Gestante(null, null, null, null, LocalDate.now(), null,
+                                null, null, null, null, null, null);
+                usuarioAutenticado.setId(99);
+                usuarioAutenticado.setNome("Eugência Aparecida");
+
                 initComponents();
-                consultaController.atualizarTabela(grdProcedimentos);
         }
 
         private void initComponents() {
@@ -197,11 +213,6 @@ public class DlgAgendaConsultas extends JDialog {
                 lblTodas.setHorizontalAlignment(SwingConstants.CENTER);
                 panTodas.add(lblTodas, BorderLayout.CENTER);
 
-                lblTodasAmount = new JLabel("(4)");
-                lblTodasAmount.setFont(new Font("Arial", Font.BOLD, 24));
-                lblTodasAmount.setForeground(AppColors.BUTTON_PINK);
-                panTodas.add(lblTodasAmount, BorderLayout.EAST);
-
                 panAgendadas = new JPanel();
                 panAgendadas.setBackground(AppColors.TRANSPARENT);
                 panAgendadas.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -224,11 +235,6 @@ public class DlgAgendaConsultas extends JDialog {
                 lblAgendadas.setFont(new Font("Arial", Font.BOLD, 24));
                 lblAgendadas.setHorizontalAlignment(SwingConstants.CENTER);
                 panAgendadas.add(lblAgendadas, BorderLayout.CENTER);
-
-                lblAgendadasAmount = new JLabel("(2)");
-                lblAgendadasAmount.setFont(new Font("Arial", Font.BOLD, 24));
-                lblAgendadasAmount.setForeground(AppColors.BUTTON_PINK);
-                panAgendadas.add(lblAgendadasAmount, BorderLayout.EAST);
 
                 panConcluidas = new JPanel();
                 panConcluidas.setBackground(AppColors.TRANSPARENT);
@@ -254,11 +260,6 @@ public class DlgAgendaConsultas extends JDialog {
                 lblConcluidas.setHorizontalAlignment(SwingConstants.CENTER);
                 panConcluidas.add(lblConcluidas, BorderLayout.CENTER);
 
-                lblConcuildasAmount = new JLabel("(4)");
-                lblConcuildasAmount.setFont(new Font("Arial", Font.BOLD, 24));
-                lblConcuildasAmount.setForeground(AppColors.BUTTON_PINK);
-                panConcluidas.add(lblConcuildasAmount, BorderLayout.EAST);
-
                 panCanceladas = new JPanel();
                 panCanceladas.setBackground(AppColors.TRANSPARENT);
                 panCanceladas.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -283,11 +284,6 @@ public class DlgAgendaConsultas extends JDialog {
                 lblCanceladas.setHorizontalAlignment(SwingConstants.CENTER);
                 panCanceladas.add(lblCanceladas, BorderLayout.CENTER);
 
-                lblCanceladasAmount = new JLabel("(4)");
-                lblCanceladasAmount.setFont(new Font("Arial", Font.BOLD, 24));
-                lblCanceladasAmount.setForeground(AppColors.BUTTON_PINK);
-                panCanceladas.add(lblCanceladasAmount, BorderLayout.EAST);
-
                 panEmpty = new JPanel();
                 panEmpty.setBackground(AppColors.TRANSPARENT);
                 panLeft.add(panEmpty);
@@ -296,11 +292,9 @@ public class DlgAgendaConsultas extends JDialog {
         }
 
         private void initUserCoponents() {
-                String userType = "MEDICO";
-
-                if (userType == "GESTANTE") {
+                if (usuarioAutenticado instanceof Gestante) {
                         initGestanteComponents();
-                } else if (userType == "MEDICO") {
+                } else if (usuarioAutenticado instanceof Medico) {
                         initMedicoComponents();
                 }
         }
@@ -309,9 +303,10 @@ public class DlgAgendaConsultas extends JDialog {
                 lblProfileImg = new JLabel(new ImageIcon(getClass().getResource("/images/profile.png")));
                 panProfile.add(lblProfileImg);
 
-                // TODO: Botar dados reais do usuário
                 lblUserData = new JLabel(
-                                "<html>Paciente: Maria José<br>Clínica: BemGestar<br>Nascimento: 17/09/2001</html>");
+                                "<html>Paciente: " + usuarioAutenticado.getNome()
+                                                + "<br>Clínica: BemGestar<br>Nascimento: "
+                                                + usuarioAutenticado.getDataNascimento().toString() + "</html>");
                 panProfile.add(lblUserData);
 
                 btnConsultas = new RoundedButton("Consultas", 50);
@@ -366,15 +361,18 @@ public class DlgAgendaConsultas extends JDialog {
                         }
                 });
                 panActions.add(btnVerDadosMedico);
+
+                consultaController.atualizarTabelaPorGestanteId(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void initMedicoComponents() {
                 lblProfileImg = new JLabel(new ImageIcon(getClass().getResource("/images/profile_doctor.png")));
                 panProfile.add(lblProfileImg);
 
-                // TODO: Botar dados reais do usuários
                 lblUserData = new JLabel(
-                                "<html>Médico(a): Maria José<br>Clínica: BemGestar<br>Nascimento: 17/09/2001</html>");
+                                "<html>Médico(a): " + usuarioAutenticado.getNome()
+                                                + "<br>Clínica: BemGestar<br>Nascimento: "
+                                                + usuarioAutenticado.getDataNascimento().toString() + "</html>");
                 panProfile.add(lblUserData);
 
                 panActions.setLayout(new GridLayout(1, 5, 10, 0));
@@ -418,9 +416,12 @@ public class DlgAgendaConsultas extends JDialog {
                         }
                 });
                 panActions.add(btnCadastrarRelatorio);
+
+                consultaController.atualizarTabelaPorMedicoId(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {
+                isConsulta = true;
                 lblAction.setText("Consultas");
                 lblTodas.setText("Todas as Consultas");
                 lblAgendadas.setText("Consultas Agendadas");
@@ -430,10 +431,11 @@ public class DlgAgendaConsultas extends JDialog {
                 btnVerDadosMedico.setEnabled(true);
                 btnVerDadosMedico.setVisible(true);
                 panBackground.repaint();
-                consultaController.atualizarTabela(grdProcedimentos);
+                consultaController.atualizarTabelaPorGestanteId(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void btnExamesActionPerformed(java.awt.event.ActionEvent evt) {
+                isConsulta = false;
                 lblAction.setText("Exames");
                 lblTodas.setText("Todos os Exames");
                 lblAgendadas.setText("Exames Agendados");
@@ -443,23 +445,67 @@ public class DlgAgendaConsultas extends JDialog {
                 btnVerDadosMedico.setEnabled(false);
                 btnVerDadosMedico.setVisible(false);
                 panBackground.repaint();
-                exameController.atualizarTabela(grdProcedimentos);
+                exameController.atualizarTabelaPorGestanteId(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void panTodasActionPerformed(java.awt.event.MouseEvent evt) {
-                System.out.println("Clicou no botão de todas consultas!");
+                if (usuarioAutenticado instanceof Gestante) {
+                        if (isConsulta) {
+                                consultaController.atualizarTabelaPorGestanteId(grdProcedimentos,
+                                                usuarioAutenticado.getId());
+                        } else {
+                                exameController.atualizarTabelaPorGestanteId(grdProcedimentos,
+                                                usuarioAutenticado.getId());
+                        }
+                } else if (usuarioAutenticado instanceof Medico) {
+                        consultaController.atualizarTabelaPorMedicoId(grdProcedimentos, usuarioAutenticado.getId());
+                }
+
         }
 
         private void panAgendadasActionPerformed(java.awt.event.MouseEvent evt) {
-                System.out.println("Clicou no botão de consultas agendadas!");
+                if (usuarioAutenticado instanceof Gestante) {
+                        if (isConsulta) {
+                                consultaController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                                usuarioAutenticado.getId(), "AGENDADA");
+                        } else {
+                                exameController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                                usuarioAutenticado.getId(), "AGENDADA");
+                        }
+                } else if (usuarioAutenticado instanceof Medico) {
+                        consultaController.atualizarTabelaPorMedicoIdStatus(grdProcedimentos,
+                                        usuarioAutenticado.getId(), "AGENDADA");
+                }
         }
 
         private void panConcluidasActionPerformed(java.awt.event.MouseEvent evt) {
-                System.out.println("Clicou no botão de consultas concluidas!");
+                if (usuarioAutenticado instanceof Gestante) {
+                        if (isConsulta) {
+                                consultaController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                                usuarioAutenticado.getId(), "CONCLUÍDA");
+                        } else {
+                                exameController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                                usuarioAutenticado.getId(), "CONCLUÍDA");
+                        }
+                } else if (usuarioAutenticado instanceof Medico) {
+                        consultaController.atualizarTabelaPorMedicoIdStatus(grdProcedimentos,
+                                        usuarioAutenticado.getId(), "CONCLUÍDA");
+                }
         }
 
         private void panCanceladasActionPerformed(java.awt.event.MouseEvent evt) {
-                System.out.println("Clicou no botão de consultas canceladas!");
+                if (usuarioAutenticado instanceof Gestante) {
+                        if (isConsulta) {
+                                consultaController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                                usuarioAutenticado.getId(), "CANCELADA");
+                        } else {
+                                exameController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                                usuarioAutenticado.getId(), "CANCELADA");
+                        }
+                } else if (usuarioAutenticado instanceof Medico) {
+                        consultaController.atualizarTabelaPorMedicoIdStatus(grdProcedimentos,
+                                        usuarioAutenticado.getId(), "CANCELADA");
+                }
         }
 
         private void btnCancelarConsultaActionPerformed(java.awt.event.ActionEvent evt) {

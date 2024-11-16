@@ -53,4 +53,12 @@ public class ExameController {
         repositorio.delete(exame);
     }
 
+    public void atualizarTabelaPorGestanteId(JTable grd, int id) {
+        Util.jTableShow(grd, new TMExame(repositorio.findAllWithGestanteId(id)), null);
+    }
+
+    public void atualizarTabelaPorGestanteIdStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMExame(repositorio.findAllWithGestanteIdStatus(id, status)), null);
+    }
+
 }
