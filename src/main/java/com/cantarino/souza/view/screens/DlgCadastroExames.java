@@ -257,7 +257,8 @@ public class DlgCadastroExames extends JDialog {
                         null,
                         null,
                         null,
-                        medico);
+                        medico,
+                        null);
                 dispose();
             } else {
                 exameController.atualizar(
@@ -270,7 +271,8 @@ public class DlgCadastroExames extends JDialog {
                         null,
                         null,
                         null,
-                        medico);
+                        medico,
+                        null);
                 dispose();
             }
 

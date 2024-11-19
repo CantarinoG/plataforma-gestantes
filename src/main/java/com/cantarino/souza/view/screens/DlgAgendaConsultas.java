@@ -362,7 +362,7 @@ public class DlgAgendaConsultas extends JDialog {
                 });
                 panActions.add(btnVerDadosMedico);
 
-                consultaController.atualizarTabelaPorGestanteId(grdProcedimentos, usuarioAutenticado.getId());
+                consultaController.filtrarTabelaPorIdGestante(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void initMedicoComponents() {
@@ -417,7 +417,7 @@ public class DlgAgendaConsultas extends JDialog {
                 });
                 panActions.add(btnCadastrarRelatorio);
 
-                consultaController.atualizarTabelaPorMedicoId(grdProcedimentos, usuarioAutenticado.getId());
+                consultaController.filtrarTabelaPorIdMedico(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {
@@ -431,7 +431,7 @@ public class DlgAgendaConsultas extends JDialog {
                 btnVerDadosMedico.setEnabled(true);
                 btnVerDadosMedico.setVisible(true);
                 panBackground.repaint();
-                consultaController.atualizarTabelaPorGestanteId(grdProcedimentos, usuarioAutenticado.getId());
+                consultaController.filtrarTabelaPorIdGestante(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void btnExamesActionPerformed(java.awt.event.ActionEvent evt) {
@@ -445,20 +445,20 @@ public class DlgAgendaConsultas extends JDialog {
                 btnVerDadosMedico.setEnabled(false);
                 btnVerDadosMedico.setVisible(false);
                 panBackground.repaint();
-                exameController.atualizarTabelaPorGestanteId(grdProcedimentos, usuarioAutenticado.getId());
+                exameController.filtrarTabelaPorIdGestante(grdProcedimentos, usuarioAutenticado.getId());
         }
 
         private void panTodasActionPerformed(java.awt.event.MouseEvent evt) {
                 if (usuarioAutenticado instanceof Gestante) {
                         if (isConsulta) {
-                                consultaController.atualizarTabelaPorGestanteId(grdProcedimentos,
+                                consultaController.filtrarTabelaPorIdGestante(grdProcedimentos,
                                                 usuarioAutenticado.getId());
                         } else {
-                                exameController.atualizarTabelaPorGestanteId(grdProcedimentos,
+                                exameController.filtrarTabelaPorIdGestante(grdProcedimentos,
                                                 usuarioAutenticado.getId());
                         }
                 } else if (usuarioAutenticado instanceof Medico) {
-                        consultaController.atualizarTabelaPorMedicoId(grdProcedimentos, usuarioAutenticado.getId());
+                        consultaController.filtrarTabelaPorIdMedico(grdProcedimentos, usuarioAutenticado.getId());
                 }
 
         }
@@ -466,14 +466,14 @@ public class DlgAgendaConsultas extends JDialog {
         private void panAgendadasActionPerformed(java.awt.event.MouseEvent evt) {
                 if (usuarioAutenticado instanceof Gestante) {
                         if (isConsulta) {
-                                consultaController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                consultaController.filtrarTabelaPorIdGestanteStatus(grdProcedimentos,
                                                 usuarioAutenticado.getId(), "AGENDADA");
                         } else {
-                                exameController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                exameController.filtrarTabelaPorIdGestanteStatus(grdProcedimentos,
                                                 usuarioAutenticado.getId(), "AGENDADA");
                         }
                 } else if (usuarioAutenticado instanceof Medico) {
-                        consultaController.atualizarTabelaPorMedicoIdStatus(grdProcedimentos,
+                        consultaController.filtrarTabelaPorIdMedicoStatus(grdProcedimentos,
                                         usuarioAutenticado.getId(), "AGENDADA");
                 }
         }
@@ -481,14 +481,14 @@ public class DlgAgendaConsultas extends JDialog {
         private void panConcluidasActionPerformed(java.awt.event.MouseEvent evt) {
                 if (usuarioAutenticado instanceof Gestante) {
                         if (isConsulta) {
-                                consultaController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                consultaController.filtrarTabelaPorIdGestanteStatus(grdProcedimentos,
                                                 usuarioAutenticado.getId(), "CONCLUÍDA");
                         } else {
-                                exameController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                exameController.filtrarTabelaPorIdGestanteStatus(grdProcedimentos,
                                                 usuarioAutenticado.getId(), "CONCLUÍDA");
                         }
                 } else if (usuarioAutenticado instanceof Medico) {
-                        consultaController.atualizarTabelaPorMedicoIdStatus(grdProcedimentos,
+                        consultaController.filtrarTabelaPorIdMedicoStatus(grdProcedimentos,
                                         usuarioAutenticado.getId(), "CONCLUÍDA");
                 }
         }
@@ -496,14 +496,14 @@ public class DlgAgendaConsultas extends JDialog {
         private void panCanceladasActionPerformed(java.awt.event.MouseEvent evt) {
                 if (usuarioAutenticado instanceof Gestante) {
                         if (isConsulta) {
-                                consultaController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                consultaController.filtrarTabelaPorIdGestanteStatus(grdProcedimentos,
                                                 usuarioAutenticado.getId(), "CANCELADA");
                         } else {
-                                exameController.atualizarTabelaPorGestanteIdStatus(grdProcedimentos,
+                                exameController.filtrarTabelaPorIdGestanteStatus(grdProcedimentos,
                                                 usuarioAutenticado.getId(), "CANCELADA");
                         }
                 } else if (usuarioAutenticado instanceof Medico) {
-                        consultaController.atualizarTabelaPorMedicoIdStatus(grdProcedimentos,
+                        consultaController.filtrarTabelaPorIdMedicoStatus(grdProcedimentos,
                                         usuarioAutenticado.getId(), "CANCELADA");
                 }
         }

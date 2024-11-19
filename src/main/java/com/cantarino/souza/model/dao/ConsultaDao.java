@@ -70,7 +70,7 @@ public class ConsultaDao implements IDao<Consulta> {
         return consultas;
     }
 
-    public List<Consulta> findAllWithMedicoId(int id) {
+    public List<Consulta> filterMedicoId(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
@@ -82,7 +82,7 @@ public class ConsultaDao implements IDao<Consulta> {
         return consultas;
     }
 
-    public List<Consulta> findAllWithGestanteId(int id) {
+    public List<Consulta> filterGestanteId(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
@@ -94,7 +94,7 @@ public class ConsultaDao implements IDao<Consulta> {
         return consultas;
     }
 
-    public List<Consulta> findAllWithMedicoIdStatus(int id, String status) {
+    public List<Consulta> filterMedicoIdStatus(int id, String status) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
@@ -109,7 +109,7 @@ public class ConsultaDao implements IDao<Consulta> {
         return consultas;
     }
 
-    public List<Consulta> findAllWithGestanteIdStatus(int id, String status) {
+    public List<Consulta> filterGestanteIdStatus(int id, String status) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
