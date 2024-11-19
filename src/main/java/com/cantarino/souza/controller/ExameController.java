@@ -24,10 +24,10 @@ public class ExameController {
     }
 
     public void cadastrar(Gestante paciente, String descricao, String data, String valor, String status,
-            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor) {
+            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
 
         Exame novoExame = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataResultado,
-                dataResultado);
+                laboratorio);
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
         repositorio.save(novoExame);
@@ -39,9 +39,9 @@ public class ExameController {
     }
 
     public void atualizar(int id, Gestante paciente, String descricao, String data, String valor, String status,
-            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor) {
+            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
         Exame novoExame = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataResultado,
-                dataResultado);
+                laboratorio);
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
         novoExame.setId(id);
@@ -53,12 +53,12 @@ public class ExameController {
         repositorio.delete(exame);
     }
 
-    public void atualizarTabelaPorGestanteId(JTable grd, int id) {
-        Util.jTableShow(grd, new TMExame(repositorio.findAllWithGestanteId(id)), null);
+    public void filtrarTabelaPorIdGestante(JTable grd, int id) {
+        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteId(id)), null);
     }
 
-    public void atualizarTabelaPorGestanteIdStatus(JTable grd, int id, String status) {
-        Util.jTableShow(grd, new TMExame(repositorio.findAllWithGestanteIdStatus(id, status)), null);
+    public void filtrarTabelaPorIdGestanteStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteIdStatus(id, status)), null);
     }
 
 }

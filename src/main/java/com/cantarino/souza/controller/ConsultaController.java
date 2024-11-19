@@ -51,20 +51,20 @@ public class ConsultaController {
         return repositorio.find(id);
     }
 
-    public void atualizarTabelaPorMedicoId(JTable grd, int id) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithMedicoId(id)), null);
+    public void filtrarTabelaPorIdMedico(JTable grd, int id) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.filterMedicoId(id)), null);
     }
 
-    public void atualizarTabelaPorMedicoIdStatus(JTable grd, int id, String status) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithMedicoIdStatus(id, status)), null);
+    public void filtrarTabelaPorIdMedicoStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.filterMedicoIdStatus(id, status)), null);
     }
 
-    public void atualizarTabelaPorGestanteId(JTable grd, int id) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithGestanteId(id)), null);
+    public void filtrarTabelaPorIdGestante(JTable grd, int id) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.filterGestanteId(id)), null);
     }
 
-    public void atualizarTabelaPorGestanteIdStatus(JTable grd, int id, String status) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.findAllWithGestanteIdStatus(id, status)), null);
+    public void filtrarTabelaPorIdGestanteStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.filterGestanteIdStatus(id, status)), null);
     }
 
 }

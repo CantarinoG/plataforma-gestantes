@@ -71,7 +71,7 @@ public class ExameDao implements IDao<Exame> {
         return exames;
     }
 
-    public List<Exame> findAllWithGestanteId(int id) {
+    public List<Exame> filterGestanteId(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> consultas = this.entityManager
@@ -83,7 +83,7 @@ public class ExameDao implements IDao<Exame> {
         return consultas;
     }
 
-    public List<Exame> findAllWithGestanteIdStatus(int id, String status) {
+    public List<Exame> filterGestanteIdStatus(int id, String status) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> consultas = this.entityManager

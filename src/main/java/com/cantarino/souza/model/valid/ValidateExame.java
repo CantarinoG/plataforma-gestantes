@@ -10,7 +10,7 @@ import com.cantarino.souza.model.exceptions.ExameException;
 public class ValidateExame extends ValidateProcedimento {
 
     public Exame validaCamposEntrada(String descricao, String data, String valor, String status,
-            String deletadoEm, String dataResultado, String tipoAmostra) {
+            String deletadoEm, String dataResultado, String laboratorio) {
 
         Exame exame = new Exame();
         Procedimento base = super.validaCamposEntrada(descricao, data, valor, status, deletadoEm);
@@ -31,6 +31,10 @@ public class ValidateExame extends ValidateProcedimento {
             }
             exame.setDataResultado(date);
         }
+
+        if (laboratorio == null || laboratorio.isEmpty())
+            throw new ExameException("ERRO: Campo descrição não pode ser vazio.");
+        exame.setLaboratorio(laboratorio);
 
         return exame;
 
