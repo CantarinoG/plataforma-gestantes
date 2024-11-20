@@ -2,6 +2,7 @@ package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.enums.TipoSanguineo;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -72,6 +73,15 @@ public class DlgCadastroGestantes extends JDialog {
         edtContatoEmergencia.setText(atualizando.getContatoEmergencia());
         edtHistoricoMedico.setText(atualizando.getHistoricoMedico());
         edtTipoSanguineo.setSelectedItem(atualizando.getTipoSanguineo());
+    }
+
+    private String[] getBloodOptions() {
+        TipoSanguineo[] values = TipoSanguineo.values();
+        String[] options = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            options[i] = values[i].getValue();
+        }
+        return options;
     }
 
     private void initComponents() {
@@ -192,14 +202,7 @@ public class DlgCadastroGestantes extends JDialog {
         panContatoEmergenciaField = createCustomTextfield("Contato de Emergência", edtContatoEmergencia);
         panColumn.add(panContatoEmergenciaField);
 
-        String[] tiposSanguineos = {
-                "A+", "A-",
-                "B+", "B-",
-                "AB+", "AB-",
-                "O+", "O-"
-        };
-
-        edtTipoSanguineo = new JComboBox<>(tiposSanguineos);
+        edtTipoSanguineo = new JComboBox<>(getBloodOptions());
         edtTipoSanguineo.setFont(new Font("Arial", Font.PLAIN, 22));
         edtTipoSanguineo.setBackground(AppColors.FIELD_PINK);
         edtTipoSanguineo.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
@@ -227,14 +230,10 @@ public class DlgCadastroGestantes extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 50);
-        btnCriarConta.setBackground(AppColors.BUTTON_PINK);
-        btnCriarConta.setFont(new Font("Arial", Font.BOLD, 15));
-        btnCriarConta.setFocusPainted(false);
-        btnCriarConta.setBorderPainted(false);
-        btnCriarConta.setPreferredSize(new Dimension(200, 55));
-        btnCriarConta.setOpaque(true);
+        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 10);
+        btnCriarConta.setPreferredSize(new Dimension(150, 50));
         btnCriarConta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCriarConta.setForeground(Color.WHITE);
         btnCriarConta.addActionListener(evt -> btnCriarContaActionPerformed(evt));
 
         panButton.add(btnCriarConta);

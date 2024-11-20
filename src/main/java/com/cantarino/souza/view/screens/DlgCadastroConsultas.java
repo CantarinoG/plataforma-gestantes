@@ -6,6 +6,7 @@ import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -26,11 +27,13 @@ public class DlgCadastroConsultas extends JDialog {
     private JFormattedTextField txtData;
     private JTextField txtValor;
     private JComboBox<String> cbMedico;
+    private JComboBox<String> cbStatus;
     private JPanel panPacienteField;
     private JPanel panDescricaoField;
     private JPanel panDataField;
     private JPanel panValorField;
     private JPanel panMedicoField;
+    private JPanel panStatusField;
 
     private MedicoController medicoController;
     private GestanteController gestanteController;
@@ -61,6 +64,7 @@ public class DlgCadastroConsultas extends JDialog {
         txtData.setText(atualizando.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         txtValor.setText(String.valueOf(atualizando.getValor()));
         cbMedico.setSelectedItem(atualizando.getMedico().getId() + " | " + atualizando.getMedico().getNome());
+        cbStatus.setSelectedItem(atualizando.getStatus());
     }
 
     private String[] getGestantesOptions() {
@@ -79,6 +83,15 @@ public class DlgCadastroConsultas extends JDialog {
         for (int i = 0; i < medicos.size(); i++) {
             Medico medico = medicos.get(i);
             options[i] = medico.getId() + " | " + medico.getNome();
+        }
+        return options;
+    }
+
+    private String[] getStatusOptions() {
+        StatusProcedimentos[] values = StatusProcedimentos.values();
+        String[] options = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            options[i] = values[i].getValue();
         }
         return options;
     }
@@ -111,7 +124,7 @@ public class DlgCadastroConsultas extends JDialog {
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(5, 1, 20, 5));
+        panColumn.setLayout(new GridLayout(atualizando != null ? 6 : 5, 1, 20, 5));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -161,6 +174,15 @@ public class DlgCadastroConsultas extends JDialog {
         panMedicoField = createCustomTextfield("Médico", cbMedico);
         panColumn.add(panMedicoField);
 
+        // Campo Status (apenas quando editando)
+        if (atualizando != null) {
+            cbStatus = new JComboBox<>(getStatusOptions());
+            cbStatus.setFont(new Font("Arial", Font.PLAIN, 22));
+            cbStatus.setBackground(AppColors.FIELD_PINK);
+            panStatusField = createCustomTextfield("Status", cbStatus);
+            panColumn.add(panStatusField);
+        }
+
         // Botão
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
@@ -173,14 +195,10 @@ public class DlgCadastroConsultas extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarConsulta = new RoundedButton(atualizando != null ? "Editar Consulta" : "Cadastrar Consulta", 50);
-        btnCadastrarConsulta.setBackground(AppColors.BUTTON_PINK);
-        btnCadastrarConsulta.setFont(new Font("Arial", Font.BOLD, 15));
-        btnCadastrarConsulta.setFocusPainted(false);
-        btnCadastrarConsulta.setBorderPainted(false);
-        btnCadastrarConsulta.setPreferredSize(new Dimension(200, 55));
-        btnCadastrarConsulta.setOpaque(true);
+        btnCadastrarConsulta = new RoundedButton(atualizando != null ? "Editar Consulta" : "Cadastrar Consulta", 10);
+        btnCadastrarConsulta.setPreferredSize(new Dimension(150, 50));
         btnCadastrarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrarConsulta.setForeground(Color.WHITE);
         btnCadastrarConsulta.addActionListener(evt -> btnCadastrarConsultaActionPerformed(evt));
 
         panButton.add(btnCadastrarConsulta);
@@ -244,7 +262,7 @@ public class DlgCadastroConsultas extends JDialog {
                         txtDescricao.getText(),
                         formattedData,
                         txtValor.getText(),
-                        "AGENDADA",
+                        StatusProcedimentos.AGENDADA.getValue(),
                         null,
                         null,
                         medico,
@@ -257,7 +275,7 @@ public class DlgCadastroConsultas extends JDialog {
                         txtDescricao.getText(),
                         formattedData,
                         txtValor.getText(),
-                        "AGENDADA",
+                        (String) cbStatus.getSelectedItem(),
                         null,
                         null,
                         medico,

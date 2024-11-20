@@ -20,7 +20,7 @@ public class ExameController {
     }
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMExame(repositorio.findAll()), null);
+        Util.jTableShow(grd, new TMExame(repositorio.findAll()), TMExame.getCustomRenderer());
     }
 
     public void cadastrar(Gestante paciente, String descricao, String data, String valor, String status,
@@ -54,11 +54,11 @@ public class ExameController {
     }
 
     public void filtrarTabelaPorIdGestante(JTable grd, int id) {
-        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteId(id)), null);
+        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteId(id)), TMExame.getCustomRenderer());
     }
 
     public void filtrarTabelaPorIdGestanteStatus(JTable grd, int id, String status) {
-        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteIdStatus(id, status)), null);
+        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteIdStatus(id, status)), TMExame.getCustomRenderer());
     }
 
 }

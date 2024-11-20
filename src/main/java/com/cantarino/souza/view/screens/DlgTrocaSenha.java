@@ -40,15 +40,17 @@ public class DlgTrocaSenha extends JDialog {
 
         edtSenhaAtual = new JPasswordField();
         configurarCampoSenha(edtSenhaAtual);
-        panBackground.add(createCustomTextfield("Senha Atual", edtSenhaAtual), gbc);
+        panBackground.add(createCustomTextfield("Nova Senha", edtSenhaAtual), gbc);
 
         gbc.gridy++;
         edtNovaSenha = new JPasswordField();
         configurarCampoSenha(edtNovaSenha);
-        panBackground.add(createCustomTextfield("Nova Senha", edtNovaSenha), gbc);
+        panBackground.add(createCustomTextfield("Confirmar Nova Senha", edtNovaSenha), gbc);
 
         gbc.gridy++;
-        btnTrocarSenha = new RoundedButton("Trocar Senha", 50);
+        btnTrocarSenha = new RoundedButton("Trocar Senha", 10);
+        btnTrocarSenha.setPreferredSize(new Dimension(150, 50));
+        btnTrocarSenha.setForeground(Color.WHITE);
         btnTrocarSenha.setBackground(AppColors.BUTTON_PINK);
         btnTrocarSenha.setFont(new Font("Arial", Font.BOLD, 15));
         btnTrocarSenha.setFocusPainted(false);

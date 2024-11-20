@@ -12,33 +12,24 @@ import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
 
-    JPanel panBackground;
-    JLabel lblAction;
-    JPanel panCategories;
-    JButton btnConsultas;
-    JButton btnExames;
-    JPanel panTable;
-    JPanel panOptions;
-    JButton btnCadastrarConsulta;
-    JButton btnEditarConsulta;
-    JButton btnDeletarConsulta;
-    JTable grdProcedimentos;
-    JScrollPane scrollPane;
+    private JPanel panBackground;
+    private JPanel panHeader;
+    private JLabel lblTitle;
+    private JPanel panContent;
+    private JTable grdConsultas;
+    private JScrollPane scrollPane;
+    private JPanel panFooter;
+    private JButton btnCadastrar;
+    private JButton btnEditar;
+    private JButton btnDeletar;
 
-    ConsultaController consultaController;
-    ExameController exameController;
-
-    private final int GERENCIANDO_CONSULTA = 0;
-    private final int GERENCIANDO_EXAME = 1;
-
-    private int gerenciando = GERENCIANDO_CONSULTA;
+    private ConsultaController consultaController;
 
     public DlgConsultas(JFrame parent, boolean modal) {
         super(parent, modal);
-        consultaController = new ConsultaController();
-        exameController = new ExameController();
         initComponents();
-        consultaController.atualizarTabela(grdProcedimentos);
+        consultaController = new ConsultaController();
+        consultaController.atualizarTabela(grdConsultas);
     }
 
     private void initComponents() {
@@ -48,58 +39,35 @@ public class DlgConsultas extends JDialog {
         setLocationRelativeTo(null);
 
         panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new GridBagLayout());
-        panBackground.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panBackground.setLayout(new BorderLayout());
         setContentPane(panBackground);
 
+        panHeader = new JPanel();
+        panHeader.setPreferredSize(new Dimension(getWidth(), 80));
+        panHeader.setBorder(BorderFactory.createEmptyBorder(5, 64, 10, 5));
+        panHeader.setBackground(AppColors.BUTTON_PINK);
+        panHeader.setOpaque(true);
+        panHeader.setLayout(new GridBagLayout());
+
+        lblTitle = new JLabel("Consultas");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
+        lblTitle.setForeground(AppColors.TITLE_BLUE);
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
+        gbc.insets = new Insets(0, 10, 0, 10);
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panHeader.add(lblTitle, gbc);
 
-        lblAction = new JLabel("Gestão de Consultas");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 64));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        panBackground.add(panHeader, BorderLayout.NORTH);
+        panContent = new PanConsultasAgendadas();
+        panContent.setLayout(new BorderLayout());
+        panContent.setBackground(new Color(255, 255, 255));
+        panContent.setOpaque(true);
 
-        panCategories = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panCategories.setBackground(AppColors.TRANSPARENT);
-        gbc.gridy = 1;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.BOTH;
-        panBackground.add(panCategories, gbc);
-
-        btnConsultas = new RoundedButton("Consultas", 50);
-        btnConsultas.setPreferredSize(new Dimension(200, 55));
-        btnConsultas.setMinimumSize(new Dimension(200, 55));
-        btnConsultas.setMaximumSize(new Dimension(200, 55));
-        btnConsultas.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnConsultas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConsultasActionPerformed(evt);
-            }
-        });
-        panCategories.add(btnConsultas);
-
-        btnExames = new RoundedButton("Exames", 50);
-        btnExames.setPreferredSize(new Dimension(200, 55));
-        btnExames.setMinimumSize(new Dimension(200, 55));
-        btnExames.setMaximumSize(new Dimension(200, 55));
-        btnExames.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnExames.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExamesActionPerformed(evt);
-            }
-        });
-        panCategories.add(btnExames);
-
-        gbc.gridy = 2;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-
-        grdProcedimentos = new JTable();
-        grdProcedimentos.setModel(new DefaultTableModel(
+        grdConsultas = new JTable();
+        grdConsultas.setModel(new DefaultTableModel(
                 new Object[][] {
                         {},
                         {},
@@ -108,108 +76,72 @@ public class DlgConsultas extends JDialog {
                 },
                 new String[] {
                 }));
-        grdProcedimentos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                grdProcedimentosMouseClicked(evt);
-            }
-        });
-        grdProcedimentos.setFillsViewportHeight(true);
-        grdProcedimentos.setBackground(AppColors.FIELD_PINK);
-        scrollPane = new JScrollPane();
-        scrollPane.setViewportView(grdProcedimentos);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panBackground.add(scrollPane, gbc);
+        scrollPane = new JScrollPane(grdConsultas);
+        panContent.add(scrollPane, BorderLayout.CENTER);
 
-        panOptions = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panOptions.setBackground(AppColors.TRANSPARENT);
-        gbc.gridy = 3;
-        gbc.weighty = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panBackground.add(panOptions, gbc);
+        panFooter = new JPanel();
+        panFooter.setPreferredSize(new Dimension(getWidth(), 80));
+        panFooter.setBackground(AppColors.BUTTON_PINK);
+        panFooter.setBorder(BorderFactory.createEmptyBorder(5, 64, 10, 5));
+        panFooter.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 5));
 
-        btnCadastrarConsulta = new RoundedButton("Cadastrar Consulta", 50);
-        btnCadastrarConsulta.setPreferredSize(new Dimension(200, 55));
-        btnCadastrarConsulta.setMinimumSize(new Dimension(200, 55));
-        btnCadastrarConsulta.setMaximumSize(new Dimension(200, 55));
-        btnCadastrarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnCadastrarConsulta.addActionListener(new java.awt.event.ActionListener() {
+        btnCadastrar = new RoundedButton("Cadastrar", 10);
+        btnCadastrar.setPreferredSize(new Dimension(150, 50));
+        btnCadastrar.setBackground(Color.WHITE);
+        btnCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastrarConsultaActionPerformed(evt);
+                btnCadastrarActionPerformed(evt);
             }
         });
-        panOptions.add(btnCadastrarConsulta);
 
-        btnEditarConsulta = new RoundedButton("Editar Consulta", 50);
-        btnEditarConsulta.setPreferredSize(new Dimension(200, 55));
-        btnEditarConsulta.setMinimumSize(new Dimension(200, 55));
-        btnEditarConsulta.setMaximumSize(new Dimension(200, 55));
-        btnEditarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnEditarConsulta.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar = new RoundedButton("Editar", 10);
+        btnEditar.setPreferredSize(new Dimension(150, 50));
+        btnEditar.setBackground(Color.WHITE);
+        btnEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditarConsultaActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
-        panOptions.add(btnEditarConsulta);
 
-        btnDeletarConsulta = new RoundedButton("Deletar Consulta", 50);
-        btnDeletarConsulta.setPreferredSize(new Dimension(200, 55));
-        btnDeletarConsulta.setMinimumSize(new Dimension(200, 55));
-        btnDeletarConsulta.setMaximumSize(new Dimension(200, 55));
-        btnDeletarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnDeletarConsulta.addActionListener(new java.awt.event.ActionListener() {
+        btnDeletar = new RoundedButton("Deletar", 10);
+        btnDeletar.setPreferredSize(new Dimension(150, 50));
+        btnDeletar.setBackground(Color.WHITE);
+        btnDeletar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnDeletar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeletarConsultaActionPerformed(evt);
+                btnDeletarActionPerformed(evt);
             }
         });
-        panOptions.add(btnDeletarConsulta);
-    }
 
-    private void btnConsultasActionPerformed(java.awt.event.ActionEvent evt) {
-        lblAction.setText("Gestão de Consultas");
-        btnCadastrarConsulta.setText("Cadastrar Consulta");
-        btnEditarConsulta.setText("Editar Consulta");
-        btnDeletarConsulta.setText("Deletar Consulta");
-        panBackground.repaint();
-        consultaController.atualizarTabela(grdProcedimentos);
-        gerenciando = GERENCIANDO_CONSULTA;
-    }
+        panFooter.add(btnCadastrar);
+        panFooter.add(btnEditar);
+        panFooter.add(btnDeletar);
 
-    private void btnExamesActionPerformed(java.awt.event.ActionEvent evt) {
-        lblAction.setText("Gestão de Exames");
-        btnCadastrarConsulta.setText("Cadastrar Exame");
-        btnEditarConsulta.setText("Editar Exame");
-        btnDeletarConsulta.setText("Deletar Exame");
-        panBackground.repaint();
-        exameController.atualizarTabela(grdProcedimentos);
-        gerenciando = GERENCIANDO_EXAME;
+        panContent.add(panFooter, BorderLayout.SOUTH);
+
+        panBackground.add(panContent, BorderLayout.CENTER);
+
     }
 
     private Object getObjetoSelecionadoNaGrid() {
-        int rowCliked = grdProcedimentos.getSelectedRow();
+        int rowCliked = grdConsultas.getSelectedRow();
         Object obj = null;
         if (rowCliked >= 0) {
-            obj = grdProcedimentos.getModel().getValueAt(rowCliked, -1);
+            obj = grdConsultas.getModel().getValueAt(rowCliked, -1);
         }
         return obj;
     }
 
-    private void btnCadastrarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
-        switch (gerenciando) {
-            case GERENCIANDO_CONSULTA:
-                DlgCadastroConsultas dlgConsulta = new DlgCadastroConsultas(this, true);
-                dlgConsulta.setVisible(true);
-                consultaController.atualizarTabela(grdProcedimentos);
-                break;
-            case GERENCIANDO_EXAME:
-                DlgCadastroExames dlgExame = new DlgCadastroExames(this, true);
-                dlgExame.setVisible(true);
-                exameController.atualizarTabela(grdProcedimentos);
-                break;
-            default:
-        }
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
+        DlgCadastroConsultas dialog = new DlgCadastroConsultas(this, true);
+        dialog.setVisible(true);
+        consultaController.atualizarTabela(grdConsultas);
+
     }
 
-    private void btnEditarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
         int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
@@ -217,26 +149,15 @@ public class DlgConsultas extends JDialog {
             return;
         }
 
-        switch (gerenciando) {
-            case GERENCIANDO_CONSULTA:
-                Consulta consulta = (Consulta) selectedObject;
-                id = consulta.getId();
-                DlgCadastroConsultas dlgConsulta = new DlgCadastroConsultas(this, true, id);
-                dlgConsulta.setVisible(true);
-                consultaController.atualizarTabela(grdProcedimentos);
-                break;
-            case GERENCIANDO_EXAME:
-                Exame exame = (Exame) selectedObject;
-                id = exame.getId();
-                DlgCadastroExames dlgExame = new DlgCadastroExames(this, true, id);
-                dlgExame.setVisible(true);
-                exameController.atualizarTabela(grdProcedimentos);
-                break;
-            default:
-        }
+        Consulta consulta = (Consulta) selectedObject;
+        id = consulta.getId();
+        DlgCadastroConsultas dialog = new DlgCadastroConsultas(this, true, id);
+        dialog.setVisible(true);
+        consultaController.atualizarTabela(grdConsultas);
+
     }
 
-    private void btnDeletarConsultaActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
         int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
@@ -244,27 +165,11 @@ public class DlgConsultas extends JDialog {
             return;
         }
 
-        switch (gerenciando) {
-            case GERENCIANDO_CONSULTA:
-                Consulta consulta = (Consulta) selectedObject;
-                id = consulta.getId();
-                consultaController.excluir(id);
-                consultaController.atualizarTabela(grdProcedimentos);
-                break;
-            case GERENCIANDO_EXAME:
-                Exame exame = (Exame) selectedObject;
-                id = exame.getId();
-                exameController.excluir(id);
-                exameController.atualizarTabela(grdProcedimentos);
-                break;
-            default:
-        }
-    }
+        Consulta consulta = (Consulta) selectedObject;
+        id = consulta.getId();
+        consultaController.excluir(id);
+        consultaController.atualizarTabela(grdConsultas);
 
-    private void grdProcedimentosMouseClicked(java.awt.event.MouseEvent evt) {
-        if (evt.getClickCount() == 2) {
-
-        }
     }
 
 }

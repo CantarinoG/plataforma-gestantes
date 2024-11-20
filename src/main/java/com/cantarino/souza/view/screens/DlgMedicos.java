@@ -1,41 +1,40 @@
 package com.cantarino.souza.view.screens;
 
-import java.awt.*;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import com.cantarino.souza.model.entities.Admin;
-import com.cantarino.souza.model.entities.Gestante;
-import com.cantarino.souza.model.entities.Secretario;
-import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.view.AuthTemp;
-import com.cantarino.souza.view.components.*;
+import java.awt.*;
 
-public class DlgPagamentos extends JDialog {
+import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.view.components.AppColors;
+import com.cantarino.souza.view.components.BackgroundPanel;
+import com.cantarino.souza.view.components.RoundedButton;
 
-    JPanel panBackground;
-    JPanel panHeader;
-    JLabel lblTitle;
-    JPanel panContent;
-    JTable grdPagamento;
-    JScrollPane scrollPane;
-    JPanel panFooter;
-    JButton btnRecibo;
-    JButton btnCadastrar;
-    JButton btnEditar;
-    JButton btnDeletar;
+public class DlgMedicos extends JDialog {
 
-    private Usuario usuario;
+    private JPanel panBackground;
+    private JPanel panHeader;
+    private JLabel lblTitle;
+    private JPanel panContent;
+    private JTable grdMedicos;
+    private JScrollPane scrollPane;
+    private JPanel panFooter;
+    private JButton btnCadastrar;
+    private JButton btnEditar;
+    private JButton btnDeletar;
 
-    public DlgPagamentos(JFrame parent, boolean modal) {
+    private MedicoController medicoController;
+
+    public DlgMedicos(JFrame parent, boolean modal) {
         super(parent, modal);
-        usuario = AuthTemp.usuario;
         initComponents();
+        medicoController = new MedicoController();
+        medicoController.atualizarTabela(grdMedicos);
     }
 
     private void initComponents() {
-        setTitle("Gestão de Pagamentos");
+        setTitle("Médicos");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
         setLocationRelativeTo(null);
@@ -51,7 +50,7 @@ public class DlgPagamentos extends JDialog {
         panHeader.setOpaque(true);
         panHeader.setLayout(new GridBagLayout());
 
-        lblTitle = new JLabel("Pagamentos");
+        lblTitle = new JLabel("Médicos");
         lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
         lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
         lblTitle.setForeground(AppColors.TITLE_BLUE);
@@ -68,8 +67,8 @@ public class DlgPagamentos extends JDialog {
         panContent.setBackground(new Color(255, 255, 255));
         panContent.setOpaque(true);
 
-        grdPagamento = new JTable();
-        grdPagamento.setModel(new DefaultTableModel(
+        grdMedicos = new JTable();
+        grdMedicos.setModel(new DefaultTableModel(
                 new Object[][] {
                         {},
                         {},
@@ -78,8 +77,8 @@ public class DlgPagamentos extends JDialog {
                 },
                 new String[] {
                 }));
-        scrollPane = new JScrollPane(grdPagamento);
-        add(scrollPane, BorderLayout.CENTER);
+        scrollPane = new JScrollPane(grdMedicos);
+        panContent.add(scrollPane, BorderLayout.CENTER);
 
         panFooter = new JPanel();
         panFooter.setPreferredSize(new Dimension(getWidth(), 80));
@@ -87,17 +86,7 @@ public class DlgPagamentos extends JDialog {
         panFooter.setBorder(BorderFactory.createEmptyBorder(5, 64, 10, 5));
         panFooter.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 5));
 
-        btnRecibo = new RoundedButton("Emitir Recibo", 10);
-        btnRecibo.setPreferredSize(new Dimension(150, 50));
-        btnRecibo.setBackground(Color.WHITE);
-        btnRecibo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnRecibo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReciboActionPerformed(evt);
-            }
-        });
-
-        btnCadastrar = new RoundedButton("Cadastrar Pagamento", 10);
+        btnCadastrar = new RoundedButton("Cadastrar", 10);
         btnCadastrar.setPreferredSize(new Dimension(150, 50));
         btnCadastrar.setBackground(Color.WHITE);
         btnCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -107,7 +96,7 @@ public class DlgPagamentos extends JDialog {
             }
         });
 
-        btnEditar = new RoundedButton("Editar Pagamento", 10);
+        btnEditar = new RoundedButton("Editar", 10);
         btnEditar.setPreferredSize(new Dimension(150, 50));
         btnEditar.setBackground(Color.WHITE);
         btnEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -117,7 +106,7 @@ public class DlgPagamentos extends JDialog {
             }
         });
 
-        btnDeletar = new RoundedButton("Deletar Pagamento", 10);
+        btnDeletar = new RoundedButton("Deletar", 10);
         btnDeletar.setPreferredSize(new Dimension(150, 50));
         btnDeletar.setBackground(Color.WHITE);
         btnDeletar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -127,33 +116,59 @@ public class DlgPagamentos extends JDialog {
             }
         });
 
-        if (usuario instanceof Gestante) {
-            panFooter.add(btnRecibo);
-        } else if (usuario instanceof Secretario) {
-            panFooter.add(btnRecibo);
-            panFooter.add(btnCadastrar);
-        } else if (usuario instanceof Admin) {
-            panFooter.add(btnRecibo);
-            panFooter.add(btnCadastrar);
-            panFooter.add(btnEditar);
-            panFooter.add(btnDeletar);
-        }
+        panFooter.add(btnCadastrar);
+        panFooter.add(btnEditar);
+        panFooter.add(btnDeletar);
 
-        add(panFooter, BorderLayout.SOUTH);
+        panContent.add(panFooter, BorderLayout.SOUTH);
 
         panBackground.add(panContent, BorderLayout.CENTER);
     }
 
-    private void btnReciboActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
+        DlgCadastroMedicos dialog = new DlgCadastroMedicos(this, true);
+        dialog.setVisible(true);
+        medicoController.atualizarTabela(grdMedicos);
     }
 
-    private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdMedicos.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdMedicos.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Medico medico = (Medico) selectedObject;
+        id = medico.getId();
+        DlgCadastroMedicos dialog = new DlgCadastroMedicos(this, true, id);
+        dialog.setVisible(true);
+        medicoController.atualizarTabela(grdMedicos);
+
     }
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Medico medico = (Medico) selectedObject;
+        id = medico.getId();
+        medicoController.excluir(id);
+        medicoController.atualizarTabela(grdMedicos);
+
     }
 
 }

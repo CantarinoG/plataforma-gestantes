@@ -166,14 +166,10 @@ public class DlgCadastroAdm extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 50);
-        btnCriarConta.setBackground(AppColors.BUTTON_PINK);
-        btnCriarConta.setFont(new Font("Arial", Font.BOLD, 15));
-        btnCriarConta.setFocusPainted(false);
-        btnCriarConta.setBorderPainted(false);
-        btnCriarConta.setPreferredSize(new Dimension(200, 55));
-        btnCriarConta.setOpaque(true);
+        btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 10);
+        btnCriarConta.setPreferredSize(new Dimension(150, 50));
         btnCriarConta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCriarConta.setForeground(Color.WHITE);
         btnCriarConta.addActionListener(evt -> btnCriarContaActionPerformed(evt));
 
         panButton.add(btnCriarConta);
