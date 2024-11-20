@@ -5,6 +5,12 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.table.AbstractTableModel;
 import com.cantarino.souza.model.entities.Consulta;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
+
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.Component;
+import java.awt.Color;
+import javax.swing.JTable;
 
 public class TMConsulta extends AbstractTableModel {
 
@@ -101,6 +107,37 @@ public class TMConsulta extends AbstractTableModel {
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return false;
+    }
+
+    public static class ConsultaTableCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (!isSelected) {
+                TMConsulta model = (TMConsulta) table.getModel();
+                Consulta consulta = model.lista.get(row);
+
+                if (StatusProcedimentos.CANCELADA.getValue().equals(consulta.getStatus())) {
+                    c.setBackground(new Color(255, 200, 200));
+                    setBackground(new Color(255, 200, 200));
+                } else if (StatusProcedimentos.CONCLUIDA.getValue().equals(consulta.getStatus())) {
+                    c.setBackground(new Color(200, 255, 200));
+                    setBackground(new Color(200, 255, 200));
+                } else {
+                    c.setBackground(Color.WHITE);
+                    setBackground(Color.WHITE);
+                }
+            }
+
+            setOpaque(true);
+            return c;
+        }
+    }
+
+    public static DefaultTableCellRenderer getCustomRenderer() {
+        return new ConsultaTableCellRenderer();
     }
 
 }

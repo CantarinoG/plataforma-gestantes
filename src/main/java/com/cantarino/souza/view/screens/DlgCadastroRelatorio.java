@@ -129,14 +129,10 @@ public class DlgCadastroRelatorio extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarRelatorio = new RoundedButton("Cadastrar Relatório", 50);
-        btnCadastrarRelatorio.setBackground(AppColors.BUTTON_PINK);
-        btnCadastrarRelatorio.setFont(new Font("Arial", Font.BOLD, 15));
-        btnCadastrarRelatorio.setFocusPainted(false);
-        btnCadastrarRelatorio.setBorderPainted(false);
-        btnCadastrarRelatorio.setPreferredSize(new Dimension(200, 55));
-        btnCadastrarRelatorio.setOpaque(true);
+        btnCadastrarRelatorio = new RoundedButton("Cadastrar Relatório", 10);
+        btnCadastrarRelatorio.setPreferredSize(new Dimension(150, 50));
         btnCadastrarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrarRelatorio.setForeground(Color.WHITE);
         btnCadastrarRelatorio.addActionListener(evt -> btnCadastrarRelatorioActionPerformed(evt));
 
         panButton.add(btnCadastrarRelatorio);

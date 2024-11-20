@@ -83,7 +83,9 @@ public class DlgLogin extends JDialog {
 
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panButton.setBackground(AppColors.TRANSPARENT);
-        btnLogin = new RoundedButton("Fazer Login", 50);
+        btnLogin = new RoundedButton("Fazer Login", 10);
+        btnLogin.setPreferredSize(new Dimension(150, 50));
+        btnLogin.setForeground(Color.white);
         btnLogin.setBackground(AppColors.BUTTON_PINK);
         btnLogin.setFont(new Font("Arial", Font.BOLD, 15));
         btnLogin.setFocusPainted(false);

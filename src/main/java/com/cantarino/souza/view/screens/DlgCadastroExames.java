@@ -6,6 +6,7 @@ import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -31,6 +32,12 @@ public class DlgCadastroExames extends JDialog {
     private JPanel panDataField;
     private JPanel panValorField;
     private JPanel panMedicoField;
+    private JFormattedTextField txtDataResultado;
+    private JTextField txtLaboratorio;
+    private JPanel panDataResultadoField;
+    private JPanel panLaboratorioField;
+    private JPanel panStatusField;
+    private JComboBox<String> cbStatus;
 
     private MedicoController medicoController;
     private GestanteController gestanteController;
@@ -58,6 +65,10 @@ public class DlgCadastroExames extends JDialog {
         txtDescricao.setText(atualizando.getDescricao());
         txtData.setText(atualizando.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         txtValor.setText(String.valueOf(atualizando.getValor()));
+        if (atualizando.getDataResultado() != null) {
+            txtDataResultado.setText(atualizando.getDataResultado().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
+        txtLaboratorio.setText(atualizando.getLaboratorio());
         Gestante gestante = atualizando.getPaciente();
         cbPaciente.setSelectedItem(gestante.getId() + " | " + gestante.getNome());
         Medico medico = (Medico) atualizando.getRequisitadoPor();
@@ -66,6 +77,7 @@ public class DlgCadastroExames extends JDialog {
         } else {
             cbMedico.setSelectedItem("Requisição Própria");
         }
+        cbStatus.setSelectedItem(atualizando.getStatus());
     }
 
     private String[] getGestantesOptions() {
@@ -85,6 +97,15 @@ public class DlgCadastroExames extends JDialog {
         for (int i = 0; i < medicos.size(); i++) {
             Medico medico = medicos.get(i);
             options[i + 1] = medico.getId() + " | " + medico.getNome();
+        }
+        return options;
+    }
+
+    private String[] getStatusOptions() {
+        StatusProcedimentos[] values = StatusProcedimentos.values();
+        String[] options = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            options[i] = values[i].getValue();
         }
         return options;
     }
@@ -117,7 +138,7 @@ public class DlgCadastroExames extends JDialog {
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(5, 1, 20, 5));
+        panColumn.setLayout(new GridLayout(atualizando != null ? 8 : 7, 1, 20, 5));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -152,6 +173,28 @@ public class DlgCadastroExames extends JDialog {
             e.printStackTrace();
         }
 
+        // Campo Data Resultado
+        try {
+            MaskFormatter maskDataResultado = new MaskFormatter("##/##/####");
+            maskDataResultado.setPlaceholderCharacter('_');
+            txtDataResultado = new JFormattedTextField(maskDataResultado);
+            txtDataResultado.setFont(new Font("Arial", Font.PLAIN, 22));
+            txtDataResultado.setBackground(AppColors.FIELD_PINK);
+            txtDataResultado.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panDataResultadoField = createCustomTextfield("Previsão Data Resultado(Opcional)", txtDataResultado);
+            panColumn.add(panDataResultadoField);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // Campo Laboratório
+        txtLaboratorio = new JTextField();
+        txtLaboratorio.setFont(new Font("Arial", Font.PLAIN, 22));
+        txtLaboratorio.setBackground(AppColors.FIELD_PINK);
+        txtLaboratorio.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panLaboratorioField = createCustomTextfield("Laboratório", txtLaboratorio);
+        panColumn.add(panLaboratorioField);
+
         // Campo Valor
         txtValor = new JTextField();
         txtValor.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -167,6 +210,14 @@ public class DlgCadastroExames extends JDialog {
         panMedicoField = createCustomTextfield("Requisitado por:", cbMedico);
         panColumn.add(panMedicoField);
 
+        if (atualizando != null) {
+            cbStatus = new JComboBox<>(getStatusOptions());
+            cbStatus.setFont(new Font("Arial", Font.PLAIN, 22));
+            cbStatus.setBackground(AppColors.FIELD_PINK);
+            panStatusField = createCustomTextfield("Status", cbStatus);
+            panColumn.add(panStatusField);
+        }
+
         // Botão
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
@@ -179,14 +230,10 @@ public class DlgCadastroExames extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarConsulta = new RoundedButton(atualizando != null ? "Editar Exame" : "Cadastrar Exame", 50);
-        btnCadastrarConsulta.setBackground(AppColors.BUTTON_PINK);
-        btnCadastrarConsulta.setFont(new Font("Arial", Font.BOLD, 15));
-        btnCadastrarConsulta.setFocusPainted(false);
-        btnCadastrarConsulta.setBorderPainted(false);
-        btnCadastrarConsulta.setPreferredSize(new Dimension(200, 55));
-        btnCadastrarConsulta.setOpaque(true);
+        btnCadastrarConsulta = new RoundedButton(atualizando != null ? "Editar Exame" : "Cadastrar Exame", 10);
+        btnCadastrarConsulta.setPreferredSize(new Dimension(150, 50));
         btnCadastrarConsulta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrarConsulta.setForeground(Color.WHITE);
         btnCadastrarConsulta.addActionListener(evt -> btnCadastrarConsultaActionPerformed(evt));
 
         panButton.add(btnCadastrarConsulta);
@@ -246,6 +293,19 @@ public class DlgCadastroExames extends JDialog {
                     timeParts[0], // hour
                     timeParts[1] // minute
             );
+            String dataResultadoStr = txtDataResultado.getText(); // Format: dd/MM/yyyy
+            String formattedDataResultado = null;
+            if (dataResultadoStr != null && !dataResultadoStr.trim().isEmpty()
+                    && !dataResultadoStr.equals("__/__/____")) {
+                String[] dataResultadoParts = dataResultadoStr.split("/");
+                formattedDataResultado = String.format("%s-%s-%s",
+                        dataResultadoParts[2], // year
+                        dataResultadoParts[1], // month
+                        dataResultadoParts[0] // day
+                );
+            }
+
+            System.out.println(formattedDataResultado);
 
             if (atualizando == null) {
                 exameController.cadastrar(
@@ -253,12 +313,12 @@ public class DlgCadastroExames extends JDialog {
                         txtDescricao.getText(),
                         formattedData,
                         txtValor.getText(),
-                        "AGENDADA",
+                        StatusProcedimentos.AGENDADA.getValue(),
                         null,
                         null,
-                        null,
+                        formattedDataResultado,
                         medico,
-                        null);
+                        txtLaboratorio.getText());
                 dispose();
             } else {
                 exameController.atualizar(
@@ -267,12 +327,12 @@ public class DlgCadastroExames extends JDialog {
                         txtDescricao.getText(),
                         formattedData,
                         txtValor.getText(),
-                        "AGENDADA",
+                        (String) cbStatus.getSelectedItem(),
                         null,
                         null,
-                        null,
+                        formattedDataResultado,
                         medico,
-                        null);
+                        txtLaboratorio.getText());
                 dispose();
             }
 

@@ -92,14 +92,10 @@ public class DlgCadastroPagamentos extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarPagamento = new RoundedButton("Confirmar Pagamento", 50);
-        btnCadastrarPagamento.setBackground(AppColors.BUTTON_PINK);
-        btnCadastrarPagamento.setFont(new Font("Arial", Font.BOLD, 15));
-        btnCadastrarPagamento.setFocusPainted(false);
-        btnCadastrarPagamento.setBorderPainted(false);
-        btnCadastrarPagamento.setPreferredSize(new Dimension(200, 55));
-        btnCadastrarPagamento.setOpaque(true);
+        btnCadastrarPagamento = new RoundedButton("Confirmar Pagamento", 10);
+        btnCadastrarPagamento.setPreferredSize(new Dimension(150, 50));
         btnCadastrarPagamento.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrarPagamento.setForeground(Color.WHITE);
         btnCadastrarPagamento.addActionListener(evt -> btnCadastrarPagamentoActionPerformed(evt));
 
         panButton.add(btnCadastrarPagamento);

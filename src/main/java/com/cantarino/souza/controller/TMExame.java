@@ -2,10 +2,14 @@ package com.cantarino.souza.controller;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import com.cantarino.souza.model.entities.Exame;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 
 public class TMExame extends AbstractTableModel {
 
@@ -101,6 +105,42 @@ public class TMExame extends AbstractTableModel {
                     return null;
             }
         }
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
+    }
+
+    public static class ExameTableCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (!isSelected) {
+                TMExame model = (TMExame) table.getModel();
+                Exame exame = model.lista.get(row);
+
+                if (StatusProcedimentos.CANCELADA.getValue().equals(exame.getStatus())) {
+                    c.setBackground(new Color(255, 200, 200));
+                    setBackground(new Color(255, 200, 200));
+                } else if (StatusProcedimentos.CONCLUIDA.getValue().equals(exame.getStatus())) {
+                    c.setBackground(new Color(200, 255, 200));
+                    setBackground(new Color(200, 255, 200));
+                } else {
+                    c.setBackground(Color.WHITE);
+                    setBackground(Color.WHITE);
+                }
+            }
+
+            setOpaque(true);
+            return c;
+        }
+    }
+
+    public static DefaultTableCellRenderer getCustomRenderer() {
+        return new ExameTableCellRenderer();
     }
 
 }

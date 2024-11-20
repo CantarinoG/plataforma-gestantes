@@ -33,7 +33,7 @@ public class ValidateExame extends ValidateProcedimento {
         }
 
         if (laboratorio == null || laboratorio.isEmpty())
-            throw new ExameException("ERRO: Campo descrição não pode ser vazio.");
+            throw new ExameException("ERRO: Campo laboratório não pode ser vazio.");
         exame.setLaboratorio(laboratorio);
 
         return exame;
