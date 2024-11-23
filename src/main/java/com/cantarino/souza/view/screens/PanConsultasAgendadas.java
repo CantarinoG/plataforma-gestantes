@@ -28,7 +28,7 @@ public class PanConsultasAgendadas extends JPanel {
 
     public PanConsultasAgendadas() {
         initComponents();
-        usuario = AuthTemp.usuario;
+        usuario = AuthTemp.getInstance().getUsuario();
         consultaController = new ConsultaController();
         consultaController.filtrarTabelaPorIdGestante(grdConsultas, usuario.getId());
     }

@@ -19,6 +19,8 @@ public class DlgLogin extends JDialog {
     JPanel panButton;
     JButton btnLogin;
     JComboBox<String> cmbUserType;
+    JLabel lblForgotPassword;
+    JPanel panForgotPassword;
 
     public DlgLogin(JFrame parent, boolean modal) {
         super(parent, modal);
@@ -36,7 +38,7 @@ public class DlgLogin extends JDialog {
         setContentPane(panBackground);
 
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(5, 1, 0, 20));
+        panColumn.setLayout(new GridLayout(6, 1, 0, 20));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn);
 
@@ -80,6 +82,21 @@ public class DlgLogin extends JDialog {
         });
         panUserType = createCustomTextfield("Tipo de Usuário", cmbUserType);
         panColumn.add(panUserType);
+
+        // Forgot Password Label
+        panForgotPassword = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panForgotPassword.setBackground(AppColors.TRANSPARENT);
+        lblForgotPassword = new JLabel("Esqueci minha senha");
+        lblForgotPassword.setFont(new Font("Arial", Font.BOLD, 16));
+        lblForgotPassword.setForeground(AppColors.BUTTON_PINK);
+        lblForgotPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panForgotPassword.add(lblForgotPassword);
+        panColumn.add(panForgotPassword);
+        lblForgotPassword.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblForgotPasswordActionPerformed(evt);
+            }
+        });
 
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panButton.setBackground(AppColors.TRANSPARENT);
@@ -139,6 +156,10 @@ public class DlgLogin extends JDialog {
         // String selectedType = (String) cmbUserType.getSelectedItem();
         // System.out.println("Selected user type: " + selectedType);
 
+    }
+
+    private void lblForgotPasswordActionPerformed(java.awt.event.MouseEvent evt) {
+        System.out.println("Esqueceu?");
     }
 
 }

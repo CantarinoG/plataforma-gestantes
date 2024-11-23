@@ -1,6 +1,7 @@
 package com.cantarino.souza.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.swing.JTable;
 
@@ -25,21 +26,27 @@ public class PublicacaoController {
     public void atualizarTabela() {
     }
 
-    public void cadastrar(String titulo, String corpo, LocalDateTime data, Usuario autor,
+    public void cadastrar(String titulo, String corpo, boolean isAnonimo, LocalDateTime data, Usuario autor,
             LocalDateTime deletadoEm) {
         Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo);
         novaPublicacao.setAutor(autor);
         novaPublicacao.setData(data);
+        novaPublicacao.setAnonimo(isAnonimo);
         repositorio.save(novaPublicacao);
     }
 
-    public void atualizar(int id, String titulo, String corpo, LocalDateTime data, Usuario autor,
+    public void atualizar(int id, String titulo, String corpo, boolean isAnonimo, LocalDateTime data, Usuario autor,
             LocalDateTime deletadoEm) {
         Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo);
         novaPublicacao.setId(id);
         novaPublicacao.setAutor(autor);
         novaPublicacao.setData(data);
+        novaPublicacao.setAnonimo(isAnonimo);
         repositorio.update(novaPublicacao);
+    }
+
+    public List<Publicacao> buscarTodos() {
+        return repositorio.findAll();
     }
 
     public void excluir(int id) {

@@ -30,7 +30,7 @@ public class DlgPagamentos extends JDialog {
 
     public DlgPagamentos(JFrame parent, boolean modal) {
         super(parent, modal);
-        usuario = AuthTemp.usuario;
+        usuario = AuthTemp.getInstance().getUsuario();
         initComponents();
     }
 

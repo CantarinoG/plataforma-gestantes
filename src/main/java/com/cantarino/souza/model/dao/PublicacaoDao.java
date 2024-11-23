@@ -12,7 +12,7 @@ public class PublicacaoDao implements IDao<Publicacao> {
     private EntityManager entityManager;
 
     @Override
-     public void save(Publicacao obj) {
+    public void save(Publicacao obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -54,9 +54,9 @@ public class PublicacaoDao implements IDao<Publicacao> {
     public List<Publicacao> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Publicacao> publicacoes = this.entityManager.createQuery(
-            "FROM Publicacao p WHERE p.deletadoEm IS NULL",
-            Publicacao.class)
-            .getResultList();
+                "FROM Publicacao p WHERE p.deletadoEm IS NULL ORDER BY p.data DESC",
+                Publicacao.class)
+                .getResultList();
         this.entityManager.close();
         return publicacoes;
     }

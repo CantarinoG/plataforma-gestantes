@@ -265,7 +265,7 @@ public class FrMenu extends JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         DlgLogin dialog = new DlgLogin(this, true);
         dialog.setVisible(true);
-        userAutenticado = AuthTemp.usuario;
+        userAutenticado = AuthTemp.getInstance().getUsuario();
 
         if (userAutenticado != null) {
             btnSair.setVisible(true);
