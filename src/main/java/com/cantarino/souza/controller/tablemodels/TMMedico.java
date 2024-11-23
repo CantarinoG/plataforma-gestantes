@@ -1,15 +1,15 @@
-package com.cantarino.souza.controller;
+package com.cantarino.souza.controller.tablemodels;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.entities.Medico;
 
-public class TMAdmin extends AbstractTableModel {
+public class TMMedico extends AbstractTableModel {
 
-    private List<Admin> lista;
+    private List<Medico> lista;
 
     private final int id = 0;
     private final int cpf = 1;
@@ -18,14 +18,16 @@ public class TMAdmin extends AbstractTableModel {
     private final int dataNascimento = 4;
     private final int telefone = 5;
     private final int endereco = 6;
+    private final int especializacao = 7;
+    private final int crm = 8;
 
-    public TMAdmin(List<Admin> listaAdmin) {
-        lista = listaAdmin;
+    public TMMedico(List<Medico> listaMedicos) {
+        lista = listaMedicos;
     }
 
     @Override
     public int getColumnCount() {
-        return 7;
+        return 9;
     }
 
     @Override
@@ -50,6 +52,10 @@ public class TMAdmin extends AbstractTableModel {
                 return "Telefone";
             case endereco:
                 return "Endereço";
+            case especializacao:
+                return "Especialização";
+            case crm:
+                return "CRM";
             default:
                 return "";
         }
@@ -57,7 +63,7 @@ public class TMAdmin extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Admin aux = new Admin();
+        Medico aux = new Medico();
         if (lista.isEmpty()) {
             return aux;
         } else {
@@ -82,6 +88,10 @@ public class TMAdmin extends AbstractTableModel {
                     return aux.getTelefone();
                 case endereco:
                     return aux.getEndereco();
+                case especializacao:
+                    return aux.getEspecializacao();
+                case crm:
+                    return aux.getCrm();
                 default:
                     return null;
             }

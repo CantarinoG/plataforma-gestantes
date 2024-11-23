@@ -1,4 +1,4 @@
-package com.cantarino.souza.controller;
+package com.cantarino.souza.controller.tablemodels;
 
 import java.util.List;
 

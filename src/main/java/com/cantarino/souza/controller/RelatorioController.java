@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMRelatorio;
 import com.cantarino.souza.model.dao.RelatorioDao;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.valid.ValidateRelatorio;

@@ -1,10 +1,10 @@
-package com.cantarino.souza.controller;
+package com.cantarino.souza.controller.tablemodels;
 
 import com.cantarino.souza.model.entities.Pagamento;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class TMPagamento extends AbstractTableModel{
+public class TMPagamento extends AbstractTableModel {
     private List<Pagamento> lista;
     private final int id = 0;
     private final int valor = 1;
@@ -12,11 +12,11 @@ public class TMPagamento extends AbstractTableModel{
     private final int paciente = 3;
     private final int status = 4;
     private final int metodoPagamento = 5;
-    
-    public TMPagamento(List<Pagamento> lista){
+
+    public TMPagamento(List<Pagamento> lista) {
         this.lista = lista;
     }
-    
+
     @Override
     public int getRowCount() {
         return lista.size();
@@ -30,17 +30,17 @@ public class TMPagamento extends AbstractTableModel{
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Pagamento aux = new Pagamento();
-        if(lista.isEmpty()){
+        if (lista.isEmpty()) {
             return aux;
-        }else{
+        } else {
             aux = lista.get(rowIndex);
-            switch(columnIndex){
+            switch (columnIndex) {
                 case -1:
-                  return aux;
+                    return aux;
                 case id:
                     return aux.getId();
                 case valor:
-                return aux.getValor();
+                    return aux.getValor();
                 case registradoPor:
                     return aux.getRegistradoPor().getNome();
                 case paciente:
@@ -53,10 +53,11 @@ public class TMPagamento extends AbstractTableModel{
                     return null;
             }
         }
-        
+
     }
+
     @Override
-    public String getColumnName(int columnIndex){
+    public String getColumnName(int columnIndex) {
         switch (columnIndex) {
             case id:
                 return "ID";

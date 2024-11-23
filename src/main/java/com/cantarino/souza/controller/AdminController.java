@@ -2,6 +2,7 @@ package com.cantarino.souza.controller;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMAdmin;
 import com.cantarino.souza.model.dao.AdminDao;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.valid.ValidateAdmin;

@@ -1,15 +1,15 @@
-package com.cantarino.souza.controller;
+package com.cantarino.souza.controller.tablemodels;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.entities.Secretario;
 
-public class TMMedico extends AbstractTableModel {
+public class TMSecretario extends AbstractTableModel {
 
-    private List<Medico> lista;
+    private List<Secretario> lista;
 
     private final int id = 0;
     private final int cpf = 1;
@@ -18,16 +18,15 @@ public class TMMedico extends AbstractTableModel {
     private final int dataNascimento = 4;
     private final int telefone = 5;
     private final int endereco = 6;
-    private final int especializacao = 7;
-    private final int crm = 8;
+    private final int dataContratacao = 7;
 
-    public TMMedico(List<Medico> listaMedicos) {
-        lista = listaMedicos;
+    public TMSecretario(List<Secretario> listaSecretarios) {
+        lista = listaSecretarios;
     }
 
     @Override
     public int getColumnCount() {
-        return 9;
+        return 8;
     }
 
     @Override
@@ -52,10 +51,8 @@ public class TMMedico extends AbstractTableModel {
                 return "Telefone";
             case endereco:
                 return "Endereço";
-            case especializacao:
-                return "Especialização";
-            case crm:
-                return "CRM";
+            case dataContratacao:
+                return "Data de Contratação";
             default:
                 return "";
         }
@@ -63,7 +60,7 @@ public class TMMedico extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Medico aux = new Medico();
+        Secretario aux = new Secretario();
         if (lista.isEmpty()) {
             return aux;
         } else {
@@ -88,10 +85,10 @@ public class TMMedico extends AbstractTableModel {
                     return aux.getTelefone();
                 case endereco:
                     return aux.getEndereco();
-                case especializacao:
-                    return aux.getEspecializacao();
-                case crm:
-                    return aux.getCrm();
+                case dataContratacao:
+                    return aux.getDataContratacao() != null
+                            ? aux.getDataContratacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                            : "-";
                 default:
                     return null;
             }

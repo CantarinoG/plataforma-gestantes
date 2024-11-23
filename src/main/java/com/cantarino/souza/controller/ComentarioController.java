@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMComentario;
 import com.cantarino.souza.model.dao.ComentarioDao;
 import com.cantarino.souza.model.entities.Comentario;
 import com.cantarino.souza.model.entities.Publicacao;
