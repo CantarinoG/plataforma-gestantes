@@ -9,7 +9,7 @@ import com.cantarino.souza.factory.DatabaseJPA;
 import com.cantarino.souza.model.entities.Comentario;
 
 public class ComentarioDao implements IDao<Comentario> {
-     private EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public void save(Comentario obj) {
@@ -28,7 +28,7 @@ public class ComentarioDao implements IDao<Comentario> {
         this.entityManager.getTransaction().begin();
         this.entityManager.merge(obj);
         this.entityManager.getTransaction().commit();
-        this.entityManager.close();   
+        this.entityManager.close();
     }
 
     @Override
@@ -55,12 +55,22 @@ public class ComentarioDao implements IDao<Comentario> {
     public List<Comentario> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Comentario> comentarios = this.entityManager.createQuery(
-            "FROM Comentario c WHERE c.deletadoEm IS NULL",
-            Comentario.class)
-            .getResultList();
+                "FROM Comentario c WHERE c.deletadoEm IS NULL ORDER BY c.data DESC",
+                Comentario.class)
+                .getResultList();
         this.entityManager.close();
-        return comentarios; 
+        return comentarios;
     }
 
-     
+    public List<Comentario> findByPost(int id) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        List<Comentario> comentarios = this.entityManager.createQuery(
+                "FROM Comentario c WHERE c.deletadoEm IS NULL AND c.publicacao.id = :id ORDER BY c.data DESC",
+                Comentario.class)
+                .setParameter("id", id)
+                .getResultList();
+        this.entityManager.close();
+        return comentarios;
+    }
+
 }
