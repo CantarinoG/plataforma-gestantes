@@ -26,6 +26,7 @@ public class Comentario {
     private int id;
     private String conteudo;
     private LocalDateTime data;
+    private boolean isAnonimo;
     @ManyToOne
     @JoinColumn(name = "publicacao_id")
     private Publicacao publicacao;
@@ -34,11 +35,12 @@ public class Comentario {
     private Usuario autor;
     private LocalDateTime deletadoEm;
 
-    public Comentario(String conteudo, LocalDateTime data, Publicacao publicacao, Usuario autor,
+    public Comentario(String conteudo, LocalDateTime data, boolean isAnonimo, Publicacao publicacao, Usuario autor,
             LocalDateTime deletadoEm) {
         this.id = 0;
         this.conteudo = conteudo;
         this.data = data;
+        this.isAnonimo = isAnonimo;
         this.publicacao = publicacao;
         this.autor = autor;
         this.deletadoEm = deletadoEm;

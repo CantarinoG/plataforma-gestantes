@@ -203,7 +203,7 @@ public class DlgComunidade extends JDialog {
 
         panPosts = new JPanel();
         panPosts.setLayout(new BoxLayout(panPosts, BoxLayout.Y_AXIS));
-        panPosts.setBackground(AppColors.TRANSPARENT);
+        panPosts.setBackground(AppColors.BG);
 
         for (Publicacao post : posts) {
             JPanel postComponent = createPostComponent(post);
@@ -386,7 +386,8 @@ public class DlgComunidade extends JDialog {
     }
 
     private void btnCommentsActionsPerformed(java.awt.event.ActionEvent evt, int id) {
-        System.out.println(id);
+        DlgComentarios dialog = new DlgComentarios(this, true, id);
+        dialog.setVisible(true);
     }
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt, int id) {

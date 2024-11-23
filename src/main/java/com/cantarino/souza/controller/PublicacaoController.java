@@ -46,6 +46,10 @@ public class PublicacaoController {
         repositorio.update(novaPublicacao);
     }
 
+    public Publicacao buscarPorId(int id) {
+        return repositorio.find(id);
+    }
+
     public List<Publicacao> buscarTodos() {
         return repositorio.findAll();
     }
