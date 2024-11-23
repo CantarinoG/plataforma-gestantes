@@ -23,6 +23,8 @@ public class DlgExames extends JDialog {
     private JButton btnCadastrar;
     private JButton btnEditar;
     private JButton btnDeletar;
+    private JButton btnVisuRelatorio;
+    private JButton btnGerenciarRelatorio;
 
     private ExameController exameController;
 
@@ -116,9 +118,31 @@ public class DlgExames extends JDialog {
             }
         });
 
+        btnVisuRelatorio = new RoundedButton("Visualizar Relatório", 10);
+        btnVisuRelatorio.setPreferredSize(new Dimension(150, 50));
+        btnVisuRelatorio.setBackground(Color.WHITE);
+        btnVisuRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVisuRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVisuRelatorioActionPerformed(evt);
+            }
+        });
+
+        btnGerenciarRelatorio = new RoundedButton("Cadastrar/Editar Relatório", 10);
+        btnGerenciarRelatorio.setPreferredSize(new Dimension(180, 50));
+        btnGerenciarRelatorio.setBackground(Color.WHITE);
+        btnGerenciarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnGerenciarRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGerenciarRelatorioActionPerformed(evt);
+            }
+        });
+
         panFooter.add(btnCadastrar);
         panFooter.add(btnEditar);
         panFooter.add(btnDeletar);
+        panFooter.add(btnVisuRelatorio);
+        panFooter.add(btnGerenciarRelatorio);
 
         panContent.add(panFooter, BorderLayout.SOUTH);
 
@@ -170,6 +194,16 @@ public class DlgExames extends JDialog {
         id = exame.getId();
         exameController.excluir(id);
         exameController.atualizarTabela(grdExames);
+
+    }
+
+    private void btnVisuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("Visualizou");
+
+    }
+
+    private void btnGerenciarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("Gerenciou");
 
     }
 

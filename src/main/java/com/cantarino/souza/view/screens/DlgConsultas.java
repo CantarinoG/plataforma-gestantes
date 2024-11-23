@@ -5,7 +5,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.ConsultaController;
+import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Consulta;
+import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
@@ -20,11 +23,16 @@ public class DlgConsultas extends JDialog {
     private JButton btnCadastrar;
     private JButton btnEditar;
     private JButton btnDeletar;
+    private JButton btnVisuRelatorio;
+    private JButton btnGerenciarRelatorio;
+
+    private Usuario usuario;
 
     private ConsultaController consultaController;
 
     public DlgConsultas(JFrame parent, boolean modal) {
         super(parent, modal);
+        usuario = AuthTemp.getInstance().getUsuario();
         initComponents();
         consultaController = new ConsultaController();
         consultaController.atualizarTabela(grdConsultas);
@@ -113,9 +121,34 @@ public class DlgConsultas extends JDialog {
             }
         });
 
+        btnVisuRelatorio = new RoundedButton("Visualizar Relatório", 10);
+        btnVisuRelatorio.setPreferredSize(new Dimension(150, 50));
+        btnVisuRelatorio.setBackground(Color.WHITE);
+        btnVisuRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVisuRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVisuRelatorioActionPerformed(evt);
+            }
+        });
+
         panFooter.add(btnCadastrar);
         panFooter.add(btnEditar);
         panFooter.add(btnDeletar);
+        panFooter.add(btnVisuRelatorio);
+
+        if (usuario instanceof Admin) {
+            btnGerenciarRelatorio = new RoundedButton("Cadastrar/Editar Relatório", 10);
+            btnGerenciarRelatorio.setPreferredSize(new Dimension(180, 50));
+            btnGerenciarRelatorio.setBackground(Color.WHITE);
+            btnGerenciarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btnGerenciarRelatorio.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    btnGerenciarRelatorioActionPerformed(evt);
+                }
+            });
+
+            panFooter.add(btnGerenciarRelatorio);
+        }
 
         panContent.add(panFooter, BorderLayout.SOUTH);
 
@@ -167,6 +200,16 @@ public class DlgConsultas extends JDialog {
         id = consulta.getId();
         consultaController.excluir(id);
         consultaController.atualizarTabela(grdConsultas);
+
+    }
+
+    private void btnVisuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("aqui carai");
+
+    }
+
+    private void btnGerenciarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+        System.out.println("aqui gerenciou carai");
 
     }
 
