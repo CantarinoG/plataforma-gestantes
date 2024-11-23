@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMPublicacao;
 import com.cantarino.souza.model.dao.PublicacaoDao;
 import com.cantarino.souza.model.entities.Publicacao;
 import com.cantarino.souza.model.entities.Usuario;

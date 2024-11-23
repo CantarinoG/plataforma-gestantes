@@ -2,6 +2,7 @@ package com.cantarino.souza.controller;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMExame;
 import com.cantarino.souza.model.dao.ExameDao;
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;

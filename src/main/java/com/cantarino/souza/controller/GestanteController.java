@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMGestantes;
 import com.cantarino.souza.model.dao.GestanteDao;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.valid.ValidateGestante;

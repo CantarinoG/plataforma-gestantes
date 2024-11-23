@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMMedico;
 import com.cantarino.souza.model.dao.MedicoDao;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.valid.ValidateMedico;

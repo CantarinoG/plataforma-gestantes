@@ -2,6 +2,7 @@ package com.cantarino.souza.controller;
 
 import javax.swing.JTable;
 
+import com.cantarino.souza.controller.tablemodels.TMSecretario;
 import com.cantarino.souza.model.dao.SecretarioDao;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.valid.ValidateSecretario;

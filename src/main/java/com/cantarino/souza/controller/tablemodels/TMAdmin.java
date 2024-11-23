@@ -1,15 +1,15 @@
-package com.cantarino.souza.controller;
+package com.cantarino.souza.controller.tablemodels;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Admin;
 
-public class TMGestantes extends AbstractTableModel {
+public class TMAdmin extends AbstractTableModel {
 
-    private List<Gestante> lista;
+    private List<Admin> lista;
 
     private final int id = 0;
     private final int cpf = 1;
@@ -18,18 +18,14 @@ public class TMGestantes extends AbstractTableModel {
     private final int dataNascimento = 4;
     private final int telefone = 5;
     private final int endereco = 6;
-    private final int previsaoParto = 7;
-    private final int contatoEmergencia = 8;
-    private final int historicoMedico = 9;
-    private final int tipoSanguineo = 10;
 
-    public TMGestantes(List<Gestante> listaGestantes) {
-        lista = listaGestantes;
+    public TMAdmin(List<Admin> listaAdmin) {
+        lista = listaAdmin;
     }
 
     @Override
     public int getColumnCount() {
-        return 11;
+        return 7;
     }
 
     @Override
@@ -54,14 +50,6 @@ public class TMGestantes extends AbstractTableModel {
                 return "Telefone";
             case endereco:
                 return "Endereço";
-            case previsaoParto:
-                return "Previsão do Parto";
-            case contatoEmergencia:
-                return "Contato de Emergência";
-            case historicoMedico:
-                return "Histórico Médico";
-            case tipoSanguineo:
-                return "Tipo Sanguíneo";
             default:
                 return "";
         }
@@ -69,7 +57,7 @@ public class TMGestantes extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Gestante aux = new Gestante();
+        Admin aux = new Admin();
         if (lista.isEmpty()) {
             return aux;
         } else {
@@ -94,16 +82,6 @@ public class TMGestantes extends AbstractTableModel {
                     return aux.getTelefone();
                 case endereco:
                     return aux.getEndereco();
-                case previsaoParto:
-                    return aux.getPrevisaoParto() != null
-                            ? aux.getPrevisaoParto().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                            : "-";
-                case contatoEmergencia:
-                    return aux.getContatoEmergencia();
-                case historicoMedico:
-                    return aux.getHistoricoMedico();
-                case tipoSanguineo:
-                    return aux.getTipoSanguineo();
                 default:
                     return null;
             }

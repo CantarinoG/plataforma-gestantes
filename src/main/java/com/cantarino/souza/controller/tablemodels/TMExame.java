@@ -1,20 +1,19 @@
-package com.cantarino.souza.controller;
+package com.cantarino.souza.controller.tablemodels;
 
-import java.util.List;
 import java.time.format.DateTimeFormatter;
-
+import java.util.List;
+import java.awt.Color;
+import java.awt.Component;
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import com.cantarino.souza.model.entities.Consulta;
+import javax.swing.table.DefaultTableCellRenderer;
+
+import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
 
-import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.Component;
-import java.awt.Color;
-import javax.swing.JTable;
+public class TMExame extends AbstractTableModel {
 
-public class TMConsulta extends AbstractTableModel {
-
-    private List<Consulta> lista;
+    private List<Exame> lista;
 
     private final int COL_ID = 0;
     private final int COL_PACIENTE = 1;
@@ -23,16 +22,17 @@ public class TMConsulta extends AbstractTableModel {
     private final int COL_VALOR = 4;
     private final int COL_STATUS = 5;
     private final int COL_RELATORIO = 6;
-    private final int COL_MEDICO = 7;
-    private final int COL_DATA_RETORNO = 8;
+    private final int COL_DATA_RESULTADO = 7;
+    private final int COL_REQUISITADO_POR = 8;
+    private final int COL_LABORATORIO = 9;
 
-    public TMConsulta(List<Consulta> listaConsultas) {
-        lista = listaConsultas;
+    public TMExame(List<Exame> listaExames) {
+        lista = listaExames;
     }
 
     @Override
     public int getColumnCount() {
-        return 9;
+        return 10;
     }
 
     @Override
@@ -57,19 +57,20 @@ public class TMConsulta extends AbstractTableModel {
                 return "Status";
             case COL_RELATORIO:
                 return "Relatório";
-            case COL_MEDICO:
-                return "Médico";
-            case COL_DATA_RETORNO:
-                return "Data Retorno";
+            case COL_DATA_RESULTADO:
+                return "Data Resultado";
+            case COL_REQUISITADO_POR:
+                return "Requisitado Por";
+            case COL_LABORATORIO:
+                return "Laboratório";
             default:
                 return "";
         }
     }
 
     @Override
-    // TODO: Alguns valores não vão poder ser null, mudar depois
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Consulta aux = new Consulta();
+        Exame aux = new Exame();
         if (lista.isEmpty()) {
             return aux;
         } else {
@@ -93,11 +94,13 @@ public class TMConsulta extends AbstractTableModel {
                     return aux.getStatus();
                 case COL_RELATORIO:
                     return aux.getRelatorio() == null ? "-" : "REGISTRADO";
-                case COL_MEDICO:
-                    return aux.getMedico() != null ? aux.getMedico().getNome() : "-";
-                case COL_DATA_RETORNO:
-                    return aux.getDataRetorno() == null ? "-"
-                            : aux.getDataRetorno().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                case COL_DATA_RESULTADO:
+                    return aux.getDataResultado() == null ? "-"
+                            : aux.getDataResultado().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                case COL_REQUISITADO_POR:
+                    return aux.getRequisitadoPor() != null ? aux.getRequisitadoPor().getNome() : "-";
+                case COL_LABORATORIO:
+                    return aux.getLaboratorio();
                 default:
                     return null;
             }
@@ -109,20 +112,20 @@ public class TMConsulta extends AbstractTableModel {
         return false;
     }
 
-    public static class ConsultaTableCellRenderer extends DefaultTableCellRenderer {
+    public static class ExameTableCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
             if (!isSelected) {
-                TMConsulta model = (TMConsulta) table.getModel();
-                Consulta consulta = model.lista.get(row);
+                TMExame model = (TMExame) table.getModel();
+                Exame exame = model.lista.get(row);
 
-                if (StatusProcedimentos.CANCELADA.getValue().equals(consulta.getStatus())) {
+                if (StatusProcedimentos.CANCELADA.getValue().equals(exame.getStatus())) {
                     c.setBackground(new Color(255, 200, 200));
                     setBackground(new Color(255, 200, 200));
-                } else if (StatusProcedimentos.CONCLUIDA.getValue().equals(consulta.getStatus())) {
+                } else if (StatusProcedimentos.CONCLUIDA.getValue().equals(exame.getStatus())) {
                     c.setBackground(new Color(200, 255, 200));
                     setBackground(new Color(200, 255, 200));
                 } else {
@@ -137,7 +140,7 @@ public class TMConsulta extends AbstractTableModel {
     }
 
     public static DefaultTableCellRenderer getCustomRenderer() {
-        return new ConsultaTableCellRenderer();
+        return new ExameTableCellRenderer();
     }
 
 }
