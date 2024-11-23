@@ -18,22 +18,24 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 
-public class Relatorio {
+public class Publicacao {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
-    private LocalDateTime dataEmissao;
-    private Procedimento procedimento;
-    private String resultado;
-    private String obeservacoes;
+    private String titulo;
+    private String corpo;
+    private LocalDateTime data;
+    private boolean isMedico;
+    private Usuario autor;
     private LocalDateTime deletadoEm;
-
-    public Relatorio(LocalDateTime dataEmissao, Procedimento procedimento, String resultado, String observacoes, LocalDateTime deletadoEm){
+    
+    public Publicacao(String titulo, String corpo, LocalDateTime data, boolean isMedico, Usuario autor, LocalDateTime deletadoEm){
         this.id = 0;
-        this.dataEmissao = dataEmissao;
-        this.procedimento = procedimento;
-        this.resultado = resultado;
-        this.obeservacoes = observacoes;
+        this.titulo = titulo;
+        this.corpo = corpo;
+        this.data = data;
+        this.isMedico = isMedico;
+        this.autor = autor;
         this.deletadoEm = deletadoEm;
     }
 }
