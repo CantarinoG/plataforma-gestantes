@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +26,16 @@ public class Comentario {
     private int id;
     private String conteudo;
     private LocalDateTime data;
+    @ManyToOne
+    @JoinColumn(name = "publicacao_id")
     private Publicacao publicacao;
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
     private Usuario autor;
     private LocalDateTime deletadoEm;
 
-    public Comentario(String conteudo, LocalDateTime data, Publicacao publicacao, Usuario autor, LocalDateTime deletadoEm){
+    public Comentario(String conteudo, LocalDateTime data, Publicacao publicacao, Usuario autor,
+            LocalDateTime deletadoEm) {
         this.id = 0;
         this.conteudo = conteudo;
         this.data = data;

@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,16 +27,17 @@ public class Publicacao {
     private String titulo;
     private String corpo;
     private LocalDateTime data;
-    private boolean isMedico;
+    @ManyToOne
+    @JoinColumn(name = "autor_id")
     private Usuario autor;
     private LocalDateTime deletadoEm;
-    
-    public Publicacao(String titulo, String corpo, LocalDateTime data, boolean isMedico, Usuario autor, LocalDateTime deletadoEm){
+
+    public Publicacao(String titulo, String corpo, LocalDateTime data, Usuario autor,
+            LocalDateTime deletadoEm) {
         this.id = 0;
         this.titulo = titulo;
         this.corpo = corpo;
         this.data = data;
-        this.isMedico = isMedico;
         this.autor = autor;
         this.deletadoEm = deletadoEm;
     }

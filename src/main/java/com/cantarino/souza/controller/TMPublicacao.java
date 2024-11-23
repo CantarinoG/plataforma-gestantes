@@ -6,16 +6,15 @@ import javax.swing.table.AbstractTableModel;
 
 import com.cantarino.souza.model.entities.Publicacao;
 
-public class TMPublicacao extends AbstractTableModel{
+public class TMPublicacao extends AbstractTableModel {
     private List<Publicacao> lista;
     private final int id = 0;
     private final int titulo = 1;
     private final int corpo = 2;
     private final int data = 3;
-    private final int isMedico = 4;
-    private final int autor = 5;
+    private final int autor = 4;
 
-    public TMPublicacao(List<Publicacao> lista){
+    public TMPublicacao(List<Publicacao> lista) {
         this.lista = lista;
     }
 
@@ -26,15 +25,15 @@ public class TMPublicacao extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 5;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Publicacao aux = new Publicacao();
-        if(lista.isEmpty()){
+        if (lista.isEmpty()) {
             return aux;
-        }else{
+        } else {
             aux = lista.get(rowIndex);
             switch (columnIndex) {
                 case -1:
@@ -47,8 +46,6 @@ public class TMPublicacao extends AbstractTableModel{
                     return aux.getCorpo();
                 case data:
                     return aux.getData();
-                case isMedico:
-                    return aux.isMedico();
                 case autor:
                     return aux.getAutor();
                 default:
@@ -58,7 +55,7 @@ public class TMPublicacao extends AbstractTableModel{
     }
 
     @Override
-    public String getColumnName(int columnIndex){
+    public String getColumnName(int columnIndex) {
         switch (columnIndex) {
             case id:
                 return "ID";
@@ -68,8 +65,6 @@ public class TMPublicacao extends AbstractTableModel{
                 return "Corpo do Texto";
             case data:
                 return "Data";
-            case isMedico:
-                return "É medico";
             case autor:
                 return "Autor";
             default:

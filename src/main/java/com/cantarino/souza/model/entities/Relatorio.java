@@ -23,15 +23,13 @@ public class Relatorio {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private LocalDateTime dataEmissao;
-    private Procedimento procedimento;
     private String resultado;
     private String obeservacoes;
     private LocalDateTime deletadoEm;
 
-    public Relatorio(LocalDateTime dataEmissao, Procedimento procedimento, String resultado, String observacoes, LocalDateTime deletadoEm){
+    public Relatorio(LocalDateTime dataEmissao, String resultado, String observacoes, LocalDateTime deletadoEm) {
         this.id = 0;
         this.dataEmissao = dataEmissao;
-        this.procedimento = procedimento;
         this.resultado = resultado;
         this.obeservacoes = observacoes;
         this.deletadoEm = deletadoEm;
