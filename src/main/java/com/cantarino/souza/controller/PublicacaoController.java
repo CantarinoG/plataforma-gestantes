@@ -24,14 +24,15 @@ public class PublicacaoController {
     }
     public void atualizarTabela(){}
     public void cadastrar(String titulo, String corpo, LocalDateTime data, boolean isMedico, Usuario autor, LocalDateTime deletadoEm){
-        Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo, isMedico);
+        Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo, String.valueOf(isMedico));
         novaPublicacao.setAutor(autor);
         novaPublicacao.setCorpo(corpo);
         novaPublicacao.setMedico(isMedico);
         repositorio.save(novaPublicacao);
     }
     public void atualizar(int id,String titulo, String corpo, LocalDateTime data, boolean isMedico, Usuario autor, LocalDateTime deletadoEm){
-        Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo, isMedico);
+        Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo, String.valueOf(isMedico));
+        novaPublicacao.setId(id);
         novaPublicacao.setAutor(autor);
         novaPublicacao.setCorpo(corpo);
         novaPublicacao.setMedico(isMedico);
