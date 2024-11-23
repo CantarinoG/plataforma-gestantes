@@ -5,9 +5,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.ConsultaController;
-import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.model.entities.Consulta;
-import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
