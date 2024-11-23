@@ -35,7 +35,7 @@ public class DlgAgendaMedico extends JDialog {
     public DlgAgendaMedico(JFrame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        usuario = AuthTemp.usuario;
+        usuario = AuthTemp.getInstance().getUsuario();
         consultaController = new ConsultaController();
         consultaController.filtrarTabelaPorIdMedico(grdConsultas, usuario.getId());
     }

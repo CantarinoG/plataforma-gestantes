@@ -1,5 +1,8 @@
 package com.cantarino.souza.view;
 
+import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.controller.GestanteController;
+import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
@@ -7,20 +10,32 @@ import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
 
 public class AuthTemp {
-    // public static Usuario usuario = new Gestante(null, "Maria das Graças",
-    // "gracinha123@gmail.com", null, null, null,
-    // null, null, null, null, null,
-    // null);
+    private static AuthTemp instance;
+    private Usuario usuario;
 
-    // public static Usuario usuario = new Medico(null, "João Almeida",
-    // "joazinhoRD@gmail.com", null, null, null,
-    // null, null, null, null);
+    private AuthTemp() {
+        AdminController admC = new AdminController();
+        this.usuario = admC.buscarPorId(3);
 
-    // public static Usuario usuario = new Secretario(null, "Ana L Martins",
-    // "analmartins@gmail.com", null, null, null,
-    // null, null, null);
+        // MedicoController medicoC = new MedicoController();
+        // this.usuario = medicoC.buscarPorId(13);
 
-    public static Usuario usuario = new Admin(null, "Elliot Alderson",
-            "samsepiol@gmail.com", null, null, null, null,
-            null);
+        // GestanteController gestanteC = new GestanteController();
+        // this.usuario = gestanteC.buscarPorId(11);
+    }
+
+    public static AuthTemp getInstance() {
+        if (instance == null) {
+            instance = new AuthTemp();
+        }
+        return instance;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

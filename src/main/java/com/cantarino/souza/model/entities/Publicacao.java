@@ -26,17 +26,19 @@ public class Publicacao {
     private int id;
     private String titulo;
     private String corpo;
+    private boolean isAnonimo;
     private LocalDateTime data;
     @ManyToOne
     @JoinColumn(name = "autor_id")
     private Usuario autor;
     private LocalDateTime deletadoEm;
 
-    public Publicacao(String titulo, String corpo, LocalDateTime data, Usuario autor,
+    public Publicacao(String titulo, String corpo, boolean isAnonimo, LocalDateTime data, Usuario autor,
             LocalDateTime deletadoEm) {
         this.id = 0;
         this.titulo = titulo;
         this.corpo = corpo;
+        this.isAnonimo = isAnonimo;
         this.data = data;
         this.autor = autor;
         this.deletadoEm = deletadoEm;

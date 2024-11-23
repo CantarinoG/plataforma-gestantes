@@ -27,7 +27,7 @@ public class PanExamesAgendados extends JPanel {
 
     public PanExamesAgendados() {
         initComponents();
-        usuario = AuthTemp.usuario;
+        usuario = AuthTemp.getInstance().getUsuario();
         exameController = new ExameController();
         exameController.filtrarTabelaPorIdGestante(grdExames, usuario.getId());
     }
