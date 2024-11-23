@@ -3,6 +3,7 @@ package com.cantarino.souza.view;
 import com.cantarino.souza.controller.AdminController;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.controller.SecretarioController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
@@ -22,6 +23,9 @@ public class AuthTemp {
 
         // GestanteController gestanteC = new GestanteController();
         // this.usuario = gestanteC.buscarPorId(11);
+
+        // SecretarioController secretarioC = new SecretarioController();
+        // this.usuario = secretarioC.buscarPorId(46);
     }
 
     public static AuthTemp getInstance() {
