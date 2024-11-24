@@ -4,6 +4,8 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class Util {
 
     public static void jTableShow(JTable grd, AbstractTableModel tableModel, TableCellRenderer render) {
@@ -11,7 +13,13 @@ public class Util {
         if (render != null) {
             grd.setDefaultRenderer(Object.class, render);
         }
-        // grd.setAutoCreateRowSorter(true); // só funciona legal quando é todas as
-        // colunas são STRING
+    }
+
+    public static String hashPassword(String plainTextPassword) {
+        return BCrypt.hashpw(plainTextPassword, BCrypt.gensalt());
+    }
+
+    public static boolean checkPassword(String plainTextPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainTextPassword, hashedPassword);
     }
 }

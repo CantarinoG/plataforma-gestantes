@@ -65,7 +65,6 @@ public class DlgCadastroGestantes extends JDialog {
         edtCPF.setText(atualizando.getCpf());
         edtNome.setText(atualizando.getNome());
         edtEmail.setText(atualizando.getEmail());
-        edtPass.setText(atualizando.getSenha());
         edtDataNascimento.setText(atualizando.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         edtTelefone.setText(atualizando.getTelefone());
         edtEndereco.setText(atualizando.getEndereco());
@@ -139,12 +138,14 @@ public class DlgCadastroGestantes extends JDialog {
         panEmailField = createCustomTextfield("Email", edtEmail);
         panColumn.add(panEmailField);
 
-        edtPass = new JPasswordField();
-        edtPass.setFont(new Font("Arial", Font.PLAIN, 22));
-        edtPass.setBackground(AppColors.FIELD_PINK);
-        edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panPassField = createCustomTextfield("Senha", edtPass);
-        panColumn.add(panPassField);
+        if (atualizando == null) {
+            edtPass = new JPasswordField();
+            edtPass.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtPass.setBackground(AppColors.FIELD_PINK);
+            edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panPassField = createCustomTextfield("Senha", edtPass);
+            panColumn.add(panPassField);
+        }
 
         try {
             MaskFormatter maskData = new MaskFormatter("##/##/####");
@@ -307,7 +308,7 @@ public class DlgCadastroGestantes extends JDialog {
                         cpf,
                         edtNome.getText(),
                         edtEmail.getText(),
-                        new String(edtPass.getPassword()),
+                        atualizando.getSenha(),
                         dataNascimento,
                         edtTelefone.getText(),
                         edtEndereco.getText(),

@@ -9,8 +9,8 @@ import javax.swing.*;
 public class DlgTrocaSenha extends JDialog {
     JPanel panBackground;
     JPanel panColumn;
-    JPasswordField edtSenhaAtual;
-    JPasswordField edtNovaSenha;
+    JPasswordField edtSenha;
+    JPasswordField edtConfirmarSenha;
     JPanel panButton;
     RoundedButton btnTrocarSenha;
     JLabel lblHint;
@@ -38,14 +38,14 @@ public class DlgTrocaSenha extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new Insets(10, 0, 10, 0);
 
-        edtSenhaAtual = new JPasswordField();
-        configurarCampoSenha(edtSenhaAtual);
-        panBackground.add(createCustomTextfield("Nova Senha", edtSenhaAtual), gbc);
+        edtSenha = new JPasswordField();
+        configurarCampoSenha(edtSenha);
+        panBackground.add(createCustomTextfield("Nova Senha", edtSenha), gbc);
 
         gbc.gridy++;
-        edtNovaSenha = new JPasswordField();
-        configurarCampoSenha(edtNovaSenha);
-        panBackground.add(createCustomTextfield("Confirmar Nova Senha", edtNovaSenha), gbc);
+        edtConfirmarSenha = new JPasswordField();
+        configurarCampoSenha(edtConfirmarSenha);
+        panBackground.add(createCustomTextfield("Confirmar Nova Senha", edtConfirmarSenha), gbc);
 
         gbc.gridy++;
         btnTrocarSenha = new RoundedButton("Trocar Senha", 10);
@@ -87,6 +87,16 @@ public class DlgTrocaSenha extends JDialog {
     }
 
     private void btnTrocarSenhaActionPerformed(ActionEvent evt) {
-        System.out.println("Clicou em Trocar Senha");
+        String senha = new String(edtSenha.getPassword());
+        String confirmarSenha = new String(edtConfirmarSenha.getPassword());
+
+        if (!senha.equals(confirmarSenha)) {
+            JOptionPane.showMessageDialog(this,
+                    "As senhas não conferem. Por favor, digite novamente.",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
     }
 }

@@ -30,6 +30,9 @@ public class GestanteController {
         Gestante novaGestante = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
                 endereco, deletadoEm, previsaoParto, contatoEmergencia, historicoMedico, tipoSanguineo);
 
+        String hashSenha = Util.hashPassword(novaGestante.getSenha());
+        novaGestante.setSenha(hashSenha);
+
         repositorio.save(novaGestante);
 
     }
