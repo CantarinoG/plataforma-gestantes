@@ -26,7 +26,8 @@ public class SecretarioController {
 
         Secretario novoSecretario = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
                 endereco, deletadoEm, dataContratacao);
-
+        String hashSenha = Util.hashPassword(novoSecretario.getSenha());
+        novoSecretario.setSenha(hashSenha);
         repositorio.save(novoSecretario);
 
     }

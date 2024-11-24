@@ -28,7 +28,8 @@ public class MedicoController {
 
         Medico novoMedico = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
                 deletadoEm, especializacao, crm);
-
+        String hashSenha = Util.hashPassword(novoMedico.getSenha());
+        novoMedico.setSenha(hashSenha);
         repositorio.save(novoMedico);
 
     }

@@ -26,6 +26,8 @@ public class AdminController {
 
         Admin novoAdm = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
                 deletadoEm);
+        String hashSenha = Util.hashPassword(novoAdm.getSenha());
+        novoAdm.setSenha(hashSenha);
 
         repositorio.save(novoAdm);
     }
