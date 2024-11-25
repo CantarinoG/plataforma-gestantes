@@ -49,4 +49,11 @@ public class SecretarioController {
         repositorio.delete(secretario);
     }
 
+    public void atualizaSenha(Secretario usuario, String senha) {
+        String senhaValidada = validator.validaSenha(senha);
+        String hashSenha = Util.hashPassword(senhaValidada);
+        usuario.setSenha(hashSenha);
+        repositorio.update(usuario);
+    }
+
 }

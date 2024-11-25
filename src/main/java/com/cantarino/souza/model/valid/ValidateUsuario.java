@@ -63,6 +63,14 @@ public class ValidateUsuario {
         return false;
     }
 
+    public String validaSenha(String senha) {
+        if (senha == null || senha.isEmpty())
+            throw new UsuarioException("ERRO: Campo senha não pode ser vazio.");
+        if (senha.length() < 6)
+            throw new UsuarioException("ERRO: Senha deve ter pelo menos 6 caracteres.");
+        return senha;
+    }
+
     public Usuario validaCamposEntrada(String cpf, String nome, String email, String senha, String dataNascimento,
             String telefone, String endereco, String deletadoEm) {
 
@@ -84,11 +92,8 @@ public class ValidateUsuario {
             throw new UsuarioException("ERRO: Email inválido.");
         usuario.setEmail(email);
 
-        if (senha == null || senha.isEmpty())
-            throw new UsuarioException("ERRO: Campo senha não pode ser vazio.");
-        if (senha.length() < 6)
-            throw new UsuarioException("ERRO: Senha deve ter pelo menos 6 caracteres.");
-        usuario.setSenha(senha);
+        String senhaValidada = validaSenha(senha);
+        usuario.setSenha(senhaValidada);
 
         if (dataNascimento == null || dataNascimento.isEmpty())
             throw new UsuarioException("ERRO: Campo data de nascimento não pode ser vazio.");
