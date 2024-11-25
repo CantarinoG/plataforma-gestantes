@@ -49,4 +49,8 @@ public class PagamentoController {
         Pagamento pagamento = repositorio.find(id);
         repositorio.delete(pagamento);
     }
+
+    public void filtrarTabelaPorIdPaciente(JTable grd, int id) {
+        Util.jTableShow(grd, new TMPagamento(repositorio.filterGestanteId(id)), null);
+    }
 }
