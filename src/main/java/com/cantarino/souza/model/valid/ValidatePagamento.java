@@ -1,11 +1,10 @@
 package com.cantarino.souza.model.valid;
 
-
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.exceptions.PagamentoException;
 
 public class ValidatePagamento {
-    public Pagamento validaCamposEntrada(String valor, String status, String metodoPagamento){
+    public Pagamento validaCamposEntrada(String valor, String metodoPagamento) {
         Pagamento pagamento = new Pagamento();
         if (valor == null || valor.isEmpty())
             throw new PagamentoException("ERRO: Campo valor não pode ser vazio.");
@@ -21,11 +20,7 @@ public class ValidatePagamento {
         }
         pagamento.setValor(validValor);
 
-        if (status == null || status.isEmpty())
-            throw new PagamentoException("ERRO: Campo status não pode ser vazio.");
-        pagamento.setStatus(status);
-
-        if(metodoPagamento == null || metodoPagamento.isEmpty())
+        if (metodoPagamento == null || metodoPagamento.isEmpty())
             throw new PagamentoException("ERRO: Campo de metodo de pagamento não pode estar vazio.");
         pagamento.setMetodoPagamento(metodoPagamento);
 

@@ -1,5 +1,7 @@
 package com.cantarino.souza.controller;
 
+import java.util.List;
+
 import javax.swing.JTable;
 
 import com.cantarino.souza.controller.tablemodels.TMExame;
@@ -47,6 +49,10 @@ public class ExameController {
         novoExame.setRequisitadoPor(requisitadoPor);
         novoExame.setId(id);
         repositorio.update(novoExame);
+    }
+
+    public List<Exame> buscarTodas() {
+        return repositorio.findAll();
     }
 
     public void excluir(int id) {

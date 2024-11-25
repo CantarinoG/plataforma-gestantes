@@ -3,6 +3,23 @@ package com.cantarino.souza.view.screens;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.*;
+
+import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.controller.ConsultaController;
+import com.cantarino.souza.controller.ExameController;
+import com.cantarino.souza.controller.GestanteController;
+import com.cantarino.souza.controller.PagamentoController;
+import com.cantarino.souza.controller.SecretarioController;
+import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.entities.Consulta;
+import com.cantarino.souza.model.entities.Exame;
+import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Pagamento;
+import com.cantarino.souza.model.entities.Procedimento;
+import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.enums.MetodoPagamento;
+import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 import java.awt.event.ActionEvent;
 
@@ -13,17 +30,87 @@ public class DlgCadastroPagamentos extends JDialog {
     JPanel panButton;
     RoundedButton btnCadastrarPagamento;
     JTextField txtValor;
-    JTextField txtPaciente;
-    JComboBox<String> cmbStatus;
+    JComboBox<String> cmbPaciente;
     JComboBox<String> cmbMetodoPagamento;
+    JComboBox<String> cmbProcedimento;
     JPanel panValorField;
     JPanel panPacienteField;
-    JPanel panStatusField;
     JPanel panMetodoField;
+    JPanel panProcedimentoField;
 
-    public DlgCadastroPagamentos(JFrame parent, boolean modal) {
+    PagamentoController pagamentoController;
+    GestanteController gestanteController;
+    ExameController exameController;
+    ConsultaController consultaController;
+    Pagamento atualizando;
+
+    Usuario usuario;
+
+    public DlgCadastroPagamentos(JDialog parent, boolean modal, int id) {
         super(parent, modal);
+        usuario = AuthTemp.getInstance().getUsuario();
+        pagamentoController = new PagamentoController();
+        gestanteController = new GestanteController();
+        exameController = new ExameController();
+        consultaController = new ConsultaController();
+        atualizando = pagamentoController.buscarPorId(id);
         initComponents();
+
+        if (atualizando != null) {
+            txtValor.setText(String.valueOf(atualizando.getValor()));
+            // cmbPaciente.setText(atualizando.getPaciente());
+            cmbMetodoPagamento.setSelectedItem(atualizando.getMetodoPagamento());
+        }
+    }
+
+    public DlgCadastroPagamentos(JDialog parent, boolean modal) {
+        super(parent, modal);
+        usuario = AuthTemp.getInstance().getUsuario();
+        pagamentoController = new PagamentoController();
+        gestanteController = new GestanteController();
+        exameController = new ExameController();
+        consultaController = new ConsultaController();
+        atualizando = null;
+        initComponents();
+    }
+
+    private String[] getGestantesOptions() {
+        java.util.List<Gestante> gestantes = gestanteController.buscarTodas();
+        String[] options = new String[gestantes.size()];
+        for (int i = 0; i < gestantes.size(); i++) {
+            Gestante gestante = gestantes.get(i);
+            options[i] = gestante.getId() + " | " + gestante.getNome();
+        }
+        return options;
+    }
+
+    private String[] getProcedimentosOptions() {
+        java.util.List<Exame> exames = exameController.buscarTodas();
+        java.util.List<Consulta> consultas = consultaController.buscarTodas();
+
+        String[] options = new String[exames.size() + consultas.size()];
+
+        int i = 0;
+        for (Exame exame : exames) {
+            options[i] = exame.getId() + "|Exame|R$ " + exame.getValor() + "| " + exame.getDescricao();
+            i++;
+        }
+
+        for (Consulta consulta : consultas) {
+            options[i] = consulta.getId() + "|Consulta|R$ " + consulta.getValor() + "| " + consulta.getDescricao();
+            i++;
+        }
+
+        return options;
+    }
+
+    private String[] getPagamentoOptions() {
+        MetodoPagamento[] values = MetodoPagamento.values();
+        String[] options = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            options[i] = values[i].getValue();
+        }
+        return options;
     }
 
     private void initComponents() {
@@ -62,19 +149,19 @@ public class DlgCadastroPagamentos extends JDialog {
         panValorField = createCustomTextfield("Valor", txtValor);
         panColumn.add(panValorField);
 
-        txtPaciente = new JTextField();
-        txtPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
-        txtPaciente.setBackground(AppColors.FIELD_PINK);
-        panPacienteField = createCustomTextfield("Paciente", txtPaciente);
+        cmbPaciente = new JComboBox<>(getGestantesOptions());
+        cmbPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
+        cmbPaciente.setBackground(AppColors.FIELD_PINK);
+        panPacienteField = createCustomTextfield("Paciente", cmbPaciente);
         panColumn.add(panPacienteField);
 
-        cmbStatus = new JComboBox<>(new String[] { "Ativo", "Inativo" });
-        cmbStatus.setFont(new Font("Arial", Font.PLAIN, 22));
-        cmbStatus.setBackground(AppColors.FIELD_PINK);
-        panStatusField = createCustomTextfield("Status", cmbStatus);
-        panColumn.add(panStatusField);
+        cmbProcedimento = new JComboBox<>(getProcedimentosOptions());
+        cmbProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
+        cmbProcedimento.setBackground(AppColors.FIELD_PINK);
+        panProcedimentoField = createCustomTextfield("Procedimento", cmbProcedimento);
+        panColumn.add(panProcedimentoField);
 
-        cmbMetodoPagamento = new JComboBox<>(new String[] { "Cartão", "Dinheiro", "Transferência Pix" });
+        cmbMetodoPagamento = new JComboBox<>(getPagamentoOptions());
         cmbMetodoPagamento.setFont(new Font("Arial", Font.PLAIN, 22));
         cmbMetodoPagamento.setBackground(AppColors.FIELD_PINK);
         panMetodoField = createCustomTextfield("Método de Pagamento", cmbMetodoPagamento);
@@ -130,8 +217,38 @@ public class DlgCadastroPagamentos extends JDialog {
     }
 
     private void btnCadastrarPagamentoActionPerformed(ActionEvent evt) {
+        try {
+            String selectedPaciente = (String) cmbPaciente.getSelectedItem();
+            int pacienteId = Integer.parseInt(selectedPaciente.split(" \\| ")[0]);
+            Gestante paciente = gestanteController.buscarPorId(pacienteId);
 
-        System.out.println("Clicou em Cadastrar Pagamento");
+            Usuario registradoPor = new Usuario();
+            if (usuario instanceof Secretario) {
+                registradoPor = new SecretarioController().buscarPorId(usuario.getId());
+            } else if (usuario instanceof Admin) {
+                registradoPor = new AdminController().buscarPorId(usuario.getId());
+            }
+
+            String selectedProcedimento = (String) cmbProcedimento.getSelectedItem();
+            String[] procedimentoParts = selectedProcedimento.split("\\|");
+            int procedimentoId = Integer.parseInt(procedimentoParts[0]);
+            String procedimentoTipo = procedimentoParts[1];
+            Procedimento procedimento = new Procedimento();
+            if (procedimentoTipo.equals("Exame")) {
+                procedimento = exameController.buscarPorId(procedimentoId);
+            } else if (procedimentoTipo.equals("Consulta")) {
+                procedimento = consultaController.buscarPorId(procedimentoId);
+            }
+            String metodoPagamento = (String) cmbMetodoPagamento.getSelectedItem();
+            String valor = txtValor.getText();
+
+            if (atualizando == null) {
+                pagamentoController.cadastrar(valor, registradoPor, paciente, metodoPagamento, procedimento, null);
+                dispose();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
 

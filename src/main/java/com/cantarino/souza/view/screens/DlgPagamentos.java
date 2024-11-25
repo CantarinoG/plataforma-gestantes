@@ -5,6 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.PagamentoController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Secretario;
@@ -28,10 +29,14 @@ public class DlgPagamentos extends JDialog {
 
     private Usuario usuario;
 
+    private PagamentoController controller;
+
     public DlgPagamentos(JFrame parent, boolean modal) {
         super(parent, modal);
+        controller = new PagamentoController();
         usuario = AuthTemp.getInstance().getUsuario();
         initComponents();
+        controller.atualizarTabela(grdPagamento);
     }
 
     private void initComponents() {
@@ -79,7 +84,7 @@ public class DlgPagamentos extends JDialog {
                 new String[] {
                 }));
         scrollPane = new JScrollPane(grdPagamento);
-        add(scrollPane, BorderLayout.CENTER);
+        panContent.add(scrollPane, BorderLayout.CENTER);
 
         panFooter = new JPanel();
         panFooter.setPreferredSize(new Dimension(getWidth(), 80));
@@ -148,6 +153,9 @@ public class DlgPagamentos extends JDialog {
     }
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
+        DlgCadastroPagamentos dialog = new DlgCadastroPagamentos(this, true);
+        dialog.setVisible(true);
+        controller.atualizarTabela(grdPagamento);
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
