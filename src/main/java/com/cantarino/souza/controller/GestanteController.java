@@ -62,4 +62,11 @@ public class GestanteController {
         repositorio.delete(gestante);
     }
 
+    public void atualizaSenha(Gestante usuario, String senha) {
+        String senhaValidada = validator.validaSenha(senha);
+        String hashSenha = Util.hashPassword(senhaValidada);
+        usuario.setSenha(hashSenha);
+        repositorio.update(usuario);
+    }
+
 }

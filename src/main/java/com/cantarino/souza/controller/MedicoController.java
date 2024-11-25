@@ -55,4 +55,11 @@ public class MedicoController {
         repositorio.delete(medico);
     }
 
+    public void atualizaSenha(Medico usuario, String senha) {
+        String senhaValidada = validator.validaSenha(senha);
+        String hashSenha = Util.hashPassword(senhaValidada);
+        usuario.setSenha(hashSenha);
+        repositorio.update(usuario);
+    }
+
 }

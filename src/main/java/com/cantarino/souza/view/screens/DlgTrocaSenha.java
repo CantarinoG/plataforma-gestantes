@@ -1,5 +1,15 @@
 package com.cantarino.souza.view.screens;
 
+import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.controller.GestanteController;
+import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.controller.SecretarioController;
+import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -16,8 +26,11 @@ public class DlgTrocaSenha extends JDialog {
     JLabel lblHint;
     JPanel panField;
 
+    Usuario usuario;
+
     public DlgTrocaSenha(JFrame parent, boolean modal) {
         super(parent, modal);
+        usuario = AuthTemp.getInstance().getUsuario();
         initComponents();
     }
 
@@ -97,6 +110,22 @@ public class DlgTrocaSenha extends JDialog {
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        if (usuario instanceof Gestante) {
+            GestanteController controller = new GestanteController();
+            controller.atualizaSenha((Gestante) usuario, senha);
+        } else if (usuario instanceof Medico) {
+            MedicoController controller = new MedicoController();
+            controller.atualizaSenha((Medico) usuario, senha);
+        } else if (usuario instanceof Secretario) {
+            SecretarioController controller = new SecretarioController();
+            controller.atualizaSenha((Secretario) usuario, senha);
+        } else if (usuario instanceof Admin) {
+            AdminController controller = new AdminController();
+            controller.atualizaSenha((Admin) usuario, senha);
+        }
+
+        dispose();
 
     }
 }
