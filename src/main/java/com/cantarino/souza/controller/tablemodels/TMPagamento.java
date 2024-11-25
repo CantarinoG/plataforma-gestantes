@@ -10,8 +10,8 @@ public class TMPagamento extends AbstractTableModel {
     private final int valor = 1;
     private final int registradoPor = 2;
     private final int paciente = 3;
-    private final int status = 4;
-    private final int metodoPagamento = 5;
+    private final int metodoPagamento = 4;
+    private final int procedimento = 5;
 
     public TMPagamento(List<Pagamento> lista) {
         this.lista = lista;
@@ -45,10 +45,10 @@ public class TMPagamento extends AbstractTableModel {
                     return aux.getRegistradoPor().getNome();
                 case paciente:
                     return aux.getPaciente().getNome();
-                case status:
-                    return aux.getStatus();
                 case metodoPagamento:
                     return aux.getMetodoPagamento();
+                case procedimento:
+                    return aux.getProcedimento().getId() + " | " + aux.getProcedimento().getDescricao();
                 default:
                     return null;
             }
@@ -67,10 +67,10 @@ public class TMPagamento extends AbstractTableModel {
                 return "Registrado Por";
             case paciente:
                 return "Paciente";
-            case status:
-                return "Status";
             case metodoPagamento:
                 return "Método de Pagamento";
+            case procedimento:
+                return "Procedimento";
             default:
                 return "";
         }

@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 
 import lombok.Getter;
@@ -30,18 +31,20 @@ public class Pagamento {
   @ManyToOne
   @JoinColumn(name = "paciente_id")
   private Gestante paciente;
-  private String status;
   private String metodoPagamento;
+  @OneToOne
+  @JoinColumn(name = "procedimento_id")
+  private Procedimento procedimento;
   private LocalDateTime deletadoEm;
 
-  public Pagamento(double valor, Usuario registradoPor, Gestante paciente, String status, String metodoPagamento,
-      LocalDateTime deletadoEm) {
+  public Pagamento(double valor, Usuario registradoPor, Gestante paciente, String metodoPagamento,
+      Procedimento procedimento, LocalDateTime deletadoEm) {
     this.id = 0;
     this.valor = valor;
     this.registradoPor = registradoPor;
     this.paciente = paciente;
-    this.status = status;
     this.metodoPagamento = metodoPagamento;
+    this.procedimento = procedimento;
     this.deletadoEm = deletadoEm;
   }
 }

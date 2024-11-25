@@ -1,5 +1,7 @@
 package com.cantarino.souza.controller;
 
+import java.util.List;
+
 import javax.swing.JTable;
 
 import com.cantarino.souza.controller.tablemodels.TMConsulta;
@@ -41,6 +43,10 @@ public class ConsultaController {
         novaConsulta.setMedico(medico);
         novaConsulta.setId(id);
         repositorio.update(novaConsulta);
+    }
+
+    public List<Consulta> buscarTodas() {
+        return repositorio.findAll();
     }
 
     public void excluir(int id) {
