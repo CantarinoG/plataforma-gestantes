@@ -58,8 +58,20 @@ public class DlgCadastroPagamentos extends JDialog {
 
         if (atualizando != null) {
             txtValor.setText(String.valueOf(atualizando.getValor()));
-            // cmbPaciente.setText(atualizando.getPaciente());
             cmbMetodoPagamento.setSelectedItem(atualizando.getMetodoPagamento());
+            if (atualizando.getPaciente() != null) {
+                String gestanteOption = atualizando.getPaciente().getId() + " | " + atualizando.getPaciente().getNome();
+                cmbPaciente.setSelectedItem(gestanteOption);
+            }
+
+            Procedimento proc = atualizando.getProcedimento();
+            if (proc instanceof Exame) {
+                String exameOption = proc.getId() + "|Exame|R$ " + proc.getValor() + "| " + proc.getDescricao();
+                cmbProcedimento.setSelectedItem(exameOption);
+            } else if (proc instanceof Consulta) {
+                String consultaOption = proc.getId() + "|Consulta|R$ " + proc.getValor() + "| " + proc.getDescricao();
+                cmbProcedimento.setSelectedItem(consultaOption);
+            }
         }
     }
 
@@ -245,6 +257,10 @@ public class DlgCadastroPagamentos extends JDialog {
             if (atualizando == null) {
                 pagamentoController.cadastrar(valor, registradoPor, paciente, metodoPagamento, procedimento, null);
                 dispose();
+            } else {
+                pagamentoController.atualizar(atualizando.getId(), valor, atualizando.getRegistradoPor(), paciente,
+                        metodoPagamento, procedimento, null);
+                dispose();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -275,6 +291,6 @@ class NumericDocumentFilter extends DocumentFilter {
     }
 
     private boolean isNumeric(String text) {
-        return text.matches("\\d*");
+        return text.matches("\\d*\\.?\\d*");
     }
 }

@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import com.cantarino.souza.controller.PagamentoController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.view.AuthTemp;
@@ -149,6 +150,15 @@ public class DlgPagamentos extends JDialog {
         panBackground.add(panContent, BorderLayout.CENTER);
     }
 
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdPagamento.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdPagamento.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
+    }
+
     private void btnReciboActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
@@ -159,9 +169,27 @@ public class DlgPagamentos extends JDialog {
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Pagamento pagamento = (Pagamento) selectedObject;
+        id = pagamento.getId();
+        DlgCadastroPagamentos dialog = new DlgCadastroPagamentos(null, true, id);
+        dialog.setVisible(true);
+        controller.atualizarTabela(grdPagamento);
     }
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
     }
 
 }
