@@ -37,7 +37,7 @@ public class DlgPagamentos extends JDialog {
         controller = new PagamentoController();
         usuario = AuthTemp.getInstance().getUsuario();
         initComponents();
-        controller.atualizarTabela(grdPagamento);
+        atualizarTabela();
     }
 
     private void initComponents() {
@@ -150,6 +150,14 @@ public class DlgPagamentos extends JDialog {
         panBackground.add(panContent, BorderLayout.CENTER);
     }
 
+    private void atualizarTabela() {
+        if (usuario instanceof Gestante) {
+            controller.filtrarTabelaPorIdPaciente(grdPagamento, usuario.getId());
+        } else {
+            controller.atualizarTabela(grdPagamento);
+        }
+    }
+
     private Object getObjetoSelecionadoNaGrid() {
         int rowCliked = grdPagamento.getSelectedRow();
         Object obj = null;
@@ -165,7 +173,7 @@ public class DlgPagamentos extends JDialog {
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
         DlgCadastroPagamentos dialog = new DlgCadastroPagamentos(this, true);
         dialog.setVisible(true);
-        controller.atualizarTabela(grdPagamento);
+        atualizarTabela();
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,7 +188,7 @@ public class DlgPagamentos extends JDialog {
         id = pagamento.getId();
         DlgCadastroPagamentos dialog = new DlgCadastroPagamentos(null, true, id);
         dialog.setVisible(true);
-        controller.atualizarTabela(grdPagamento);
+        atualizarTabela();
     }
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,7 +202,7 @@ public class DlgPagamentos extends JDialog {
         Pagamento pagamento = (Pagamento) selectedObject;
         id = pagamento.getId();
         controller.excluir(id);
-        controller.atualizarTabela(grdPagamento);
+        atualizarTabela();
     }
 
 }

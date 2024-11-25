@@ -7,8 +7,7 @@ import com.cantarino.souza.factory.DatabaseJPA;
 import com.cantarino.souza.model.entities.Pagamento;
 import java.time.LocalDateTime;
 
-
-public class PagamentoDao implements IDao<Pagamento>{
+public class PagamentoDao implements IDao<Pagamento> {
 
     private EntityManager entityManager;
 
@@ -55,11 +54,22 @@ public class PagamentoDao implements IDao<Pagamento>{
     public List<Pagamento> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Pagamento> pagamentos = this.entityManager.createQuery(
-            "FROM Pagamento p WHERE p.deletadoEm IS NULL",
-            Pagamento.class)
-            .getResultList();
+                "FROM Pagamento p WHERE p.deletadoEm IS NULL",
+                Pagamento.class)
+                .getResultList();
         this.entityManager.close();
         return pagamentos;
     }
-    
+
+    public List<Pagamento> filterGestanteId(int id) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        List<Pagamento> pagamentos = this.entityManager.createQuery(
+                "FROM Pagamento p WHERE p.deletadoEm IS NULL AND p.paciente.id = :id",
+                Pagamento.class)
+                .setParameter("id", id)
+                .getResultList();
+        this.entityManager.close();
+        return pagamentos;
+    }
+
 }
