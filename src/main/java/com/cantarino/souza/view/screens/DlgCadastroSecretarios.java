@@ -2,6 +2,7 @@ package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.SecretarioController;
 import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.exceptions.SecretarioException;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -22,7 +23,9 @@ public class DlgCadastroSecretarios extends JDialog {
     JFormattedTextField edtCPF;
     JPanel panNomeField;
     JPasswordField edtPass;
+    JPasswordField edtConfirmPass;
     JPanel panPassField;
+    JPanel panConfirmPassField;
     JPanel panButton;
     JButton btnCriarConta;
     JDatePickerImpl datePicker;
@@ -125,6 +128,13 @@ public class DlgCadastroSecretarios extends JDialog {
             edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             panPassField = createCustomTextfield("Senha", edtPass);
             panColumn.add(panPassField);
+
+            edtConfirmPass = new JPasswordField();
+            edtConfirmPass.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtConfirmPass.setBackground(AppColors.FIELD_PINK);
+            edtConfirmPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panConfirmPassField = createCustomTextfield("Confirmar Senha", edtConfirmPass);
+            panColumn.add(panConfirmPassField);
         }
 
         try {
@@ -233,6 +243,10 @@ public class DlgCadastroSecretarios extends JDialog {
                     edtDataContratacao.getText().split("/")[1] + "-" +
                     edtDataContratacao.getText().split("/")[0];
             if (atualizando == null) {
+                if (!(new String(edtPass.getPassword()).equals(new String(edtConfirmPass.getPassword())))) {
+                    throw new SecretarioException("As senhas não coincidem.");
+                }
+
                 secretarioController.cadastrar(
                         cpf,
                         edtNome.getText(),

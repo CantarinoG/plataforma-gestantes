@@ -3,6 +3,7 @@ package com.cantarino.souza.view.screens;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.enums.TipoSanguineo;
+import com.cantarino.souza.model.exceptions.SecretarioException;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -44,6 +45,8 @@ public class DlgCadastroGestantes extends JDialog {
     JPanel panContatoEmergenciaField;
     JPanel panTipoSanguineoField;
     JPanel panHistoricoMedicoField;
+    JPasswordField edtConfirmPass;
+    JPanel panConfirmPassField;
 
     private GestanteController gestanteController;
     private Gestante atualizando;
@@ -145,6 +148,13 @@ public class DlgCadastroGestantes extends JDialog {
             edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             panPassField = createCustomTextfield("Senha", edtPass);
             panColumn.add(panPassField);
+
+            edtConfirmPass = new JPasswordField();
+            edtConfirmPass.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtConfirmPass.setBackground(AppColors.FIELD_PINK);
+            edtConfirmPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panConfirmPassField = createCustomTextfield("Confirmar Senha", edtConfirmPass);
+            panColumn.add(panConfirmPassField);
         }
 
         try {
@@ -288,6 +298,10 @@ public class DlgCadastroGestantes extends JDialog {
                     edtPrevisaoParto.getText().split("/")[0];
 
             if (atualizando == null) {
+                if (!(new String(edtPass.getPassword()).equals(new String(edtConfirmPass.getPassword())))) {
+                    throw new SecretarioException("As senhas não coincidem.");
+                }
+
                 gestanteController.cadastrar(
                         cpf,
                         edtNome.getText(),

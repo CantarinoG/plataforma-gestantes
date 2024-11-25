@@ -3,6 +3,7 @@ package com.cantarino.souza.view.screens;
 import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.enums.EspecializacaoMedico;
+import com.cantarino.souza.model.exceptions.SecretarioException;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -37,6 +38,8 @@ public class DlgCadastroMedicos extends JDialog {
     JPanel panTelefoneField;
     JTextField edtEndereco;
     JPanel panEnderecoField;
+    JPasswordField edtConfirmPass;
+    JPanel panConfirmPassField;
 
     private MedicoController medicoController;
     private Medico atualizando;
@@ -149,6 +152,13 @@ public class DlgCadastroMedicos extends JDialog {
             edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             panPassField = createCustomTextfield("Senha", edtPass);
             panColumn.add(panPassField);
+
+            edtConfirmPass = new JPasswordField();
+            edtConfirmPass.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtConfirmPass.setBackground(AppColors.FIELD_PINK);
+            edtConfirmPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panConfirmPassField = createCustomTextfield("Confirmar Senha", edtConfirmPass);
+            panColumn.add(panConfirmPassField);
         }
 
         try {
@@ -246,6 +256,10 @@ public class DlgCadastroMedicos extends JDialog {
                     edtDataNascimento.getText().split("/")[1] + "-" +
                     edtDataNascimento.getText().split("/")[0];
             if (atualizando == null) {
+                if (!(new String(edtPass.getPassword()).equals(new String(edtConfirmPass.getPassword())))) {
+                    throw new SecretarioException("As senhas não coincidem.");
+                }
+
                 medicoController.cadastrar(
                         cpf,
                         edtNome.getText(),
