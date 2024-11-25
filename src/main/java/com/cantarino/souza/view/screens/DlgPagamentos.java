@@ -190,6 +190,11 @@ public class DlgPagamentos extends JDialog {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
+        Pagamento pagamento = (Pagamento) selectedObject;
+        id = pagamento.getId();
+        controller.excluir(id);
+        controller.atualizarTabela(grdPagamento);
     }
 
 }
