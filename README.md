@@ -4,7 +4,6 @@
 1. [Introdução](#introdução)
 2. [Modelagem](#modelagem)
     - [Quadro Scrum](#quadro-scrum)
-    - [Protótipo do Projeto](#protótipo-do-projeto)
     - [Diagrama de Casos de Uso](#diagrama-de-casos-de-uso)
     - [Diagrama de Classes](#diagrama-de-classes)
     - [Diagramas de Sequência](#diagramas-de-sequência)
@@ -25,12 +24,7 @@ Além disso, o BemGestar oferece uma comunidade de apoio, onde as gestantes pode
 O desenvolvimento do BemGestar segue a metodologia ágil Scrum, permitindo um gerenciamento eficiente do projeto através de sprints, priorização de tarefas e acompanhamento contínuo do progresso. O quadro de tarefas está organizado no Trello, onde é possível visualizar o backlog, as sprints em andamento e as tarefas concluídas. Essa abordagem garante uma entrega incremental e adaptável, focada na evolução contínua do sistema.
 
 ![Quadro Scrum](./docs/quadroScrum.png)
-*Atualizado em 31/10/2024
-
-### Protótipo do Projeto
-O protótipo do BemGestar foi desenvolvido no Figma, projetado com uma interface amigável e acessível, especialmente focada na experiência de gestantes e profissionais de saúde. As telas têm um design leve e acolhedor, com uma paleta de cores suaves, voltada para criar um ambiente seguro e confortável para o acompanhamento gestacional. Para acessar o protótipo completo, acesse o nosso [Figma](https://www.figma.com/design/42ONyUTdi21II9Jtm1otPi/bemGestar?node-id=2077-341&node-type=canvas&t=Okix4vPe28b4qhUG-0).
-
-![Protótipo do Projeto](./docs/prototipo.png)
+*Atualizado em 26/11/2024
 
 ### Diagrama de Casos de Uso
 
