@@ -5,6 +5,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.RoundedButton;
@@ -59,7 +60,8 @@ public class PanConsultasAgendadas extends JPanel {
 
         lblFilter = new JLabel("Filtrar por:");
         cbFilter = new JComboBox<>(
-                new String[] { "Todos", "Agendados", "Concluídos", "Cancelados" });
+                new String[] { "Todos", StatusProcedimentos.AGENDADA.getValue(),
+                        StatusProcedimentos.CONCLUIDA.getValue(), StatusProcedimentos.CANCELADA.getValue() });
         cbFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterActionPerformed(evt);
@@ -115,6 +117,12 @@ public class PanConsultasAgendadas extends JPanel {
     }
 
     private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {
+        String selectedFilter = (String) cbFilter.getSelectedItem();
+        if (selectedFilter.equals("Todos")) {
+            consultaController.filtrarTabelaPorIdGestante(grdConsultas, usuario.getId());
+        } else {
+            consultaController.filtrarTabelaPorIdGestanteStatus(grdConsultas, usuario.getId(), selectedFilter);
+        }
     }
 
 }

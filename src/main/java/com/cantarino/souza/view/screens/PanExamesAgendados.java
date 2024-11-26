@@ -7,6 +7,7 @@ import java.awt.*;
 
 import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.RoundedButton;
@@ -58,7 +59,8 @@ public class PanExamesAgendados extends JPanel {
 
         lblFilter = new JLabel("Filtrar por:");
         cbFilter = new JComboBox<>(
-                new String[] { "Todos", "Agendados", "Concluídos", "Cancelados" });
+                new String[] { "Todos", StatusProcedimentos.AGENDADA.getValue(),
+                        StatusProcedimentos.CONCLUIDA.getValue(), StatusProcedimentos.CANCELADA.getValue() });
         cbFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterActionPerformed(evt);
@@ -100,6 +102,11 @@ public class PanExamesAgendados extends JPanel {
     }
 
     private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {
+        String selectedFilter = (String) cbFilter.getSelectedItem();
+        if (selectedFilter.equals("Todos")) {
+            exameController.filtrarTabelaPorIdGestante(grdExames, usuario.getId());
+        } else {
+            exameController.filtrarTabelaPorIdGestanteStatus(grdExames, usuario.getId(), selectedFilter);
+        }
     }
-
 }
