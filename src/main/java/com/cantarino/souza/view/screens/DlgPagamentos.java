@@ -168,6 +168,34 @@ public class DlgPagamentos extends JDialog {
     }
 
     private void btnReciboActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Selecione um pagamento para gerar o recibo", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        try {
+            Pagamento pagamento = (Pagamento) selectedObject;
+            id = pagamento.getId();
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Salvar Recibo");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+            int result = fileChooser.showSaveDialog(this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                String selectedPath = fileChooser.getSelectedFile().getAbsolutePath();
+                System.out.println("Selected path: " + selectedPath);
+                controller.gerarRecibo(selectedPath, id);
+            }
+            JOptionPane.showMessageDialog(this, "Recibo Gerado com Sucesso!", "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao gerar recibo: " + e.getMessage(), "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
