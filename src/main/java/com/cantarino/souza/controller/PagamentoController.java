@@ -7,6 +7,10 @@ import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.valid.ValidatePagamento;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JTable;
 
 public class PagamentoController {
@@ -52,5 +56,22 @@ public class PagamentoController {
 
     public void filtrarTabelaPorIdPaciente(JTable grd, int id) {
         Util.jTableShow(grd, new TMPagamento(repositorio.filterGestanteId(id)), null);
+    }
+
+    public void gerarRecibo(String path, int id) {
+        Pagamento pagamento = repositorio.find(id);
+        Util.generatePdf(path,
+                "PDF gerado em: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), "\n",
+                "Bem Gestar" + "\n",
+                "Recibo de Pagamento", "\n",
+                "Id do Pagamento: " + pagamento.getId(), "Valor Total: " + pagamento.getProcedimento().getValor(),
+                "Valor Pago: " + pagamento.getValor(), "Paciente: " + pagamento.getPaciente().getNome(),
+                "Pagamento Registrado Por: " + pagamento.getRegistradoPor().getNome(),
+                "Método de Pagamento: " + pagamento.getMetodoPagamento(), "\n",
+                "Id do Procedimento: " + pagamento.getProcedimento().getId(),
+                "Procedimento: " + pagamento.getProcedimento().getDescricao(),
+                "Data do Procedimento: "
+                        + pagamento.getProcedimento().getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
+                "Status do Procedimento: " + pagamento.getProcedimento().getStatus());
     }
 }
