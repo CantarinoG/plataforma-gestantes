@@ -154,6 +154,20 @@ public class PanConsultasAgendadas extends JPanel {
     }
 
     private void btnMedicoActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Consulta consulta = (Consulta) selectedObject;
+        id = consulta.getMedico().getId();
+
+        JDialog parentWindow = (JDialog) SwingUtilities.getWindowAncestor(this);
+        DlgDadosMedico dialog = new DlgDadosMedico(parentWindow, true, id);
+        dialog.setVisible(true);
+
     }
 
     private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {
