@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 import com.cantarino.souza.controller.ExameController;
+import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.AuthTemp;
@@ -67,7 +68,7 @@ public class PanExamesAgendados extends JPanel {
             }
         });
 
-        btnCancelar = new RoundedButton("Cancelar consulta", 10);
+        btnCancelar = new RoundedButton("Cancelar exame", 10);
         btnCancelar.setPreferredSize(new Dimension(150, 50));
         btnCancelar.setBackground(Color.WHITE);
         btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -96,9 +97,48 @@ public class PanExamesAgendados extends JPanel {
     }
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Exame consulta = (Exame) selectedObject;
+
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+            JOptionPane.showMessageDialog(this, "Exame já cancelado", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValue())) {
+            JOptionPane.showMessageDialog(this, "Exame já concluído", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int option = JOptionPane.showConfirmDialog(this,
+                    "Tem certeza que deseja cancelar este exame?",
+                    "Confirmar cancelamento",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (option == JOptionPane.YES_OPTION) {
+                id = consulta.getId();
+                exameController.cancelar(id);
+                cbFilterActionPerformed(null);
+
+                JOptionPane.showMessageDialog(this, "Exame cancelado com sucesso!", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            return;
+        }
     }
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdExames.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdExames.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
     }
 
     private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {

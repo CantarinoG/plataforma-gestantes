@@ -6,6 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 import com.cantarino.souza.controller.ConsultaController;
+import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.AuthTemp;
@@ -165,7 +166,46 @@ public class DlgAgendaMedico extends JDialog {
         }
     }
 
+    private Object getObjetoSelecionadoNaGrid() {
+        int rowCliked = grdConsultas.getSelectedRow();
+        Object obj = null;
+        if (rowCliked >= 0) {
+            obj = grdConsultas.getModel().getValueAt(rowCliked, -1);
+        }
+        return obj;
+    }
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Consulta consulta = (Consulta) selectedObject;
+
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+            JOptionPane.showMessageDialog(this, "Consulta já cancelada", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValue())) {
+            JOptionPane.showMessageDialog(this, "Consulta já concluída", "Aviso", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int option = JOptionPane.showConfirmDialog(this,
+                    "Tem certeza que deseja cancelar esta consulta?",
+                    "Confirmar cancelamento",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (option == JOptionPane.YES_OPTION) {
+                id = consulta.getId();
+                consultaController.cancelar(id);
+                cbFilterActionPerformed(null);
+
+                JOptionPane.showMessageDialog(this, "Consulta cancelada com sucesso!", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            return;
+        }
     }
 
     private void btnVerRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
