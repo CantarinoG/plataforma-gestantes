@@ -10,6 +10,7 @@ import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Relatorio;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.model.valid.ValidateConsulta;
 
 public class ConsultaController {
@@ -74,6 +75,12 @@ public class ConsultaController {
     public void filtrarTabelaPorIdGestanteStatus(JTable grd, int id, String status) {
         Util.jTableShow(grd, new TMConsulta(repositorio.filterGestanteIdStatus(id, status)),
                 TMConsulta.getCustomRenderer());
+    }
+
+    public void cancelar(int id) {
+        Consulta consulta = repositorio.find(id);
+        consulta.setStatus(StatusProcedimentos.CANCELADA.getValue());
+        repositorio.update(consulta);
     }
 
 }

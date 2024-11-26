@@ -10,6 +10,7 @@ import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.model.valid.ValidateExame;
 
 public class ExameController {
@@ -66,6 +67,12 @@ public class ExameController {
 
     public void filtrarTabelaPorIdGestanteStatus(JTable grd, int id, String status) {
         Util.jTableShow(grd, new TMExame(repositorio.filterGestanteIdStatus(id, status)), TMExame.getCustomRenderer());
+    }
+
+    public void cancelar(int id) {
+        Exame exame = repositorio.find(id);
+        exame.setStatus(StatusProcedimentos.CANCELADA.getValue());
+        repositorio.update(exame);
     }
 
 }
