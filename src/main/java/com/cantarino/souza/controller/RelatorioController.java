@@ -22,15 +22,17 @@ public class RelatorioController {
         Util.jTableShow(grd, new TMRelatorio(repositorio.findAll()), null);
     }
 
-    public void cadastrar(LocalDateTime dataEmissao, String resultado, String observacoes, LocalDateTime deletadoEm) {
-        Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes);
+    public int cadastrar(LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
+            LocalDateTime deletadoEm) {
+        Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes, caminhoPdf);
         novoRelatorio.setDataEmissao(dataEmissao);
         repositorio.save(novoRelatorio);
+        return novoRelatorio.getId();
     }
 
-    public void atualizar(int id, LocalDateTime dataEmissao, String resultado, String observacoes,
+    public void atualizar(int id, LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
             LocalDateTime deletadoEm) {
-        Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes);
+        Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes, caminhoPdf);
         novoRelatorio.setId(id);
         novoRelatorio.setDataEmissao(dataEmissao);
         repositorio.update(novoRelatorio);
@@ -39,5 +41,9 @@ public class RelatorioController {
     public void excluir(int id) {
         Relatorio relatorio = repositorio.find(id);
         repositorio.delete(relatorio);
+    }
+
+    public Relatorio buscarPorId(int id) {
+        return repositorio.find(id);
     }
 }

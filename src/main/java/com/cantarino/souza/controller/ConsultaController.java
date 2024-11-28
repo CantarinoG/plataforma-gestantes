@@ -83,4 +83,11 @@ public class ConsultaController {
         repositorio.update(consulta);
     }
 
+    public void adicionarRelatorio(int id, Relatorio relatorio) {
+        Consulta consulta = repositorio.find(id);
+        consulta.setStatus(StatusProcedimentos.CONCLUIDA.getValue());
+        consulta.setRelatorio(relatorio);
+        repositorio.update(consulta);
+    }
+
 }
