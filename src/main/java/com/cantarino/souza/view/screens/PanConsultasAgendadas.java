@@ -151,6 +151,19 @@ public class PanConsultasAgendadas extends JPanel {
     }
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
+        int id = -1;
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Consulta consulta = (Consulta) selectedObject;
+        if (consulta.getRelatorio() == null) {
+            JOptionPane.showMessageDialog(this, "Essa consulta não possui nenhum relatório cadastrado", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
     }
 
     private void btnMedicoActionPerformed(java.awt.event.ActionEvent evt) {

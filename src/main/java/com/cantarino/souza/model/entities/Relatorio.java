@@ -25,13 +25,16 @@ public class Relatorio {
     private LocalDateTime dataEmissao;
     private String resultado;
     private String obeservacoes;
+    private String caminhoPdf;
     private LocalDateTime deletadoEm;
 
-    public Relatorio(LocalDateTime dataEmissao, String resultado, String observacoes, LocalDateTime deletadoEm) {
+    public Relatorio(LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
+            LocalDateTime deletadoEm) {
         this.id = 0;
         this.dataEmissao = dataEmissao;
         this.resultado = resultado;
         this.obeservacoes = observacoes;
+        this.caminhoPdf = caminhoPdf;
         this.deletadoEm = deletadoEm;
     }
 }
