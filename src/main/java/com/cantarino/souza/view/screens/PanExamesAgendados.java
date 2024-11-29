@@ -142,6 +142,10 @@ public class PanExamesAgendados extends JPanel {
             JOptionPane.showMessageDialog(this, "Esse exame não possui nenhum relatório cadastrado", "Aviso",
                     JOptionPane.WARNING_MESSAGE);
             return;
+        } else {
+            JDialog parentWindow = (JDialog) SwingUtilities.getWindowAncestor(this);
+            DlgDadosRelatorio dialog = new DlgDadosRelatorio(parentWindow, true, exame);
+            dialog.setVisible(true);
         }
     }
 
