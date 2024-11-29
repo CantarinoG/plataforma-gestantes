@@ -18,11 +18,11 @@ public class AuthTemp {
         // AdminController admC = new AdminController();
         // this.usuario = admC.buscarPorId(3);
 
-        MedicoController medicoC = new MedicoController();
-        this.usuario = medicoC.buscarPorId(13);
+        // MedicoController medicoC = new MedicoController();
+        // this.usuario = medicoC.buscarPorId(13);
 
-        // GestanteController gestanteC = new GestanteController();
-        // this.usuario = gestanteC.buscarPorId(11);
+        GestanteController gestanteC = new GestanteController();
+        this.usuario = gestanteC.buscarPorId(11);
 
         // SecretarioController secretarioC = new SecretarioController();
         // this.usuario = secretarioC.buscarPorId(46);

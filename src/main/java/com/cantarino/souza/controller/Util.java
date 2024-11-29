@@ -8,6 +8,10 @@ import org.mindrot.jbcrypt.BCrypt;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.PdfCopy;
+import com.itextpdf.text.pdf.PdfReader;
+import java.io.File;
+import java.util.List;
 
 public class Util {
 
@@ -43,4 +47,31 @@ public class Util {
             document.close();
         }
     }
+
+    public static void mergePdfs(String outputPath, List<String> inputPaths) {
+        Document document = new Document();
+        try {
+            if (new File(outputPath).isDirectory()) {
+                outputPath = outputPath + File.separator + "relatorio.pdf";
+            }
+
+            File outputFile = new File(outputPath);
+            outputFile.getParentFile().mkdirs();
+
+            PdfCopy copy = new PdfCopy(document, new FileOutputStream(outputFile));
+            document.open();
+
+            for (String inputPath : inputPaths) {
+                PdfReader reader = new PdfReader(inputPath);
+                copy.addDocument(reader);
+                reader.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            document.close();
+        }
+    }
+
 }
