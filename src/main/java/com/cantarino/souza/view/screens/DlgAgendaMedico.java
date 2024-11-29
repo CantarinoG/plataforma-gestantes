@@ -233,13 +233,11 @@ public class DlgAgendaMedico extends JDialog {
         }
         Consulta consulta = (Consulta) selectedObject;
         id = consulta.getId();
-        if (consulta.getRelatorio() == null) {
-            DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(null, true, id);
-            dialog.setVisible(true);
-            consultaController.filtrarTabelaPorIdMedico(grdConsultas, usuario.getId());
-        } else {
-            // Editar Relatório
-        }
+
+        DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, id);
+        dialog.setVisible(true);
+        consultaController.filtrarTabelaPorIdMedico(grdConsultas, usuario.getId());
+
     }
 
     private void btnPacienteActionPerformed(java.awt.event.ActionEvent evt) {
