@@ -41,17 +41,34 @@ public class DlgCadastroRelatorio extends JDialog {
     private int procedimentoId;
     private String selectedFilePath;
 
-    public DlgCadastroRelatorio(JFrame parent, boolean modal, int procedimentoId) {
+    public DlgCadastroRelatorio(JDialog parent, boolean modal, int procedimentoId) {
         super(parent, modal);
         relatorioController = new RelatorioController();
         consultaController = new ConsultaController();
         exameController = new ExameController();
         this.procedimentoId = procedimentoId;
         initComponents();
+
+        Procedimento procedimento = consultaController.buscarPorId(procedimentoId);
+        if (procedimento == null) {
+            procedimento = exameController.buscarPorId(procedimentoId);
+        }
+        if (procedimento != null) {
+            if (procedimento.getRelatorio() != null) {
+                atualizando = procedimento.getRelatorio();
+                edtResultado.setText(atualizando.getResultado());
+                edtObservacoes.setText(atualizando.getObeservacoes());
+                if (atualizando.getCaminhoPdf() != null) {
+                    edtArquivoSelecionado.setText(atualizando.getCaminhoPdf());
+                    selectedFilePath = atualizando.getCaminhoPdf();
+                }
+            }
+
+        }
     }
 
     private void initComponents() {
-        setTitle("Cadastro de Relatório");
+        setTitle(atualizando == null ? "Cadastro de Relatório" : "Atualização de Relatório");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1920, 1080);
         setLocationRelativeTo(null);
@@ -67,7 +84,7 @@ public class DlgCadastroRelatorio extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel("Cadastrar Relatório");
+        lblAction = new JLabel(atualizando == null ? "Cadastrar Relatório" : "Atualizar Relatório");
         lblAction.setFont(new Font("Arial", Font.BOLD, 32));
         lblAction.setForeground(AppColors.TITLE_BLUE);
         lblAction.setHorizontalAlignment(SwingConstants.CENTER);
@@ -131,7 +148,8 @@ public class DlgCadastroRelatorio extends JDialog {
         panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panButton.setBackground(AppColors.TRANSPARENT);
 
-        btnCadastrarRelatorio = new RoundedButton("Cadastrar Relatório", 10);
+        btnCadastrarRelatorio = new RoundedButton(atualizando == null ? "Cadastrar Relatório" : "Atualizar Relatório",
+                10);
         btnCadastrarRelatorio.setPreferredSize(new Dimension(150, 50));
         btnCadastrarRelatorio.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCadastrarRelatorio.setForeground(Color.WHITE);
@@ -192,21 +210,20 @@ public class DlgCadastroRelatorio extends JDialog {
                 }
             }
 
-            if (atualizando == null) { // Criando
-                int relatorioId = relatorioController.cadastrar(LocalDateTime.now(), resultado, observacoes,
-                        destinationPath, null);
-                Relatorio relatorioCriado = relatorioController.buscarPorId(relatorioId);
+            int relatorioId = relatorioController.cadastrar(LocalDateTime.now(), resultado, observacoes,
+                    destinationPath, null);
+            Relatorio relatorioCriado = relatorioController.buscarPorId(relatorioId);
 
-                Procedimento procedimento = consultaController.buscarPorId(procedimentoId);
+            Procedimento procedimento = consultaController.buscarPorId(procedimentoId);
 
-                if (procedimento != null) { // Pertence a uma consulta
-                    consultaController.adicionarRelatorio(procedimento.getId(), relatorioCriado);
-                } else { // Pertence a um exame
-                    procedimento = exameController.buscarPorId(procedimentoId);
-                }
-
-                dispose();
+            if (procedimento != null) { // Pertence a uma consulta
+                consultaController.adicionarRelatorio(procedimento.getId(), relatorioCriado);
+            } else { // Pertence a um exame
+                procedimento = exameController.buscarPorId(procedimentoId);
             }
+
+            dispose();
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
