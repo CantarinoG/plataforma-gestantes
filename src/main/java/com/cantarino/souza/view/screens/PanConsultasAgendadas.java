@@ -159,10 +159,15 @@ public class PanConsultasAgendadas extends JPanel {
         }
 
         Consulta consulta = (Consulta) selectedObject;
+
         if (consulta.getRelatorio() == null) {
             JOptionPane.showMessageDialog(this, "Essa consulta não possui nenhum relatório cadastrado", "Aviso",
                     JOptionPane.WARNING_MESSAGE);
             return;
+        } else {
+            JDialog parentWindow = (JDialog) SwingUtilities.getWindowAncestor(this);
+            DlgDadosRelatorio dialog = new DlgDadosRelatorio(parentWindow, true, consulta);
+            dialog.setVisible(true);
         }
     }
 
