@@ -221,6 +221,9 @@ public class DlgAgendaMedico extends JDialog {
             JOptionPane.showMessageDialog(this, "Essa consulta não possui nenhum relatório cadastrado", "Aviso",
                     JOptionPane.WARNING_MESSAGE);
             return;
+        } else {
+            DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, consulta);
+            dialog.setVisible(true);
         }
     }
 
