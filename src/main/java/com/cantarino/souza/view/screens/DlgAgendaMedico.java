@@ -209,7 +209,6 @@ public class DlgAgendaMedico extends JDialog {
     }
 
     private void btnVerRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -244,6 +243,16 @@ public class DlgAgendaMedico extends JDialog {
     }
 
     private void btnPacienteActionPerformed(java.awt.event.ActionEvent evt) {
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Consulta consulta = (Consulta) selectedObject;
+
+        DlgDadosGestante dialog = new DlgDadosGestante(this, true, consulta.getPaciente().getId());
+        dialog.setVisible(true);
     }
 
 }

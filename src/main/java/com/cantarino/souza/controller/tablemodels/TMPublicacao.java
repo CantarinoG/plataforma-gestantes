@@ -2,8 +2,11 @@ package com.cantarino.souza.controller.tablemodels;
 
 import java.util.List;
 
+import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
+import com.cantarino.souza.controller.tablemodels.TMExame.ExameTableCellRenderer;
 import com.cantarino.souza.model.entities.Publicacao;
 
 public class TMPublicacao extends AbstractTableModel {
@@ -45,9 +48,9 @@ public class TMPublicacao extends AbstractTableModel {
                 case corpo:
                     return aux.getCorpo();
                 case data:
-                    return aux.getData();
+                    return aux.getData().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 case autor:
-                    return aux.getAutor();
+                    return aux.getAutor().getNome();
                 default:
                     return null;
             }
@@ -71,4 +74,30 @@ public class TMPublicacao extends AbstractTableModel {
                 return null;
         }
     }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
+    }
+
+    public static DefaultTableCellRenderer getCustomRenderer() {
+        return new ExameTableCellRenderer();
+    }
+
+    public static class PublicacaoTableCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public java.awt.Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (!isSelected) {
+                c.setBackground(java.awt.Color.WHITE);
+                setBackground(java.awt.Color.WHITE);
+            }
+
+            setOpaque(true);
+            return c;
+        }
+    }
+
 }

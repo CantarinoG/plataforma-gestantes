@@ -49,7 +49,8 @@ public class DlgDadosMedico extends JDialog {
         setSize(1620, 930);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
+        panBackground = new JPanel();
+        panBackground.setBackground(AppColors.BUTTON_PINK);
         panBackground.setLayout(new GridBagLayout());
         setContentPane(panBackground);
 
