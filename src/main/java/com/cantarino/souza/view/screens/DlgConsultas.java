@@ -204,7 +204,22 @@ public class DlgConsultas extends JDialog {
     }
 
     private void btnVisuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("aqui carai");
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Consulta consulta = (Consulta) selectedObject;
+
+        if (consulta.getRelatorio() == null) {
+            JOptionPane.showMessageDialog(this, "Essa consulta não possui nenhum relatório cadastrado", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        } else {
+            DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, consulta);
+            dialog.setVisible(true);
+        }
 
     }
 
