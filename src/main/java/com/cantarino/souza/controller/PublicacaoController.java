@@ -16,7 +16,7 @@ public class PublicacaoController {
     private ValidatePublicacao validator;
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMPublicacao(repositorio.findAll()), null);
+        Util.jTableShow(grd, new TMPublicacao(repositorio.findAll()), TMPublicacao.getCustomRenderer());
     }
 
     public PublicacaoController() {
@@ -24,7 +24,8 @@ public class PublicacaoController {
         this.validator = new ValidatePublicacao();
     }
 
-    public void atualizarTabela() {
+    public void filtrarTabelaPorIdGestante(JTable grd, int id) {
+        Util.jTableShow(grd, new TMPublicacao(repositorio.filterGestanteId(id)), null);
     }
 
     public void cadastrar(String titulo, String corpo, boolean isAnonimo, LocalDateTime data, Usuario autor,

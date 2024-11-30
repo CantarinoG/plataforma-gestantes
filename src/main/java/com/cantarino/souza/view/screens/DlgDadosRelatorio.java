@@ -3,10 +3,8 @@ package com.cantarino.souza.view.screens;
 import javax.swing.*;
 
 import com.cantarino.souza.controller.RelatorioController;
-import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.view.components.AppColors;
-import com.cantarino.souza.view.components.BackgroundPanel;
 import com.cantarino.souza.view.components.RoundedButton;
 
 import java.awt.*;
@@ -52,7 +50,8 @@ public class DlgDadosRelatorio extends JDialog {
         setSize(1620, 930);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
+        panBackground = new JPanel();
+        panBackground.setBackground(AppColors.BUTTON_PINK);
         panBackground.setLayout(new GridBagLayout());
         setContentPane(panBackground);
 
@@ -131,7 +130,7 @@ public class DlgDadosRelatorio extends JDialog {
                 10);
         btnEmitirPdf.setPreferredSize(new Dimension(150, 50));
         btnEmitirPdf.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnEmitirPdf.setForeground(Color.WHITE);
+        btnEmitirPdf.setBackground(Color.WHITE);
         btnEmitirPdf.addActionListener(evt -> btnEmitirPdfActionPerformed(evt));
 
         panButton.add(btnEmitirPdf);
