@@ -369,7 +369,9 @@ public class FrMenu extends JFrame {
     }
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Saiu kkkk");
+        autenticacaoController.logOut();
+        initComponents();
+        repaint();
     }
 
     private void btnGestantesActionPerformed(java.awt.event.ActionEvent evt) {
