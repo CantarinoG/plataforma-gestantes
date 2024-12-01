@@ -70,4 +70,16 @@ public class AdminDao implements IDao<Admin> {
         return admins;
     }
 
+    public Admin findByCpf(String cpf) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Admin admin = this.entityManager
+                .createQuery("FROM Admin a WHERE a.cpf = :cpf AND a.deletadoEm IS NULL", Admin.class)
+                .setParameter("cpf", cpf)
+                .getSingleResult();
+
+        this.entityManager.close();
+        return admin;
+    }
+
 }

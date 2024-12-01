@@ -2,7 +2,6 @@ package com.cantarino.souza.view.screens;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 
 import org.jdatepicker.impl.JDatePickerImpl;
 

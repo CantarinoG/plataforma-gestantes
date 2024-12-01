@@ -4,12 +4,12 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 
 public class FrMenu extends JFrame {
@@ -44,10 +44,13 @@ public class FrMenu extends JFrame {
     JPanel gridPanel;
     JPanel centeringPanel;
 
-    Usuario userAutenticado;
+    private AutenticacaoController autenticacaoController;
+
+    Usuario userAutenticado = null;
 
     public FrMenu() {
         initComponents();
+        autenticacaoController = new AutenticacaoController();
     }
 
     private void initComponents() {
@@ -265,7 +268,7 @@ public class FrMenu extends JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         DlgLogin dialog = new DlgLogin(this, true);
         dialog.setVisible(true);
-        userAutenticado = AuthTemp.getInstance().getUsuario();
+        userAutenticado = autenticacaoController.getUsuario();
 
         if (userAutenticado != null) {
             btnSair.setVisible(true);
