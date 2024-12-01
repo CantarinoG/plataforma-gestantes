@@ -2,6 +2,8 @@ package com.cantarino.souza.view.screens;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 import java.awt.*;
 
@@ -25,6 +27,8 @@ public class DlgExames extends JDialog {
     private JButton btnDeletar;
     private JButton btnVisuRelatorio;
     private JButton btnGerenciarRelatorio;
+    private JLabel lblNome;
+    private JTextField edtNome;
 
     private ExameController exameController;
 
@@ -87,6 +91,24 @@ public class DlgExames extends JDialog {
         panFooter.setBackground(AppColors.BUTTON_PINK);
         panFooter.setBorder(BorderFactory.createEmptyBorder(5, 64, 10, 5));
         panFooter.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 5));
+
+        lblNome = new JLabel("Nome:");
+        edtNome = new JTextField(20);
+        edtNome.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                filterTable();
+            }
+        });
+        panFooter.add(lblNome);
+        panFooter.add(edtNome);
 
         btnCadastrar = new RoundedButton("Cadastrar", 10);
         btnCadastrar.setPreferredSize(new Dimension(150, 50));
@@ -229,6 +251,13 @@ public class DlgExames extends JDialog {
         DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, exame.getId());
         dialog.setVisible(true);
         exameController.atualizarTabela(grdExames);
+
+    }
+
+    private void filterTable() {
+        String searchText = edtNome.getText();
+
+        exameController.filtrarTabelaPorInicioNomeGestante(grdExames, searchText);
 
     }
 
