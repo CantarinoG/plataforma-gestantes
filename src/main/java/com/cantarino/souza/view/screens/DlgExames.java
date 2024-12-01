@@ -198,7 +198,22 @@ public class DlgExames extends JDialog {
     }
 
     private void btnVisuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Visualizou");
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Exame exame = (Exame) selectedObject;
+
+        if (exame.getRelatorio() == null) {
+            JOptionPane.showMessageDialog(this, "Esse exame não possui nenhum relatório cadastrado", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, exame);
+        dialog.setVisible(true);
 
     }
 
