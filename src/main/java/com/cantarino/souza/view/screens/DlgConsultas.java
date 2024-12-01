@@ -2,6 +2,8 @@ package com.cantarino.souza.view.screens;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.AutenticacaoController;
@@ -25,6 +27,12 @@ public class DlgConsultas extends JDialog {
     private JButton btnDeletar;
     private JButton btnVisuRelatorio;
     private JButton btnGerenciarRelatorio;
+    private JLabel lblFiltro;
+    private JComboBox<String> cmbFiltro;
+    private JTextField edtFiltro;
+
+    private final String GESTANTE = "Gestante";
+    private final String MEDICO = "Médico(a)";
 
     private Usuario usuario;
 
@@ -92,6 +100,33 @@ public class DlgConsultas extends JDialog {
         panFooter.setBackground(AppColors.BUTTON_PINK);
         panFooter.setBorder(BorderFactory.createEmptyBorder(5, 64, 10, 5));
         panFooter.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 5));
+
+        lblFiltro = new JLabel("Filtrar por:");
+        lblFiltro.setFont(new Font("Arial", Font.PLAIN, 14));
+
+        String[] userTypes = { GESTANTE, MEDICO };
+        cmbFiltro = new JComboBox<String>(userTypes);
+        cmbFiltro.setPreferredSize(new Dimension(150, 30));
+
+        edtFiltro = new JTextField();
+        edtFiltro.setPreferredSize(new Dimension(150, 30));
+        edtFiltro.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
+            public void removeUpdate(DocumentEvent e) {
+                filterTable();
+            }
+
+            public void changedUpdate(DocumentEvent e) {
+                filterTable();
+            }
+        });
+
+        panFooter.add(lblFiltro);
+        panFooter.add(cmbFiltro);
+        panFooter.add(edtFiltro);
 
         btnCadastrar = new RoundedButton("Cadastrar", 10);
         btnCadastrar.setPreferredSize(new Dimension(150, 50));
@@ -237,6 +272,19 @@ public class DlgConsultas extends JDialog {
         DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, consulta.getId());
         dialog.setVisible(true);
         consultaController.atualizarTabela(grdConsultas);
+    }
+
+    private void filterTable() {
+        String searchText = edtFiltro.getText();
+
+        String filterType = (String) cmbFiltro.getSelectedItem();
+
+        if (filterType.equals(GESTANTE)) {
+            consultaController.filtrarTabelaPorInicioNomeGestante(grdConsultas, searchText);
+        } else if (filterType.equals(MEDICO)) {
+            consultaController.filtrarTabelaPorInicioNomeMedico(grdConsultas, searchText);
+        }
+
     }
 
 }
