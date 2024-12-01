@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.*;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.PublicacaoController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Gestante;
@@ -14,7 +15,6 @@ import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Publicacao;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 
 public class DlgComunidade extends JDialog {
@@ -39,13 +39,15 @@ public class DlgComunidade extends JDialog {
     JPanel panPosts;
 
     private PublicacaoController controller;
+    private AutenticacaoController autenticacaoController;
 
     private Usuario usuario;
 
     public DlgComunidade(JFrame parent, boolean modal) {
         super(parent, modal);
         controller = new PublicacaoController();
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         initComponents();
         initPosts(false, false);
     }

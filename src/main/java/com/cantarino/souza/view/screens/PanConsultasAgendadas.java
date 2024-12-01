@@ -3,11 +3,11 @@ package com.cantarino.souza.view.screens;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.RoundedButton;
 
@@ -25,12 +25,14 @@ public class PanConsultasAgendadas extends JPanel {
     JButton btnMedico;
 
     private ConsultaController consultaController;
+    private AutenticacaoController autenticacaoController;
 
     private Usuario usuario;
 
     public PanConsultasAgendadas() {
         initComponents();
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         consultaController = new ConsultaController();
         consultaController.filtrarTabelaPorIdGestante(grdConsultas, usuario.getId());
     }

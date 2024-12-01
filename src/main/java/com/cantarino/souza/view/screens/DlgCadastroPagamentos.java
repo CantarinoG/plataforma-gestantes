@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.text.*;
 
 import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.controller.GestanteController;
@@ -19,7 +20,6 @@ import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.MetodoPagamento;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 import java.awt.event.ActionEvent;
 
@@ -42,13 +42,15 @@ public class DlgCadastroPagamentos extends JDialog {
     GestanteController gestanteController;
     ExameController exameController;
     ConsultaController consultaController;
+    AutenticacaoController autenticacaoController;
     Pagamento atualizando;
 
     Usuario usuario;
 
     public DlgCadastroPagamentos(JDialog parent, boolean modal, int id) {
         super(parent, modal);
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         pagamentoController = new PagamentoController();
         gestanteController = new GestanteController();
         exameController = new ExameController();
@@ -77,7 +79,8 @@ public class DlgCadastroPagamentos extends JDialog {
 
     public DlgCadastroPagamentos(JDialog parent, boolean modal) {
         super(parent, modal);
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         pagamentoController = new PagamentoController();
         gestanteController = new GestanteController();
         exameController = new ExameController();

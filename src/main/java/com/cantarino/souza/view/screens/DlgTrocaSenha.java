@@ -1,6 +1,7 @@
 package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.controller.SecretarioController;
@@ -9,7 +10,6 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
@@ -28,9 +28,12 @@ public class DlgTrocaSenha extends JDialog {
 
     Usuario usuario;
 
+    private AutenticacaoController autenticacaoController;
+
     public DlgTrocaSenha(JFrame parent, boolean modal) {
         super(parent, modal);
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         initComponents();
     }
 

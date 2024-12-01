@@ -5,13 +5,13 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.PagamentoController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 
 public class DlgPagamentos extends JDialog {
@@ -31,11 +31,13 @@ public class DlgPagamentos extends JDialog {
     private Usuario usuario;
 
     private PagamentoController controller;
+    private AutenticacaoController autenticacaoController;
 
     public DlgPagamentos(JFrame parent, boolean modal) {
         super(parent, modal);
         controller = new PagamentoController();
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         initComponents();
         atualizarTabela();
     }
