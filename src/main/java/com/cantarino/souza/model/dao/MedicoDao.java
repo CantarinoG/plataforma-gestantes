@@ -63,7 +63,7 @@ public class MedicoDao implements IDao<Medico> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Medico> medicos = this.entityManager
-                .createQuery("FROM Medico m WHERE m.deletadoEm IS NULL", Medico.class)
+                .createQuery("FROM Medico m WHERE m.deletadoEm IS NULL ORDER BY LOWER(m.nome)", Medico.class)
                 .getResultList();
 
         this.entityManager.close();

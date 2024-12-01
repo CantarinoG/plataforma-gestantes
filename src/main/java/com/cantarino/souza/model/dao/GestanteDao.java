@@ -65,7 +65,7 @@ public class GestanteDao implements IDao<Gestante> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Gestante> gestantes = this.entityManager
-                .createQuery("FROM Gestante g WHERE g.deletadoEm IS NULL", Gestante.class)
+                .createQuery("FROM Gestante g WHERE g.deletadoEm IS NULL ORDER BY LOWER(g.nome)", Gestante.class)
                 .getResultList();
 
         this.entityManager.close();

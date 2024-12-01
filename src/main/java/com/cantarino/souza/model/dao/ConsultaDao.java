@@ -63,7 +63,7 @@ public class ConsultaDao implements IDao<Consulta> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
-                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL", Consulta.class)
+                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL ORDER BY c.data DESC", Consulta.class)
                 .getResultList();
 
         this.entityManager.close();
@@ -74,7 +74,8 @@ public class ConsultaDao implements IDao<Consulta> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
-                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id", Consulta.class)
+                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id ORDER BY c.data DESC",
+                        Consulta.class)
                 .setParameter("id", id)
                 .getResultList();
 
@@ -86,7 +87,8 @@ public class ConsultaDao implements IDao<Consulta> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Consulta> consultas = this.entityManager
-                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id", Consulta.class)
+                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id ORDER BY c.data DESC",
+                        Consulta.class)
                 .setParameter("id", id)
                 .getResultList();
 
@@ -99,7 +101,7 @@ public class ConsultaDao implements IDao<Consulta> {
 
         List<Consulta> consultas = this.entityManager
                 .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id AND c.status = :status",
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id AND c.status = :status ORDER BY c.data DESC",
                         Consulta.class)
                 .setParameter("id", id)
                 .setParameter("status", status)
@@ -114,7 +116,7 @@ public class ConsultaDao implements IDao<Consulta> {
 
         List<Consulta> consultas = this.entityManager
                 .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id AND c.status = :status",
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id AND c.status = :status ORDER BY c.data DESC",
                         Consulta.class)
                 .setParameter("id", id)
                 .setParameter("status", status)
@@ -129,7 +131,7 @@ public class ConsultaDao implements IDao<Consulta> {
 
         List<Consulta> consultas = this.entityManager
                 .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.paciente.nome) LIKE LOWER(:substring)",
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.paciente.nome) LIKE LOWER(:substring) ORDER BY c.data DESC",
                         Consulta.class)
                 .setParameter("substring", substring + "%")
                 .getResultList();
@@ -143,7 +145,7 @@ public class ConsultaDao implements IDao<Consulta> {
 
         List<Consulta> consultas = this.entityManager
                 .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.medico.nome) LIKE LOWER(:substring)",
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.medico.nome) LIKE LOWER(:substring) ORDER BY c.data DESC",
                         Consulta.class)
                 .setParameter("substring", subString + "%")
                 .getResultList();
