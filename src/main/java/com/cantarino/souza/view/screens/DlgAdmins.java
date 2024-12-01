@@ -149,6 +149,12 @@ public class DlgAdmins extends JDialog {
         }
 
         Admin admin = (Admin) selectedObject;
+        if (admin.getCpf().equals("00000000000")) {
+            JOptionPane.showMessageDialog(this, "Não é possível editar o usuário root, apenas alterar sua senha",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         id = admin.getId();
         DlgCadastroAdm dialog = new DlgCadastroAdm(this, true, id);
         dialog.setVisible(true);
@@ -165,6 +171,12 @@ public class DlgAdmins extends JDialog {
         }
 
         Admin admin = (Admin) selectedObject;
+        if (admin.getCpf().equals("00000000000")) {
+            JOptionPane.showMessageDialog(this, "Não é possível deletar o usuário root, apenas alterar sua senha",
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         id = admin.getId();
         adminController.excluir(id);
         adminController.atualizarTabela(grdAdmins);
