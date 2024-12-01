@@ -70,4 +70,16 @@ public class MedicoDao implements IDao<Medico> {
         return medicos;
     }
 
+    public Medico findByCpf(String cpf) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Medico medico = this.entityManager
+                .createQuery("FROM Medico m WHERE m.cpf = :cpf AND m.deletadoEm IS NULL", Medico.class)
+                .setParameter("cpf", cpf)
+                .getSingleResult();
+
+        this.entityManager.close();
+        return medico;
+    }
+
 }

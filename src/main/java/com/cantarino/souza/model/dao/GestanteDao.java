@@ -72,4 +72,16 @@ public class GestanteDao implements IDao<Gestante> {
         return gestantes;
     }
 
+    public Gestante findByCpf(String cpf) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Gestante gestante = this.entityManager
+                .createQuery("FROM Gestante g WHERE g.cpf = :cpf AND g.deletadoEm IS NULL", Gestante.class)
+                .setParameter("cpf", cpf)
+                .getSingleResult();
+
+        this.entityManager.close();
+        return gestante;
+    }
+
 }

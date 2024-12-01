@@ -4,6 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
+
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.view.components.*;
 
 public class DlgLogin extends JDialog {
@@ -22,8 +24,16 @@ public class DlgLogin extends JDialog {
     JLabel lblForgotPassword;
     JPanel panForgotPassword;
 
+    private final String GESTANTE = "Gestante";
+    private final String MEDICO = "Médico(a)";
+    private final String SECRETARIO = "Secretário(a)";
+    private final String ADMIN = "Administrador(a)";
+
+    private AutenticacaoController autenticacaoController;
+
     public DlgLogin(JFrame parent, boolean modal) {
         super(parent, modal);
+        autenticacaoController = new AutenticacaoController();
         initComponents();
     }
 
@@ -71,7 +81,7 @@ public class DlgLogin extends JDialog {
         panPassField = createCustomTextfield("Senha", edtPass);
         panColumn.add(panPassField);
 
-        String[] userTypes = { "Gestante", "Médico(a)", "Secretário(a)", "Administrador(a)" };
+        String[] userTypes = { GESTANTE, MEDICO, SECRETARIO, ADMIN };
         cmbUserType = new JComboBox<>(userTypes);
         cmbUserType.setFont(new Font("Arial", Font.PLAIN, 22));
         cmbUserType.setBackground(AppColors.FIELD_PINK);
@@ -148,14 +158,36 @@ public class DlgLogin extends JDialog {
     }
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Clicou no botão de Login!");
+        String selectedType = (String) cmbUserType.getSelectedItem();
+        String login = edtLogin.getText().replaceAll("[.-]", "");
+        String senha = new String(edtPass.getPassword());
+
+        try {
+            switch (selectedType) {
+                case GESTANTE:
+                    autenticacaoController.logInGestante(login, senha);
+                    break;
+                case MEDICO:
+                    autenticacaoController.logInMedico(login, senha);
+                    break;
+                case SECRETARIO:
+                    autenticacaoController.logInSecretario(login, senha);
+                    break;
+                case ADMIN:
+                    autenticacaoController.logInAdmin(login, senha);
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(this, "Selecione um tipo de usuário válido");
+                    return;
+            }
+            dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 
     private void cmbUserTypeActionPerformed(java.awt.event.ActionEvent evt) {
         panBackground.repaint();
-        // String selectedType = (String) cmbUserType.getSelectedItem();
-        // System.out.println("Selected user type: " + selectedType);
-
     }
 
     private void lblForgotPasswordActionPerformed(java.awt.event.MouseEvent evt) {

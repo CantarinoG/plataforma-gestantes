@@ -70,4 +70,16 @@ public class SecretarioDao implements IDao<Secretario> {
         return secretarios;
     }
 
+    public Secretario findByCpf(String cpf) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Secretario secretario = this.entityManager
+                .createQuery("FROM Secretario s WHERE s.cpf = :cpf AND s.deletadoEm IS NULL", Secretario.class)
+                .setParameter("cpf", cpf)
+                .getSingleResult();
+
+        this.entityManager.close();
+        return secretario;
+    }
+
 }
