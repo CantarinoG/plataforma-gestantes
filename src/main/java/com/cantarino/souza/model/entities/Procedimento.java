@@ -29,6 +29,7 @@ public class Procedimento {
     protected Gestante paciente;
     protected String descricao;
     protected LocalDateTime data;
+    protected int duracao;
     protected double valor;
     protected String status;
     @ManyToOne

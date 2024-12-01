@@ -9,14 +9,15 @@ import com.cantarino.souza.model.exceptions.ProcedimentoException;
 
 public class ValidateConsulta extends ValidateProcedimento {
 
-    public Consulta validaCamposEntrada(String descricao, String data, String valor, String status,
+    public Consulta validaCamposEntrada(String descricao, String data, String duracao, String valor, String status,
             String deletadoEm, String dataRetorno) {
 
         Consulta consulta = new Consulta();
 
-        Procedimento base = super.validaCamposEntrada(descricao, data, valor, status, deletadoEm);
+        Procedimento base = super.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm);
         consulta.setDescricao(base.getDescricao());
         consulta.setData(base.getData());
+        consulta.setDuracao(base.getDuracao());
         consulta.setValor(base.getValor());
         consulta.setStatus(base.getStatus());
         consulta.setDeletadoEm(base.getDeletadoEm());

@@ -19,12 +19,13 @@ public class TMExame extends AbstractTableModel {
     private final int COL_PACIENTE = 1;
     private final int COL_DESCRICAO = 2;
     private final int COL_DATA = 3;
-    private final int COL_VALOR = 4;
-    private final int COL_STATUS = 5;
-    private final int COL_RELATORIO = 6;
-    private final int COL_DATA_RESULTADO = 7;
-    private final int COL_REQUISITADO_POR = 8;
-    private final int COL_LABORATORIO = 9;
+    private final int COL_DURACAO = 4;
+    private final int COL_VALOR = 5;
+    private final int COL_STATUS = 6;
+    private final int COL_RELATORIO = 7;
+    private final int COL_DATA_RESULTADO = 8;
+    private final int COL_REQUISITADO_POR = 9;
+    private final int COL_LABORATORIO = 10;
 
     public TMExame(List<Exame> listaExames) {
         lista = listaExames;
@@ -32,7 +33,7 @@ public class TMExame extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 10;
+        return 11;
     }
 
     @Override
@@ -51,6 +52,8 @@ public class TMExame extends AbstractTableModel {
                 return "Descrição";
             case COL_DATA:
                 return "Data";
+            case COL_DURACAO:
+                return "Duração (Minutos)";
             case COL_VALOR:
                 return "Valor";
             case COL_STATUS:
@@ -88,6 +91,8 @@ public class TMExame extends AbstractTableModel {
                 case COL_DATA:
                     return aux.getData() != null ? aux.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                             : "-";
+                case COL_DURACAO:
+                    return aux.getDuracao();
                 case COL_VALOR:
                     return aux.getValor();
                 case COL_STATUS:

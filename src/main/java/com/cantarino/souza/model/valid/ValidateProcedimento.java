@@ -9,7 +9,7 @@ import com.cantarino.souza.model.exceptions.UsuarioException;
 
 public class ValidateProcedimento {
 
-    public Procedimento validaCamposEntrada(String descricao, String data, String valor, String status,
+    public Procedimento validaCamposEntrada(String descricao, String data, String duracao, String valor, String status,
             String deletadoEm) {
 
         Procedimento procedimento = new Procedimento();
@@ -28,6 +28,19 @@ public class ValidateProcedimento {
         }
         procedimento.setData(validDate);
 
+        if (duracao == null || duracao.isEmpty())
+            throw new ProcedimentoException("ERRO: Campo duração não pode ser vazio.");
+        int validDuracao;
+        try {
+            validDuracao = Integer.parseInt(duracao.trim());
+            if (validDuracao <= 0) {
+                throw new ProcedimentoException("ERRO: Duração deve ser maior que zero.");
+            }
+        } catch (NumberFormatException e) {
+            throw new ProcedimentoException("ERRO: Campo duração deve conter um número válido.");
+        }
+        procedimento.setDuracao(validDuracao);
+
         if (valor == null || valor.isEmpty())
             throw new ProcedimentoException("ERRO: Campo valor não pode ser vazio.");
         double validValor;
@@ -37,8 +50,8 @@ public class ValidateProcedimento {
         } catch (NumberFormatException e) {
             throw new ProcedimentoException("ERRO: Campo valor deve conter um número válido.");
         }
-        if (validValor <= 0) {
-            throw new ProcedimentoException("ERRO: Valor deve ser maior que zero.");
+        if (validValor < 0) {
+            throw new ProcedimentoException("ERRO: Valor não pode ser negativo.");
         }
         procedimento.setValor(validValor);
 

@@ -34,6 +34,8 @@ public class DlgCadastroConsultas extends JDialog {
     private JPanel panValorField;
     private JPanel panMedicoField;
     private JPanel panStatusField;
+    private JTextField txtDuracao;
+    private JPanel panDuracaoField;
 
     private MedicoController medicoController;
     private GestanteController gestanteController;
@@ -62,6 +64,7 @@ public class DlgCadastroConsultas extends JDialog {
         cbPaciente.setSelectedItem(atualizando.getPaciente().getId() + " | " + atualizando.getPaciente().getNome());
         txtDescricao.setText(atualizando.getDescricao());
         txtData.setText(atualizando.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        txtDuracao.setText(String.valueOf(atualizando.getDuracao()));
         txtValor.setText(String.valueOf(atualizando.getValor()));
         cbMedico.setSelectedItem(atualizando.getMedico().getId() + " | " + atualizando.getMedico().getNome());
         cbStatus.setSelectedItem(atualizando.getStatus());
@@ -124,7 +127,7 @@ public class DlgCadastroConsultas extends JDialog {
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(atualizando != null ? 6 : 5, 1, 20, 5));
+        panColumn.setLayout(new GridLayout(atualizando != null ? 7 : 6, 1, 20, 5));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -158,6 +161,14 @@ public class DlgCadastroConsultas extends JDialog {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        // Campo Duração
+        txtDuracao = new JTextField();
+        txtDuracao.setFont(new Font("Arial", Font.PLAIN, 22));
+        txtDuracao.setBackground(AppColors.FIELD_PINK);
+        txtDuracao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panDuracaoField = createCustomTextfield("Duração(minutos)", txtDuracao);
+        panColumn.add(panDuracaoField);
 
         // Campo Valor
         txtValor = new JTextField();
@@ -261,6 +272,7 @@ public class DlgCadastroConsultas extends JDialog {
                         paciente,
                         txtDescricao.getText(),
                         formattedData,
+                        txtDuracao.getText(),
                         txtValor.getText(),
                         StatusProcedimentos.AGENDADA.getValue(),
                         null,
@@ -274,6 +286,7 @@ public class DlgCadastroConsultas extends JDialog {
                         paciente,
                         txtDescricao.getText(),
                         formattedData,
+                        txtDuracao.getText(),
                         txtValor.getText(),
                         (String) cbStatus.getSelectedItem(),
                         null,

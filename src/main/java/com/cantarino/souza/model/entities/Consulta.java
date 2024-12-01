@@ -25,9 +25,9 @@ public class Consulta extends Procedimento {
     private Medico medico;
     private LocalDateTime dataRetorno;
 
-    public Consulta(Gestante paciente, String descricao, LocalDateTime data, double valor, String status,
+    public Consulta(Gestante paciente, String descricao, LocalDateTime data, int duracao, double valor, String status,
             Relatorio relatorio, LocalDateTime deletadoEm, Medico medico, LocalDateTime dataRetorno) {
-        super(0, paciente, descricao, dataRetorno, valor, status, relatorio, deletadoEm);
+        super(0, paciente, descricao, data, duracao, valor, status, relatorio, deletadoEm);
         this.medico = medico;
         this.dataRetorno = dataRetorno;
     }

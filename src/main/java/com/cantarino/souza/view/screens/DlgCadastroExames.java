@@ -38,6 +38,8 @@ public class DlgCadastroExames extends JDialog {
     private JPanel panLaboratorioField;
     private JPanel panStatusField;
     private JComboBox<String> cbStatus;
+    private JTextField txtDuracao;
+    private JPanel panDuracaoField;
 
     private MedicoController medicoController;
     private GestanteController gestanteController;
@@ -69,6 +71,7 @@ public class DlgCadastroExames extends JDialog {
             txtDataResultado.setText(atualizando.getDataResultado().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
         txtLaboratorio.setText(atualizando.getLaboratorio());
+        txtDuracao.setText(String.valueOf(atualizando.getDuracao()));
         Gestante gestante = atualizando.getPaciente();
         cbPaciente.setSelectedItem(gestante.getId() + " | " + gestante.getNome());
         Medico medico = (Medico) atualizando.getRequisitadoPor();
@@ -138,7 +141,7 @@ public class DlgCadastroExames extends JDialog {
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(atualizando != null ? 8 : 7, 1, 20, 5));
+        panColumn.setLayout(new GridLayout(atualizando != null ? 9 : 8, 1, 20, 5));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -172,6 +175,14 @@ public class DlgCadastroExames extends JDialog {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        // Campo Duração
+        txtDuracao = new JTextField();
+        txtDuracao.setFont(new Font("Arial", Font.PLAIN, 22));
+        txtDuracao.setBackground(AppColors.FIELD_PINK);
+        txtDuracao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panDuracaoField = createCustomTextfield("Duração(minutos)", txtDuracao);
+        panColumn.add(panDuracaoField);
 
         // Campo Data Resultado
         try {
@@ -305,13 +316,12 @@ public class DlgCadastroExames extends JDialog {
                 );
             }
 
-            System.out.println(formattedDataResultado);
-
             if (atualizando == null) {
                 exameController.cadastrar(
                         paciente,
                         txtDescricao.getText(),
                         formattedData,
+                        txtDuracao.getText(),
                         txtValor.getText(),
                         StatusProcedimentos.AGENDADA.getValue(),
                         null,
@@ -326,6 +336,7 @@ public class DlgCadastroExames extends JDialog {
                         paciente,
                         txtDescricao.getText(),
                         formattedData,
+                        txtDuracao.getText(),
                         txtValor.getText(),
                         (String) cbStatus.getSelectedItem(),
                         null,

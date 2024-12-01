@@ -9,13 +9,14 @@ import com.cantarino.souza.model.exceptions.ExameException;
 
 public class ValidateExame extends ValidateProcedimento {
 
-    public Exame validaCamposEntrada(String descricao, String data, String valor, String status,
+    public Exame validaCamposEntrada(String descricao, String data, String duracao, String valor, String status,
             String deletadoEm, String dataResultado, String laboratorio) {
 
         Exame exame = new Exame();
-        Procedimento base = super.validaCamposEntrada(descricao, data, valor, status, deletadoEm);
+        Procedimento base = super.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm);
         exame.setDescricao(base.getDescricao());
         exame.setData(base.getData());
+        exame.setDuracao(base.getDuracao());
         exame.setValor(base.getValor());
         exame.setStatus(base.getStatus());
         exame.setDeletadoEm(base.getDeletadoEm());
