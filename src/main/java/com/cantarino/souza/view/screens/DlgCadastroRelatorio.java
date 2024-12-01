@@ -220,6 +220,7 @@ public class DlgCadastroRelatorio extends JDialog {
                 consultaController.adicionarRelatorio(procedimento.getId(), relatorioCriado);
             } else { // Pertence a um exame
                 procedimento = exameController.buscarPorId(procedimentoId);
+                exameController.adicionarRelatorio(procedimento.getId(), relatorioCriado);
             }
 
             dispose();
