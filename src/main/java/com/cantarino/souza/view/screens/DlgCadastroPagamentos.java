@@ -14,7 +14,6 @@ import com.cantarino.souza.controller.SecretarioController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Exame;
-import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Secretario;
@@ -30,11 +29,9 @@ public class DlgCadastroPagamentos extends JDialog {
     JPanel panButton;
     RoundedButton btnCadastrarPagamento;
     JTextField txtValor;
-    JComboBox<String> cmbPaciente;
     JComboBox<String> cmbMetodoPagamento;
     JComboBox<String> cmbProcedimento;
     JPanel panValorField;
-    JPanel panPacienteField;
     JPanel panMetodoField;
     JPanel panProcedimentoField;
 
@@ -61,10 +58,6 @@ public class DlgCadastroPagamentos extends JDialog {
         if (atualizando != null) {
             txtValor.setText(String.valueOf(atualizando.getValor()));
             cmbMetodoPagamento.setSelectedItem(atualizando.getMetodoPagamento());
-            if (atualizando.getPaciente() != null) {
-                String gestanteOption = atualizando.getPaciente().getId() + " | " + atualizando.getPaciente().getNome();
-                cmbPaciente.setSelectedItem(gestanteOption);
-            }
 
             Procedimento proc = atualizando.getProcedimento();
             if (proc instanceof Exame) {
@@ -87,16 +80,6 @@ public class DlgCadastroPagamentos extends JDialog {
         consultaController = new ConsultaController();
         atualizando = null;
         initComponents();
-    }
-
-    private String[] getGestantesOptions() {
-        java.util.List<Gestante> gestantes = gestanteController.buscarTodas();
-        String[] options = new String[gestantes.size()];
-        for (int i = 0; i < gestantes.size(); i++) {
-            Gestante gestante = gestantes.get(i);
-            options[i] = gestante.getId() + " | " + gestante.getNome();
-        }
-        return options;
     }
 
     private String[] getProcedimentosOptions() {
@@ -153,7 +136,7 @@ public class DlgCadastroPagamentos extends JDialog {
 
         gbc.gridy = 1;
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(4, 1, 20, 10));
+        panColumn.setLayout(new GridLayout(3, 1, 20, 10));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -163,12 +146,6 @@ public class DlgCadastroPagamentos extends JDialog {
         ((AbstractDocument) txtValor.getDocument()).setDocumentFilter(new NumericDocumentFilter());
         panValorField = createCustomTextfield("Valor", txtValor);
         panColumn.add(panValorField);
-
-        cmbPaciente = new JComboBox<>(getGestantesOptions());
-        cmbPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
-        cmbPaciente.setBackground(AppColors.FIELD_PINK);
-        panPacienteField = createCustomTextfield("Paciente", cmbPaciente);
-        panColumn.add(panPacienteField);
 
         cmbProcedimento = new JComboBox<>(getProcedimentosOptions());
         cmbProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -233,10 +210,6 @@ public class DlgCadastroPagamentos extends JDialog {
 
     private void btnCadastrarPagamentoActionPerformed(ActionEvent evt) {
         try {
-            String selectedPaciente = (String) cmbPaciente.getSelectedItem();
-            int pacienteId = Integer.parseInt(selectedPaciente.split(" \\| ")[0]);
-            Gestante paciente = gestanteController.buscarPorId(pacienteId);
-
             Usuario registradoPor = new Usuario();
             if (usuario instanceof Secretario) {
                 registradoPor = new SecretarioController().buscarPorId(usuario.getId());
@@ -258,10 +231,12 @@ public class DlgCadastroPagamentos extends JDialog {
             String valor = txtValor.getText();
 
             if (atualizando == null) {
-                pagamentoController.cadastrar(valor, registradoPor, paciente, metodoPagamento, procedimento, null);
+                pagamentoController.cadastrar(valor, registradoPor, procedimento.getPaciente(), metodoPagamento,
+                        procedimento, null);
                 dispose();
             } else {
-                pagamentoController.atualizar(atualizando.getId(), valor, atualizando.getRegistradoPor(), paciente,
+                pagamentoController.atualizar(atualizando.getId(), valor, atualizando.getRegistradoPor(),
+                        procedimento.getPaciente(),
                         metodoPagamento, procedimento, null);
                 dispose();
             }
