@@ -166,9 +166,16 @@ public class DlgMedicos extends JDialog {
 
         Medico medico = (Medico) selectedObject;
         id = medico.getId();
-        medicoController.excluir(id);
-        medicoController.atualizarTabela(grdMedicos);
 
+        int option = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir este médico?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            medicoController.excluir(id);
+            medicoController.atualizarTabela(grdMedicos);
+        }
     }
 
 }

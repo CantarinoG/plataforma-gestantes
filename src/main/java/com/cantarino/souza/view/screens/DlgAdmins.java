@@ -178,9 +178,16 @@ public class DlgAdmins extends JDialog {
         }
 
         id = admin.getId();
-        adminController.excluir(id);
-        adminController.atualizarTabela(grdAdmins);
 
+        int option = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir este administrador?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            adminController.excluir(id);
+            adminController.atualizarTabela(grdAdmins);
+        }
     }
 
 }

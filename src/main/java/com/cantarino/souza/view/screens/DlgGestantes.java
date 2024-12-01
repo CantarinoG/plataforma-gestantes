@@ -163,9 +163,16 @@ public class DlgGestantes extends JDialog {
 
         Gestante gestante = (Gestante) selectedObject;
         id = gestante.getId();
-        gestanteController.excluir(id);
-        gestanteController.atualizarTabela(grdGestantes);
 
+        int option = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir esta gestante?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            gestanteController.excluir(id);
+            gestanteController.atualizarTabela(grdGestantes);
+        }
     }
 
 }

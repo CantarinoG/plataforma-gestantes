@@ -166,9 +166,16 @@ public class DlgSecretarios extends JDialog {
 
         Secretario secretario = (Secretario) selectedObject;
         id = secretario.getId();
-        secretarioController.excluir(id);
-        secretarioController.atualizarTabela(grdSecretarios);
 
+        int option = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir este secretário?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            secretarioController.excluir(id);
+            secretarioController.atualizarTabela(grdSecretarios);
+        }
     }
 
 }
