@@ -82,6 +82,16 @@ public class ConsultaController {
                 TMConsulta.getCustomRenderer());
     }
 
+    public void filtrarTabelaPorInicioNomeGestante(JTable grd, String substring) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.filterGestanteNameStartsWith(substring)),
+                TMConsulta.getCustomRenderer());
+    }
+
+    public void filtrarTabelaPorInicioNomeMedico(JTable grd, String substring) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.filterMedicoNameStartsWith(substring)),
+                TMConsulta.getCustomRenderer());
+    }
+
     public void cancelar(int id) {
         Consulta consulta = repositorio.find(id);
         consulta.setStatus(StatusProcedimentos.CANCELADA.getValue());

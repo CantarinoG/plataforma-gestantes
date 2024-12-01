@@ -124,4 +124,32 @@ public class ConsultaDao implements IDao<Consulta> {
         return consultas;
     }
 
+    public List<Consulta> filterGestanteNameStartsWith(String substring) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Consulta> consultas = this.entityManager
+                .createQuery(
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.paciente.nome) LIKE LOWER(:substring)",
+                        Consulta.class)
+                .setParameter("substring", substring + "%")
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
+    public List<Consulta> filterMedicoNameStartsWith(String subString) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Consulta> consultas = this.entityManager
+                .createQuery(
+                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.medico.nome) LIKE LOWER(:substring)",
+                        Consulta.class)
+                .setParameter("substring", subString + "%")
+                .getResultList();
+
+        this.entityManager.close();
+        return consultas;
+    }
+
 }
