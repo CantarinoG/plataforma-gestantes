@@ -214,9 +214,16 @@ public class DlgExames extends JDialog {
 
         Exame exame = (Exame) selectedObject;
         id = exame.getId();
-        exameController.excluir(id);
-        exameController.atualizarTabela(grdExames);
 
+        int option = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir este exame?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            exameController.excluir(id);
+            exameController.atualizarTabela(grdExames);
+        }
     }
 
     private void btnVisuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {

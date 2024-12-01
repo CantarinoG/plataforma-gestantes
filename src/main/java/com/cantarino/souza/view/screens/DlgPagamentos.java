@@ -230,8 +230,16 @@ public class DlgPagamentos extends JDialog {
 
         Pagamento pagamento = (Pagamento) selectedObject;
         id = pagamento.getId();
-        controller.excluir(id);
-        atualizarTabela();
+
+        int option = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir este pagamento?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            controller.excluir(id);
+            atualizarTabela();
+        }
     }
 
 }

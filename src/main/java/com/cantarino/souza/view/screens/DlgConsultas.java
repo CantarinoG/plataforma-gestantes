@@ -235,9 +235,16 @@ public class DlgConsultas extends JDialog {
 
         Consulta consulta = (Consulta) selectedObject;
         id = consulta.getId();
-        consultaController.excluir(id);
-        consultaController.atualizarTabela(grdConsultas);
 
+        int option = JOptionPane.showConfirmDialog(this,
+                "Tem certeza que deseja excluir esta consulta?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            consultaController.excluir(id);
+            consultaController.atualizarTabela(grdConsultas);
+        }
     }
 
     private void btnVisuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
