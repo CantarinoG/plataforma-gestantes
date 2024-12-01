@@ -218,7 +218,17 @@ public class DlgExames extends JDialog {
     }
 
     private void btnGerenciarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Gerenciou");
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Exame exame = (Exame) selectedObject;
+
+        DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, exame.getId());
+        dialog.setVisible(true);
+        exameController.atualizarTabela(grdExames);
 
     }
 

@@ -75,4 +75,11 @@ public class ExameController {
         repositorio.update(exame);
     }
 
+    public void adicionarRelatorio(int id, Relatorio relatorio) {
+        Exame exame = repositorio.find(id);
+        exame.setStatus(StatusProcedimentos.CONCLUIDA.getValue());
+        exame.setRelatorio(relatorio);
+        repositorio.update(exame);
+    }
+
 }
