@@ -224,8 +224,17 @@ public class DlgConsultas extends JDialog {
     }
 
     private void btnGerenciarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("aqui gerenciou carai");
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
+        Consulta consulta = (Consulta) selectedObject;
+
+        DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, consulta.getId());
+        dialog.setVisible(true);
+        consultaController.atualizarTabela(grdConsultas);
     }
 
 }
