@@ -72,6 +72,11 @@ public class ExameController {
         Util.jTableShow(grd, new TMExame(repositorio.filterGestanteIdStatus(id, status)), TMExame.getCustomRenderer());
     }
 
+    public void filtrarTabelaPorInicioNomeGestante(JTable grd, String substring) {
+        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteNameStartsWith(substring)),
+                TMExame.getCustomRenderer());
+    }
+
     public void cancelar(int id) {
         Exame exame = repositorio.find(id);
         exame.setStatus(StatusProcedimentos.CANCELADA.getValue());

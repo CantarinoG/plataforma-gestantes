@@ -98,4 +98,18 @@ public class ExameDao implements IDao<Exame> {
         return consultas;
     }
 
+    public List<Exame> filterGestanteNameStartsWith(String substring) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Exame> exames = this.entityManager
+                .createQuery(
+                        "FROM Exame e WHERE e.deletadoEm IS NULL AND LOWER(e.paciente.nome) LIKE LOWER(:substring)",
+                        Exame.class)
+                .setParameter("substring", substring + "%")
+                .getResultList();
+
+        this.entityManager.close();
+        return exames;
+    }
+
 }
