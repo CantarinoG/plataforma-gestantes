@@ -13,13 +13,13 @@ public class RelatorioDao implements IDao<Relatorio> {
 
     @Override
     public void save(Relatorio obj) {
-       this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
         this.entityManager.persist(obj);
         this.entityManager.getTransaction().commit();
 
-        this.entityManager.close(); 
+        this.entityManager.close();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class RelatorioDao implements IDao<Relatorio> {
         this.entityManager.getTransaction().begin();
         this.entityManager.merge(obj);
         this.entityManager.getTransaction().commit();
-        this.entityManager.close();  
+        this.entityManager.close();
     }
 
     @Override
@@ -54,12 +54,11 @@ public class RelatorioDao implements IDao<Relatorio> {
     public List<Relatorio> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Relatorio> relatorios = this.entityManager.createQuery(
-            "FROM Relatorio r WHERE r.deletadoEm IS NULL",
-            Relatorio.class)
-            .getResultList();
+                "FROM Relatorio r WHERE r.deletadoEm IS NULL ORDER BY r.id DESC",
+                Relatorio.class)
+                .getResultList();
         this.entityManager.close();
         return relatorios;
     }
 
-    
 }

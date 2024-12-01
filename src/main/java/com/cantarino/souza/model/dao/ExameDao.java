@@ -64,7 +64,7 @@ public class ExameDao implements IDao<Exame> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> exames = this.entityManager
-                .createQuery("FROM Exame e WHERE e.deletadoEm IS NULL", Exame.class)
+                .createQuery("FROM Exame e WHERE e.deletadoEm IS NULL ORDER BY e.data DESC", Exame.class)
                 .getResultList();
 
         this.entityManager.close();
@@ -75,7 +75,8 @@ public class ExameDao implements IDao<Exame> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> consultas = this.entityManager
-                .createQuery("FROM Exame e WHERE e.deletadoEm IS NULL AND e.paciente.id = :id", Exame.class)
+                .createQuery("FROM Exame e WHERE e.deletadoEm IS NULL AND e.paciente.id = :id ORDER BY e.data DESC",
+                        Exame.class)
                 .setParameter("id", id)
                 .getResultList();
 
@@ -88,7 +89,7 @@ public class ExameDao implements IDao<Exame> {
 
         List<Exame> consultas = this.entityManager
                 .createQuery(
-                        "FROM Exame e WHERE e.deletadoEm IS NULL AND e.paciente.id = :id AND e.status = :status",
+                        "FROM Exame e WHERE e.deletadoEm IS NULL AND e.paciente.id = :id AND e.status = :status ORDER BY e.data DESC",
                         Exame.class)
                 .setParameter("id", id)
                 .setParameter("status", status)
@@ -103,7 +104,7 @@ public class ExameDao implements IDao<Exame> {
 
         List<Exame> exames = this.entityManager
                 .createQuery(
-                        "FROM Exame e WHERE e.deletadoEm IS NULL AND LOWER(e.paciente.nome) LIKE LOWER(:substring)",
+                        "FROM Exame e WHERE e.deletadoEm IS NULL AND LOWER(e.paciente.nome) LIKE LOWER(:substring) ORDER BY e.data DESC",
                         Exame.class)
                 .setParameter("substring", substring + "%")
                 .getResultList();

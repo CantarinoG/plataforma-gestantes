@@ -54,7 +54,7 @@ public class PagamentoDao implements IDao<Pagamento> {
     public List<Pagamento> findAll() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Pagamento> pagamentos = this.entityManager.createQuery(
-                "FROM Pagamento p WHERE p.deletadoEm IS NULL",
+                "FROM Pagamento p WHERE p.deletadoEm IS NULL ORDER BY p.id DESC",
                 Pagamento.class)
                 .getResultList();
         this.entityManager.close();

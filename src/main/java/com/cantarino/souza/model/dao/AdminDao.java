@@ -63,7 +63,7 @@ public class AdminDao implements IDao<Admin> {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Admin> admins = this.entityManager
-                .createQuery("FROM Admin a WHERE a.deletadoEm IS NULL", Admin.class)
+                .createQuery("FROM Admin a WHERE a.deletadoEm IS NULL ORDER BY LOWER(a.nome)", Admin.class)
                 .getResultList();
 
         this.entityManager.close();
