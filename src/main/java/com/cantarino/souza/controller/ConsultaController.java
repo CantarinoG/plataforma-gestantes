@@ -27,22 +27,27 @@ public class ConsultaController {
         Util.jTableShow(grd, new TMConsulta(repositorio.findAll()), TMConsulta.getCustomRenderer());
     }
 
-    public void cadastrar(Gestante paciente, String descricao, String data, String valor, String status,
+    public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
             Relatorio relatorio, String deletadoEm, Medico medico, String dataRetorno) {
 
-        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataRetorno);
+        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+                dataRetorno);
         novaConsulta.setPaciente(paciente);
         novaConsulta.setMedico(medico);
         repositorio.save(novaConsulta);
 
     }
 
-    public void atualizar(int id, Gestante paciente, String descricao, String data, String valor, String status,
+    public void atualizar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
+            String status,
             Relatorio relatorio, String deletadoEm, Medico medico, String dataRetorno) {
-        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataRetorno);
+
+        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+                dataRetorno);
         novaConsulta.setPaciente(paciente);
         novaConsulta.setMedico(medico);
         novaConsulta.setId(id);
+
         repositorio.update(novaConsulta);
     }
 

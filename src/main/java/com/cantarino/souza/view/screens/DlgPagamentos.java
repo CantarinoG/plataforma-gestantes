@@ -188,7 +188,6 @@ public class DlgPagamentos extends JDialog {
             int result = fileChooser.showSaveDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 String selectedPath = fileChooser.getSelectedFile().getAbsolutePath();
-                System.out.println("Selected path: " + selectedPath);
                 controller.gerarRecibo(selectedPath, id);
             }
             JOptionPane.showMessageDialog(this, "Recibo Gerado com Sucesso!", "Sucesso",

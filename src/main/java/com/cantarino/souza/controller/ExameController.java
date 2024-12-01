@@ -27,10 +27,11 @@ public class ExameController {
         Util.jTableShow(grd, new TMExame(repositorio.findAll()), TMExame.getCustomRenderer());
     }
 
-    public void cadastrar(Gestante paciente, String descricao, String data, String valor, String status,
+    public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
             Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
 
-        Exame novoExame = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataResultado,
+        Exame novoExame = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+                dataResultado,
                 laboratorio);
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
@@ -42,9 +43,11 @@ public class ExameController {
         return repositorio.find(id);
     }
 
-    public void atualizar(int id, Gestante paciente, String descricao, String data, String valor, String status,
+    public void atualizar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
+            String status,
             Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
-        Exame novoExame = validator.validaCamposEntrada(descricao, data, valor, status, deletadoEm, dataResultado,
+        Exame novoExame = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+                dataResultado,
                 laboratorio);
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
