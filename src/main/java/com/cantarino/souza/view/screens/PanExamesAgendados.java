@@ -5,11 +5,11 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.RoundedButton;
 
@@ -24,12 +24,14 @@ public class PanExamesAgendados extends JPanel {
     JButton btnRelatorio;
 
     private ExameController exameController;
+    private AutenticacaoController autenticacaoController;
 
     private Usuario usuario;
 
     public PanExamesAgendados() {
         initComponents();
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         exameController = new ExameController();
         exameController.filtrarTabelaPorIdGestante(grdExames, usuario.getId());
     }

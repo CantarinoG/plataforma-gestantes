@@ -4,11 +4,11 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
@@ -29,10 +29,12 @@ public class DlgConsultas extends JDialog {
     private Usuario usuario;
 
     private ConsultaController consultaController;
+    private AutenticacaoController autenticacaoController;
 
     public DlgConsultas(JFrame parent, boolean modal) {
         super(parent, modal);
-        usuario = AuthTemp.getInstance().getUsuario();
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         initComponents();
         consultaController = new ConsultaController();
         consultaController.atualizarTabela(grdConsultas);

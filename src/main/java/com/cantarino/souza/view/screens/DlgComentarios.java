@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import java.util.List;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ComentarioController;
 import com.cantarino.souza.controller.PublicacaoController;
 import com.cantarino.souza.model.entities.Admin;
@@ -13,7 +14,6 @@ import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Publicacao;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.view.AuthTemp;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.RoundedButton;
 
@@ -38,15 +38,17 @@ public class DlgComentarios extends JDialog {
 
     private ComentarioController comentarioController;
     private PublicacaoController publicacaoController;
+    private AutenticacaoController autenticacaoController;
 
     private Usuario usuario;
 
     public DlgComentarios(JDialog parent, boolean modal, int postId) {
         super(parent, modal);
+        autenticacaoController = new AutenticacaoController();
         this.id = postId;
         comentarioController = new ComentarioController();
         publicacaoController = new PublicacaoController();
-        usuario = AuthTemp.getInstance().getUsuario();
+        usuario = autenticacaoController.getUsuario();
         initComponents();
         initComments();
     }
