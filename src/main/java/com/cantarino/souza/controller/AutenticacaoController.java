@@ -83,6 +83,10 @@ public class AutenticacaoController {
         autenticacao.setUsuario(admin);
     }
 
+    public void logOut() {
+        autenticacao.setUsuario(null);
+    }
+
     public Usuario getUsuario() {
         return autenticacao.getUsuario();
     }
