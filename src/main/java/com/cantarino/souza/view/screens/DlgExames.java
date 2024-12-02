@@ -6,9 +6,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.DocumentEvent;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 import com.cantarino.souza.controller.ExameController;
+import com.cantarino.souza.controller.PagamentoController;
+import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Exame;
+import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.BackgroundPanel;
 import com.cantarino.souza.view.components.RoundedButton;
@@ -27,13 +31,16 @@ public class DlgExames extends JDialog {
     private JButton btnDeletar;
     private JButton btnVisuRelatorio;
     private JButton btnGerenciarRelatorio;
+    private JButton btnVerPagamento;
     private JLabel lblNome;
     private JTextField edtNome;
 
     private ExameController exameController;
+    private PagamentoController pagamentoController;
 
     public DlgExames(JFrame parent, boolean modal) {
         super(parent, modal);
+        pagamentoController = new PagamentoController();
         initComponents();
         exameController = new ExameController();
         exameController.atualizarTabela(grdExames);
@@ -160,11 +167,22 @@ public class DlgExames extends JDialog {
             }
         });
 
+        btnVerPagamento = new RoundedButton("Ver detalhes do pagamento", 10);
+        btnVerPagamento.setPreferredSize(new Dimension(180, 50));
+        btnVerPagamento.setBackground(Color.WHITE);
+        btnVerPagamento.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVerPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerPagamentoActionPerformed(evt);
+            }
+        });
+
         panFooter.add(btnCadastrar);
         panFooter.add(btnEditar);
         panFooter.add(btnDeletar);
         panFooter.add(btnVisuRelatorio);
         panFooter.add(btnGerenciarRelatorio);
+        panFooter.add(btnVerPagamento);
 
         panContent.add(panFooter, BorderLayout.SOUTH);
 
@@ -266,6 +284,25 @@ public class DlgExames extends JDialog {
 
         exameController.filtrarTabelaPorInicioNomeGestante(grdExames, searchText);
 
+    }
+
+    private void btnVerPagamentoActionPerformed(ActionEvent evt) {
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Exame exame = (Exame) selectedObject;
+        Pagamento pagamento = pagamentoController.buscarPorIdProcedimento(exame.getId());
+        if (pagamento == null) {
+            JOptionPane.showMessageDialog(this, "Não há nenhum pagamento registrado para esse procedimento", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DlgDadosPagamento dialog = new DlgDadosPagamento(this, true, pagamento);
+        dialog.setVisible(true);
     }
 
 }

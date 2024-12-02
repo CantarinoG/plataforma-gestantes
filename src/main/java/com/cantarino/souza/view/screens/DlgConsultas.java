@@ -8,8 +8,10 @@ import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ConsultaController;
+import com.cantarino.souza.controller.PagamentoController;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Consulta;
+import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.view.components.*;
 
@@ -27,6 +29,7 @@ public class DlgConsultas extends JDialog {
     private JButton btnDeletar;
     private JButton btnVisuRelatorio;
     private JButton btnGerenciarRelatorio;
+    private JButton btnVerPagamento;
     private JLabel lblFiltro;
     private JComboBox<String> cmbFiltro;
     private JTextField edtFiltro;
@@ -37,11 +40,13 @@ public class DlgConsultas extends JDialog {
     private Usuario usuario;
 
     private ConsultaController consultaController;
+    private PagamentoController pagamentoController;
     private AutenticacaoController autenticacaoController;
 
     public DlgConsultas(JFrame parent, boolean modal) {
         super(parent, modal);
         autenticacaoController = new AutenticacaoController();
+        pagamentoController = new PagamentoController();
         usuario = autenticacaoController.getUsuario();
         initComponents();
         consultaController = new ConsultaController();
@@ -168,6 +173,16 @@ public class DlgConsultas extends JDialog {
             }
         });
 
+        btnVerPagamento = new RoundedButton("Ver detalhes do pagamento", 10);
+        btnVerPagamento.setPreferredSize(new Dimension(180, 50));
+        btnVerPagamento.setBackground(Color.WHITE);
+        btnVerPagamento.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnVerPagamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerPagamentoActionPerformed(evt);
+            }
+        });
+
         panFooter.add(btnCadastrar);
         panFooter.add(btnEditar);
         panFooter.add(btnDeletar);
@@ -185,6 +200,7 @@ public class DlgConsultas extends JDialog {
             });
 
             panFooter.add(btnGerenciarRelatorio);
+            panFooter.add(btnVerPagamento);
         }
 
         panContent.add(panFooter, BorderLayout.SOUTH);
@@ -279,6 +295,26 @@ public class DlgConsultas extends JDialog {
         DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, consulta.getId());
         dialog.setVisible(true);
         consultaController.atualizarTabela(grdConsultas);
+    }
+
+    private void btnVerPagamentoActionPerformed(java.awt.event.ActionEvent evt) {
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Consulta consulta = (Consulta) selectedObject;
+        Pagamento pagamento = pagamentoController.buscarPorIdProcedimento(consulta.getId());
+        if (pagamento == null) {
+            JOptionPane.showMessageDialog(this, "Não há nenhum pagamento registrado para esse procedimento", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DlgDadosPagamento dialog = new DlgDadosPagamento(this, true, pagamento);
+        dialog.setVisible(true);
+
     }
 
     private void filterTable() {

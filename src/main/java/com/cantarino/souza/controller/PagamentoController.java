@@ -49,6 +49,10 @@ public class PagamentoController {
         return repositorio.find(id);
     }
 
+    public Pagamento buscarPorIdProcedimento(int id) {
+        return repositorio.filterProcedimentoId(id);
+    }
+
     public void excluir(int id) {
         Pagamento pagamento = repositorio.find(id);
         repositorio.delete(pagamento);
