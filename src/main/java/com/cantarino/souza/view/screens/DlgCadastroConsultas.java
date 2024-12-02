@@ -107,10 +107,14 @@ public class DlgCadastroConsultas extends JDialog {
 
     private String[] getConsultasOptions() {
         java.util.List<Consulta> consultas = consultaController.buscarTodas();
-        String[] options = new String[consultas.size() + 1];
+        java.util.List<Consulta> filteredConsultas = consultas.stream()
+                .filter(consulta -> atualizando == null || consulta.getId() != atualizando.getId())
+                .collect(java.util.stream.Collectors.toList());
+
+        String[] options = new String[filteredConsultas.size() + 1];
         options[0] = "Nenhuma";
-        for (int i = 0; i < consultas.size(); i++) {
-            Consulta consulta = consultas.get(i);
+        for (int i = 0; i < filteredConsultas.size(); i++) {
+            Consulta consulta = filteredConsultas.get(i);
             options[i + 1] = consulta.getId() + " | " + consulta.getDescricao();
         }
         return options;
