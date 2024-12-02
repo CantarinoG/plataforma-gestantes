@@ -10,6 +10,7 @@ import com.cantarino.souza.model.valid.ValidatePagamento;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.JTable;
 
@@ -47,6 +48,10 @@ public class PagamentoController {
 
     public Pagamento buscarPorId(int id) {
         return repositorio.find(id);
+    }
+
+    public List<Pagamento> buscarTodas() {
+        return repositorio.findAll();
     }
 
     public Pagamento buscarPorIdProcedimento(int id) {

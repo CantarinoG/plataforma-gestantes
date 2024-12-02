@@ -58,15 +58,6 @@ public class DlgCadastroPagamentos extends JDialog {
         if (atualizando != null) {
             txtValor.setText(String.valueOf(atualizando.getValor()));
             cmbMetodoPagamento.setSelectedItem(atualizando.getMetodoPagamento());
-
-            Procedimento proc = atualizando.getProcedimento();
-            if (proc instanceof Exame) {
-                String exameOption = proc.getId() + "|Exame|R$ " + proc.getValor() + "| " + proc.getDescricao();
-                cmbProcedimento.setSelectedItem(exameOption);
-            } else if (proc instanceof Consulta) {
-                String consultaOption = proc.getId() + "|Consulta|R$ " + proc.getValor() + "| " + proc.getDescricao();
-                cmbProcedimento.setSelectedItem(consultaOption);
-            }
         }
     }
 
@@ -85,21 +76,24 @@ public class DlgCadastroPagamentos extends JDialog {
     private String[] getProcedimentosOptions() {
         java.util.List<Exame> exames = exameController.buscarTodas();
         java.util.List<Consulta> consultas = consultaController.buscarTodas();
+        java.util.List<Pagamento> pagamentos = pagamentoController.buscarTodas();
 
-        String[] options = new String[exames.size() + consultas.size()];
+        java.util.Set<Integer> paidProcedureIds = pagamentos.stream()
+                .map(p -> p.getProcedimento().getId())
+                .collect(java.util.stream.Collectors.toSet());
 
-        int i = 0;
-        for (Exame exame : exames) {
-            options[i] = exame.getId() + "|Exame|R$ " + exame.getValor() + "| " + exame.getDescricao();
-            i++;
-        }
+        java.util.List<String> exameOptions = exames.stream()
+                .filter(e -> !paidProcedureIds.contains(e.getId()))
+                .map(e -> e.getId() + "|Exame|R$ " + e.getValor() + "| " + e.getDescricao())
+                .collect(java.util.stream.Collectors.toList());
 
-        for (Consulta consulta : consultas) {
-            options[i] = consulta.getId() + "|Consulta|R$ " + consulta.getValor() + "| " + consulta.getDescricao();
-            i++;
-        }
+        java.util.List<String> consultaOptions = consultas.stream()
+                .filter(c -> !paidProcedureIds.contains(c.getId()))
+                .map(c -> c.getId() + "|Consulta|R$ " + c.getValor() + "| " + c.getDescricao())
+                .collect(java.util.stream.Collectors.toList());
 
-        return options;
+        exameOptions.addAll(consultaOptions);
+        return exameOptions.toArray(new String[0]);
     }
 
     private String[] getPagamentoOptions() {
@@ -136,7 +130,7 @@ public class DlgCadastroPagamentos extends JDialog {
 
         gbc.gridy = 1;
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(3, 1, 20, 10));
+        panColumn.setLayout(new GridLayout(atualizando == null ? 3 : 2, 1, 20, 10));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -147,11 +141,13 @@ public class DlgCadastroPagamentos extends JDialog {
         panValorField = createCustomTextfield("Valor", txtValor);
         panColumn.add(panValorField);
 
-        cmbProcedimento = new JComboBox<>(getProcedimentosOptions());
-        cmbProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
-        cmbProcedimento.setBackground(AppColors.FIELD_PINK);
-        panProcedimentoField = createCustomTextfield("Procedimento", cmbProcedimento);
-        panColumn.add(panProcedimentoField);
+        if (atualizando == null) {
+            cmbProcedimento = new JComboBox<>(getProcedimentosOptions());
+            cmbProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
+            cmbProcedimento.setBackground(AppColors.FIELD_PINK);
+            panProcedimentoField = createCustomTextfield("Procedimento", cmbProcedimento);
+            panColumn.add(panProcedimentoField);
+        }
 
         cmbMetodoPagamento = new JComboBox<>(getPagamentoOptions());
         cmbMetodoPagamento.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -217,29 +213,28 @@ public class DlgCadastroPagamentos extends JDialog {
                 registradoPor = new AdminController().buscarPorId(usuario.getId());
             }
 
-            String selectedProcedimento = (String) cmbProcedimento.getSelectedItem();
-            String[] procedimentoParts = selectedProcedimento.split("\\|");
-            int procedimentoId = Integer.parseInt(procedimentoParts[0]);
-            String procedimentoTipo = procedimentoParts[1];
-            Procedimento procedimento = new Procedimento();
-            if (procedimentoTipo.equals("Exame")) {
-                procedimento = exameController.buscarPorId(procedimentoId);
-            } else if (procedimentoTipo.equals("Consulta")) {
-                procedimento = consultaController.buscarPorId(procedimentoId);
-            }
             String metodoPagamento = (String) cmbMetodoPagamento.getSelectedItem();
             String valor = txtValor.getText();
 
             if (atualizando == null) {
+                String selectedProcedimento = (String) cmbProcedimento.getSelectedItem();
+                String[] procedimentoParts = selectedProcedimento.split("\\|");
+                int procedimentoId = Integer.parseInt(procedimentoParts[0]);
+                String procedimentoTipo = procedimentoParts[1];
+                Procedimento procedimento = new Procedimento();
+                if (procedimentoTipo.equals("Exame")) {
+                    procedimento = exameController.buscarPorId(procedimentoId);
+                } else if (procedimentoTipo.equals("Consulta")) {
+                    procedimento = consultaController.buscarPorId(procedimentoId);
+                }
                 pagamentoController.cadastrar(valor, registradoPor, procedimento.getPaciente(), metodoPagamento,
                         procedimento, null);
-                dispose();
             } else {
                 pagamentoController.atualizar(atualizando.getId(), valor, atualizando.getRegistradoPor(),
-                        procedimento.getPaciente(),
-                        metodoPagamento, procedimento, null);
-                dispose();
+                        atualizando.getPaciente(),
+                        metodoPagamento, atualizando.getProcedimento(), null);
             }
+            dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
