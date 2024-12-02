@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 
 import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.controller.PagamentoController;
-import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.view.components.AppColors;
