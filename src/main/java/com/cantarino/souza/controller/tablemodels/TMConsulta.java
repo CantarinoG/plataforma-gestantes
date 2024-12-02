@@ -25,7 +25,7 @@ public class TMConsulta extends AbstractTableModel {
     private final int COL_STATUS = 6;
     private final int COL_RELATORIO = 7;
     private final int COL_MEDICO = 8;
-    private final int COL_DATA_RETORNO = 9;
+    private final int COL_RETORNO = 9;
 
     public TMConsulta(List<Consulta> listaConsultas) {
         lista = listaConsultas;
@@ -62,8 +62,8 @@ public class TMConsulta extends AbstractTableModel {
                 return "Relatório";
             case COL_MEDICO:
                 return "Médico";
-            case COL_DATA_RETORNO:
-                return "Data Retorno";
+            case COL_RETORNO:
+                return "Retorno da Consulta";
             default:
                 return "";
         }
@@ -100,9 +100,8 @@ public class TMConsulta extends AbstractTableModel {
                     return aux.getRelatorio() == null ? "-" : "REGISTRADO";
                 case COL_MEDICO:
                     return aux.getMedico() != null ? aux.getMedico().getNome() : "-";
-                case COL_DATA_RETORNO:
-                    return aux.getDataRetorno() == null ? "-"
-                            : aux.getDataRetorno().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+                case COL_RETORNO:
+                    return aux.getRetorno() != null ? aux.getRetorno().getId() : "-";
                 default:
                     return null;
             }

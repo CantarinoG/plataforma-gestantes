@@ -23,13 +23,16 @@ public class Consulta extends Procedimento {
     @ManyToOne
     @JoinColumn(name = "medico_id")
     private Medico medico;
-    private LocalDateTime dataRetorno;
+
+    @ManyToOne
+    @JoinColumn(name = "retorno_id")
+    private Consulta retorno;
 
     public Consulta(Gestante paciente, String descricao, LocalDateTime data, int duracao, double valor, String status,
-            Relatorio relatorio, LocalDateTime deletadoEm, Medico medico, LocalDateTime dataRetorno) {
+            Relatorio relatorio, LocalDateTime deletadoEm, Medico medico, Consulta retorno) {
         super(0, paciente, descricao, data, duracao, valor, status, relatorio, deletadoEm);
         this.medico = medico;
-        this.dataRetorno = dataRetorno;
+        this.retorno = retorno;
     }
 
 }

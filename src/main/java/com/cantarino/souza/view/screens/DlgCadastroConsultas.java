@@ -36,6 +36,8 @@ public class DlgCadastroConsultas extends JDialog {
     private JPanel panStatusField;
     private JTextField txtDuracao;
     private JPanel panDuracaoField;
+    private JComboBox<String> cbRetorno;
+    private JPanel panRetornoField;
 
     private MedicoController medicoController;
     private GestanteController gestanteController;
@@ -68,6 +70,10 @@ public class DlgCadastroConsultas extends JDialog {
         txtValor.setText(String.valueOf(atualizando.getValor()));
         cbMedico.setSelectedItem(atualizando.getMedico().getId() + " | " + atualizando.getMedico().getNome());
         cbStatus.setSelectedItem(atualizando.getStatus());
+        if (atualizando.getRetorno() != null) {
+            cbRetorno.setSelectedItem(
+                    atualizando.getRetorno().getId() + " | " + atualizando.getRetorno().getDescricao());
+        }
     }
 
     private String[] getGestantesOptions() {
@@ -95,6 +101,17 @@ public class DlgCadastroConsultas extends JDialog {
         String[] options = new String[values.length];
         for (int i = 0; i < values.length; i++) {
             options[i] = values[i].getValue();
+        }
+        return options;
+    }
+
+    private String[] getConsultasOptions() {
+        java.util.List<Consulta> consultas = consultaController.buscarTodas();
+        String[] options = new String[consultas.size() + 1];
+        options[0] = "Nenhuma";
+        for (int i = 0; i < consultas.size(); i++) {
+            Consulta consulta = consultas.get(i);
+            options[i + 1] = consulta.getId() + " | " + consulta.getDescricao();
         }
         return options;
     }
@@ -127,7 +144,7 @@ public class DlgCadastroConsultas extends JDialog {
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
         panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(atualizando != null ? 7 : 6, 1, 20, 5));
+        panColumn.setLayout(new GridLayout(atualizando != null ? 8 : 7, 1, 20, 5));
         panColumn.setBackground(AppColors.TRANSPARENT);
         panBackground.add(panColumn, gbc);
 
@@ -184,6 +201,13 @@ public class DlgCadastroConsultas extends JDialog {
         cbMedico.setBackground(AppColors.FIELD_PINK);
         panMedicoField = createCustomTextfield("Médico", cbMedico);
         panColumn.add(panMedicoField);
+
+        // Campo Retorno da Consulta
+        cbRetorno = new JComboBox<>(getConsultasOptions());
+        cbRetorno.setFont(new Font("Arial", Font.PLAIN, 22));
+        cbRetorno.setBackground(AppColors.FIELD_PINK);
+        panRetornoField = createCustomTextfield("Retorno da Consulta", cbRetorno);
+        panColumn.add(panRetornoField);
 
         // Campo Status (apenas quando editando)
         if (atualizando != null) {
@@ -255,6 +279,13 @@ public class DlgCadastroConsultas extends JDialog {
             int medicoId = Integer.parseInt(selectedMedico.split(" \\| ")[0]);
             Medico medico = medicoController.buscarPorId(medicoId);
 
+            String selectedRetorno = (String) cbRetorno.getSelectedItem();
+            Consulta retorno = null;
+            if (!"Nenhuma".equals(selectedRetorno)) {
+                int retornoId = Integer.parseInt(selectedRetorno.split(" \\| ")[0]);
+                retorno = consultaController.buscarPorId(retornoId);
+            }
+
             String dataStr = txtData.getText(); // Format: dd/MM/yyyy HH:mm
             String[] dateParts = dataStr.split(" ")[0].split("/");
             String[] timeParts = dataStr.split(" ")[1].split(":");
@@ -278,7 +309,7 @@ public class DlgCadastroConsultas extends JDialog {
                         null,
                         null,
                         medico,
-                        null);
+                        retorno);
                 dispose();
             } else {
                 consultaController.atualizar(
@@ -292,7 +323,7 @@ public class DlgCadastroConsultas extends JDialog {
                         null,
                         null,
                         medico,
-                        null);
+                        retorno);
                 dispose();
             }
 

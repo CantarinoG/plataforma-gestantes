@@ -28,24 +28,24 @@ public class ConsultaController {
     }
 
     public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
-            Relatorio relatorio, String deletadoEm, Medico medico, String dataRetorno) {
+            Relatorio relatorio, String deletadoEm, Medico medico, Consulta retorno) {
 
-        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
-                dataRetorno);
+        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm);
         novaConsulta.setPaciente(paciente);
         novaConsulta.setMedico(medico);
+        novaConsulta.setRetorno(retorno);
         repositorio.save(novaConsulta);
 
     }
 
     public void atualizar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
             String status,
-            Relatorio relatorio, String deletadoEm, Medico medico, String dataRetorno) {
+            Relatorio relatorio, String deletadoEm, Medico medico, Consulta retorno) {
 
-        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
-                dataRetorno);
+        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm);
         novaConsulta.setPaciente(paciente);
         novaConsulta.setMedico(medico);
+        novaConsulta.setRetorno(retorno);
         novaConsulta.setId(id);
 
         repositorio.update(novaConsulta);
