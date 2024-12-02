@@ -6,6 +6,7 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidatePagamento;
 
 import java.time.LocalDateTime;
@@ -17,10 +18,12 @@ import javax.swing.JTable;
 public class PagamentoController {
     private PagamentoDao repositorio;
     private ValidatePagamento validator;
+    private NotificadorEmail notificador;
 
     public PagamentoController() {
         this.repositorio = new PagamentoDao();
         this.validator = new ValidatePagamento();
+        this.notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -34,6 +37,10 @@ public class PagamentoController {
         novoPagamento.setPaciente(paciente);
         novoPagamento.setProcedimento(procedimento);
         repositorio.save(novoPagamento);
+
+        String conteudoEmail = "Foi registrado um pagamento para o procedimento de id " + procedimento.getId() + ": "
+                + procedimento.getDescricao() + ".";
+        notificador.notificar(paciente, "Bem Gestar | Confirmação de Pagamento", conteudoEmail);
     }
 
     public void atualizar(int id, String valor, Usuario registradoPor, Gestante paciente,

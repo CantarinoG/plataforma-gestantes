@@ -1,5 +1,6 @@
 package com.cantarino.souza.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -11,16 +12,19 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
+import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateConsulta;
 
 public class ConsultaController {
 
     private ConsultaDao repositorio;
     private ValidateConsulta validator;
+    private NotificadorEmail notificador;
 
     public ConsultaController() {
         repositorio = new ConsultaDao();
         validator = new ValidateConsulta();
+        notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -35,6 +39,11 @@ public class ConsultaController {
         novaConsulta.setMedico(medico);
         novaConsulta.setRetorno(retorno);
         repositorio.save(novaConsulta);
+
+        String conteudoEmail = "Foi agendada uma nova consulta: " + novaConsulta.getDescricao() + ". Data: "
+                + novaConsulta.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + ".";
+        notificador.notificar(paciente, "Bem Gestar | Agendamento de Consulta", conteudoEmail);
+        notificador.notificar(medico, "Bem Gestar | Agendamento de Consulta", conteudoEmail);
 
     }
 
@@ -96,13 +105,22 @@ public class ConsultaController {
         Consulta consulta = repositorio.find(id);
         consulta.setStatus(StatusProcedimentos.CANCELADA.getValue());
         repositorio.update(consulta);
+
+        String conteudoEmail = "Foi concelada a consulta de id: " + consulta.getId() + ": "
+                + consulta.getDescricao() + ".";
+        notificador.notificar(consulta.getPaciente(), "Bem Gestar | Cancelamento de Consulta", conteudoEmail);
+        notificador.notificar(consulta.getMedico(), "Bem Gestar | Cancelamento de Consulta", conteudoEmail);
     }
 
-    public void adicionarRelatorio(int id, Relatorio relatorio) {
+    public void adicionarRelatorio(int id, Gestante paciente, Relatorio relatorio) {
         Consulta consulta = repositorio.find(id);
         consulta.setStatus(StatusProcedimentos.CONCLUIDA.getValue());
         consulta.setRelatorio(relatorio);
         repositorio.update(consulta);
+
+        String conteudoEmail = "Foi cadastrado um relatório para a consulta de id: " + consulta.getId() + ": "
+                + consulta.getDescricao() + ".";
+        notificador.notificar(paciente, "Bem Gestar | Relatório de Consulta", conteudoEmail);
     }
 
 }

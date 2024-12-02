@@ -142,7 +142,9 @@ public class PanConsultasAgendadas extends JPanel {
 
             if (option == JOptionPane.YES_OPTION) {
                 id = consulta.getId();
+
                 consultaController.cancelar(id);
+
                 cbFilterActionPerformed(null);
 
                 JOptionPane.showMessageDialog(this, "Consulta cancelada com sucesso!", "Sucesso",

@@ -1,5 +1,6 @@
 package com.cantarino.souza.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -11,16 +12,19 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
+import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateExame;
 
 public class ExameController {
 
     private ExameDao repositorio;
     private ValidateExame validator;
+    private NotificadorEmail notificador;
 
     public ExameController() {
         repositorio = new ExameDao();
         validator = new ValidateExame();
+        notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -36,6 +40,10 @@ public class ExameController {
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
         repositorio.save(novoExame);
+
+        String conteudoEmail = "Foi agendada um novo exame: " + novoExame.getDescricao() + ". Data: "
+                + novoExame.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + ".";
+        notificador.notificar(paciente, "Bem Gestar | Agendamento de Exame", conteudoEmail);
 
     }
 
@@ -81,13 +89,21 @@ public class ExameController {
         Exame exame = repositorio.find(id);
         exame.setStatus(StatusProcedimentos.CANCELADA.getValue());
         repositorio.update(exame);
+
+        String conteudoEmail = "Foi concelado o exame de id: " + exame.getId() + ": "
+                + exame.getDescricao() + ".";
+        notificador.notificar(exame.getPaciente(), "Bem Gestar | Cancelamento de Exame", conteudoEmail);
     }
 
-    public void adicionarRelatorio(int id, Relatorio relatorio) {
+    public void adicionarRelatorio(int id, Gestante paciente, Relatorio relatorio) {
         Exame exame = repositorio.find(id);
         exame.setStatus(StatusProcedimentos.CONCLUIDA.getValue());
         exame.setRelatorio(relatorio);
         repositorio.update(exame);
+
+        String conteudoEmail = "Foi cadastrado um relatório para o exame de id: " + exame.getId() + ": "
+                + exame.getDescricao() + ".";
+        notificador.notificar(paciente, "Bem Gestar | Relatório de Exame", conteudoEmail);
     }
 
 }
