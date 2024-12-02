@@ -72,4 +72,15 @@ public class PagamentoDao implements IDao<Pagamento> {
         return pagamentos;
     }
 
+    public Pagamento filterProcedimentoId(int id) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        Pagamento pagamento = this.entityManager.createQuery(
+                "FROM Pagamento p WHERE p.deletadoEm IS NULL AND p.procedimento.id = :id",
+                Pagamento.class)
+                .setParameter("id", id)
+                .getResultList().stream().findFirst().orElse(null);
+        this.entityManager.close();
+        return pagamento;
+    }
+
 }
