@@ -121,7 +121,9 @@ public class PanExamesAgendados extends JPanel {
 
             if (option == JOptionPane.YES_OPTION) {
                 id = consulta.getId();
+
                 exameController.cancelar(id);
+
                 cbFilterActionPerformed(null);
 
                 JOptionPane.showMessageDialog(this, "Exame cancelado com sucesso!", "Sucesso",

@@ -227,8 +227,10 @@ public class DlgCadastroPagamentos extends JDialog {
                 } else if (procedimentoTipo.equals("Consulta")) {
                     procedimento = consultaController.buscarPorId(procedimentoId);
                 }
+
                 pagamentoController.cadastrar(valor, registradoPor, procedimento.getPaciente(), metodoPagamento,
                         procedimento, null);
+
             } else {
                 pagamentoController.atualizar(atualizando.getId(), valor, atualizando.getRegistradoPor(),
                         atualizando.getPaciente(),

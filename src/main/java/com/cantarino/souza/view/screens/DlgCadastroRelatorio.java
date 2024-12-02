@@ -217,10 +217,11 @@ public class DlgCadastroRelatorio extends JDialog {
             Procedimento procedimento = consultaController.buscarPorId(procedimentoId);
 
             if (procedimento != null) { // Pertence a uma consulta
-                consultaController.adicionarRelatorio(procedimento.getId(), relatorioCriado);
+                consultaController.adicionarRelatorio(procedimento.getId(), procedimento.getPaciente(),
+                        relatorioCriado);
             } else { // Pertence a um exame
                 procedimento = exameController.buscarPorId(procedimentoId);
-                exameController.adicionarRelatorio(procedimento.getId(), relatorioCriado);
+                exameController.adicionarRelatorio(procedimento.getId(), procedimento.getPaciente(), relatorioCriado);
             }
 
             dispose();
