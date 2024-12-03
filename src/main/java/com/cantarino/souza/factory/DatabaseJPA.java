@@ -36,7 +36,8 @@ public class DatabaseJPA {
                         .getSingleResult();
             } catch (javax.persistence.NoResultException e) {
                 Admin admin = new Admin("00000000000", "root", "",
-                        "$2a$10$0X8SJRAa4PSIagVNXUCU0.fIGyYFJUkvVqb6POYbbQcwRj824RsMK", LocalDate.now(), "", "", null);
+                        "$2a$10$0X8SJRAa4PSIagVNXUCU0.fIGyYFJUkvVqb6POYbbQcwRj824RsMK", null, null, LocalDate.now(), "",
+                        "", null);
                 // Senha padrão: 000000
                 em.getTransaction().begin();
                 em.persist(admin);

@@ -1,5 +1,7 @@
 package com.cantarino.souza.controller;
 
+import java.time.LocalDateTime;
+
 import com.cantarino.souza.model.dao.AdminDao;
 import com.cantarino.souza.model.dao.GestanteDao;
 import com.cantarino.souza.model.dao.MedicoDao;
@@ -37,6 +39,12 @@ public class AutenticacaoController {
             throw new GestanteException("ERRO: Não existe nenhuma gestante com esse email.");
         }
 
+        if (gestante.getCodigoRecuperacao().equals(senha)
+                && gestante.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+            autenticacao.setUsuario(gestante);
+            return;
+        }
+
         if (!Util.checkPassword(senha, gestante.getSenha())) {
             throw new GestanteException("ERRO: A senha informada está incorreta.");
         }
@@ -48,6 +56,12 @@ public class AutenticacaoController {
         Medico medico = repositorioMedico.findByCpf(cpf);
         if (medico == null) {
             throw new MedicoException("ERRO: Não existe nenhum médico com esse email.");
+        }
+
+        if (medico.getCodigoRecuperacao().equals(senha)
+                && medico.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+            autenticacao.setUsuario(medico);
+            return;
         }
 
         if (!Util.checkPassword(senha, medico.getSenha())) {
@@ -63,6 +77,12 @@ public class AutenticacaoController {
             throw new SecretarioException("ERRO: Não existe nenhum secretário com esse email.");
         }
 
+        if (secretario.getCodigoRecuperacao().equals(senha)
+                && secretario.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+            autenticacao.setUsuario(secretario);
+            return;
+        }
+
         if (!Util.checkPassword(senha, secretario.getSenha())) {
             throw new SecretarioException("ERRO: A senha informada está incorreta.");
         }
@@ -74,6 +94,12 @@ public class AutenticacaoController {
         Admin admin = repositorioAdmin.findByCpf(cpf);
         if (admin == null) {
             throw new AdminException("ERRO: Não existe nenhum administrador com esse email.");
+        }
+
+        if (admin.getCodigoRecuperacao().equals(senha)
+                && admin.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+            autenticacao.setUsuario(admin);
+            return;
         }
 
         if (!Util.checkPassword(senha, admin.getSenha())) {

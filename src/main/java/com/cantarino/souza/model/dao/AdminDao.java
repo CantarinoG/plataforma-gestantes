@@ -76,7 +76,10 @@ public class AdminDao implements IDao<Admin> {
         Admin admin = this.entityManager
                 .createQuery("FROM Admin a WHERE a.cpf = :cpf AND a.deletadoEm IS NULL", Admin.class)
                 .setParameter("cpf", cpf)
-                .getSingleResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
 
         this.entityManager.close();
         return admin;

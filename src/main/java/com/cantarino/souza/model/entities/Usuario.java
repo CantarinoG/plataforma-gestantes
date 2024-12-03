@@ -27,6 +27,8 @@ public class Usuario {
     protected String nome;
     protected String email;
     protected String senha;
+    protected String codigoRecuperacao;
+    protected LocalDateTime validadeCodigoRecuperacao;
     protected LocalDate dataNascimento;
     protected String telefone;
     protected String endereco;

@@ -76,7 +76,10 @@ public class MedicoDao implements IDao<Medico> {
         Medico medico = this.entityManager
                 .createQuery("FROM Medico m WHERE m.cpf = :cpf AND m.deletadoEm IS NULL", Medico.class)
                 .setParameter("cpf", cpf)
-                .getSingleResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
 
         this.entityManager.close();
         return medico;

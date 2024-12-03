@@ -5,7 +5,12 @@ import javax.swing.*;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
+import com.cantarino.souza.controller.AdminController;
 import com.cantarino.souza.controller.AutenticacaoController;
+import com.cantarino.souza.controller.GestanteController;
+import com.cantarino.souza.controller.MedicoController;
+import com.cantarino.souza.controller.SecretarioController;
+import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.view.components.*;
 
 public class DlgLogin extends JDialog {
@@ -30,10 +35,18 @@ public class DlgLogin extends JDialog {
     private final String ADMIN = "Administrador(a)";
 
     private AutenticacaoController autenticacaoController;
+    private GestanteController gestanteController;
+    private MedicoController medicoController;
+    private SecretarioController secretarioController;
+    private AdminController adminController;
 
     public DlgLogin(JFrame parent, boolean modal) {
         super(parent, modal);
         autenticacaoController = new AutenticacaoController();
+        gestanteController = new GestanteController();
+        medicoController = new MedicoController();
+        secretarioController = new SecretarioController();
+        adminController = new AdminController();
         initComponents();
     }
 
@@ -191,7 +204,52 @@ public class DlgLogin extends JDialog {
     }
 
     private void lblForgotPasswordActionPerformed(java.awt.event.MouseEvent evt) {
-        System.out.println("Esqueceu?");
+        String selectedType = (String) cmbUserType.getSelectedItem();
+        String login = edtLogin.getText().replaceAll("[.-]", "");
+
+        if (login == null || login.trim().isEmpty() || login.contains("_")) {
+            JOptionPane.showMessageDialog(this, "Por favor, informe o CPF da conta para recuperá-la.");
+            return;
+        }
+
+        String codigoRecuperacao = String.format("%06d", (int) (Math.random() * 1000000));
+
+        Usuario usuario = null;
+
+        switch (selectedType) {
+            case GESTANTE:
+                usuario = gestanteController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+                break;
+            case MEDICO:
+                usuario = medicoController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+                break;
+            case SECRETARIO:
+                usuario = secretarioController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+                break;
+            case ADMIN:
+                usuario = adminController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+                break;
+            default:
+                JOptionPane.showMessageDialog(this, "Selecione um tipo de usuário válido");
+                return;
+        }
+
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Não foi possível começar o processo de recuperação de senha. Entre em contato com um administrador.");
+            return;
+        } else {
+            String email = usuario.getEmail();
+            String[] parts = email.split("@");
+            String username = parts[0];
+            String domain = parts[1];
+            String maskedUsername = username.substring(0, 4) + "*".repeat(username.length() - 4);
+            String maskedEmail = maskedUsername + "@" + domain;
+            JOptionPane.showMessageDialog(this,
+                    "Um código de recuperação está sendo enviado para o seu email: " + maskedEmail + ".");
+            return;
+        }
+
     }
 
 }
