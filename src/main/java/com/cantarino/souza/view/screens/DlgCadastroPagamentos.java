@@ -216,27 +216,60 @@ public class DlgCadastroPagamentos extends JDialog {
             String metodoPagamento = (String) cmbMetodoPagamento.getSelectedItem();
             String valor = txtValor.getText();
 
-            if (atualizando == null) {
-                String selectedProcedimento = (String) cmbProcedimento.getSelectedItem();
-                String[] procedimentoParts = selectedProcedimento.split("\\|");
-                int procedimentoId = Integer.parseInt(procedimentoParts[0]);
-                String procedimentoTipo = procedimentoParts[1];
-                Procedimento procedimento = new Procedimento();
-                if (procedimentoTipo.equals("Exame")) {
-                    procedimento = exameController.buscarPorId(procedimentoId);
-                } else if (procedimentoTipo.equals("Consulta")) {
-                    procedimento = consultaController.buscarPorId(procedimentoId);
+            double valorPago = Double.parseDouble(valor);
+
+            if (atualizando != null) { // Atualizando
+                double valorProcedimento = atualizando.getProcedimento().getValor();
+                if (valorPago < valorProcedimento) {
+                    double desconto = valorProcedimento - valorPago;
+                    int option = JOptionPane.showConfirmDialog(this,
+                            "O valor informado é menor que o valor do procedimento. Deseja confirmar o desconto de R$"
+                                    + desconto + "?",
+                            "Confirmar desconto",
+                            JOptionPane.YES_NO_OPTION);
+
+                    if (option != JOptionPane.YES_OPTION) {
+                        return;
+                    }
                 }
 
-                pagamentoController.cadastrar(valor, registradoPor, procedimento.getPaciente(), metodoPagamento,
-                        procedimento, null);
-
-            } else {
                 pagamentoController.atualizar(atualizando.getId(), valor, atualizando.getRegistradoPor(),
-                        atualizando.getPaciente(),
-                        metodoPagamento, atualizando.getProcedimento(), null);
+                        atualizando.getPaciente(), metodoPagamento, atualizando.getProcedimento(), null);
+                dispose();
+                return;
             }
+
+            String selectedProcedimento = (String) cmbProcedimento.getSelectedItem();
+            String[] procedimentoParts = selectedProcedimento.split("\\|");
+            int procedimentoId = Integer.parseInt(procedimentoParts[0]);
+            String procedimentoTipo = procedimentoParts[1];
+
+            Procedimento procedimento;
+            if (procedimentoTipo.equals("Exame")) {
+                procedimento = exameController.buscarPorId(procedimentoId);
+            } else {
+                procedimento = consultaController.buscarPorId(procedimentoId);
+            }
+
+            double valorProcedimento = procedimento.getValor();
+
+            if (valorPago < valorProcedimento) {
+                double desconto = valorProcedimento - valorPago;
+                int option = JOptionPane.showConfirmDialog(this,
+                        "O valor informado é menor que o valor do procedimento. Deseja confirmar o desconto de R$"
+                                + desconto + "?",
+                        "Confirmar desconto",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (option != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+
+            pagamentoController.cadastrar(valor, registradoPor, procedimento.getPaciente(),
+                    metodoPagamento, procedimento, null);
             dispose();
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
@@ -268,4 +301,5 @@ class NumericDocumentFilter extends DocumentFilter {
     private boolean isNumeric(String text) {
         return text.matches("\\d*\\.?\\d*");
     }
+
 }

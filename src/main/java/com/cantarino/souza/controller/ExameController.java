@@ -42,6 +42,30 @@ public class ExameController {
         Exame novoExame = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
                 dataResultado,
                 laboratorio);
+
+        // // Check for time conflicts with existing exams
+        // List<Exame> examesPaciente = repositorio.filterGestanteId(paciente.getId());
+        // for (Exame exame : examesPaciente) {
+        // // Get start and end times for existing exam
+        // var exameInicio = exame.getData();
+        // var exameFim =
+        // exame.getData().plusMinutes(Long.parseLong(exame.getDuracao()));
+
+        // // Get start and end times for new exam
+        // var novoInicio = novoExame.getData();
+        // var novoFim =
+        // novoExame.getData().plusMinutes(Long.parseLong(novoExame.getDuracao()));
+
+        // // Check if times overlap
+        // if ((novoInicio.isAfter(exameInicio) && novoInicio.isBefore(exameFim)) ||
+        // (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
+        // (novoInicio.isEqual(exameInicio)) ||
+        // (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
+        // throw new ExameException("Existe um conflito de horário com outro exame já
+        // agendado");
+        // }
+        // }
+
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
         repositorio.save(novoExame);
