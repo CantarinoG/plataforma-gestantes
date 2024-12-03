@@ -39,10 +39,12 @@ public class AutenticacaoController {
             throw new GestanteException("ERRO: Não existe nenhuma gestante com esse email.");
         }
 
-        if (gestante.getCodigoRecuperacao().equals(senha)
-                && gestante.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
-            autenticacao.setUsuario(gestante);
-            return;
+        if (gestante.getCodigoRecuperacao() != null && gestante.getValidadeCodigoRecuperacao() != null) {
+            if (gestante.getCodigoRecuperacao().equals(senha)
+                    && gestante.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+                autenticacao.setUsuario(gestante);
+                return;
+            }
         }
 
         if (!Util.checkPassword(senha, gestante.getSenha())) {
@@ -58,10 +60,12 @@ public class AutenticacaoController {
             throw new MedicoException("ERRO: Não existe nenhum médico com esse email.");
         }
 
-        if (medico.getCodigoRecuperacao().equals(senha)
-                && medico.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
-            autenticacao.setUsuario(medico);
-            return;
+        if (medico.getCodigoRecuperacao() != null && medico.getValidadeCodigoRecuperacao() != null) {
+            if (medico.getCodigoRecuperacao().equals(senha)
+                    && medico.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+                autenticacao.setUsuario(medico);
+                return;
+            }
         }
 
         if (!Util.checkPassword(senha, medico.getSenha())) {
@@ -77,10 +81,12 @@ public class AutenticacaoController {
             throw new SecretarioException("ERRO: Não existe nenhum secretário com esse email.");
         }
 
-        if (secretario.getCodigoRecuperacao().equals(senha)
-                && secretario.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
-            autenticacao.setUsuario(secretario);
-            return;
+        if (secretario.getCodigoRecuperacao() != null && secretario.getValidadeCodigoRecuperacao() != null) {
+            if (secretario.getCodigoRecuperacao().equals(senha)
+                    && secretario.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+                autenticacao.setUsuario(secretario);
+                return;
+            }
         }
 
         if (!Util.checkPassword(senha, secretario.getSenha())) {
@@ -96,10 +102,12 @@ public class AutenticacaoController {
             throw new AdminException("ERRO: Não existe nenhum administrador com esse email.");
         }
 
-        if (admin.getCodigoRecuperacao().equals(senha)
-                && admin.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
-            autenticacao.setUsuario(admin);
-            return;
+        if (admin.getCodigoRecuperacao() != null && admin.getValidadeCodigoRecuperacao() != null) {
+            if (admin.getCodigoRecuperacao().equals(senha)
+                    && admin.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
+                autenticacao.setUsuario(admin);
+                return;
+            }
         }
 
         if (!Util.checkPassword(senha, admin.getSenha())) {
