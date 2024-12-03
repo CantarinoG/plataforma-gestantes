@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import com.cantarino.souza.controller.tablemodels.TMGestantes;
 import com.cantarino.souza.model.dao.GestanteDao;
 import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateGestante;
 
@@ -37,6 +38,15 @@ public class GestanteController {
         String hashSenha = Util.hashPassword(novaGestante.getSenha());
         novaGestante.setSenha(hashSenha);
 
+        Gestante existingGestante = repositorio.findByCpf(novaGestante.getCpf());
+        if (existingGestante != null) {
+            throw new GestanteException("Já existe uma gestante cadastrada com esse cpf.");
+        }
+        existingGestante = repositorio.findByEmail(novaGestante.getEmail());
+        if (existingGestante != null) {
+            throw new GestanteException("Já existe uma gestante cadastrada com esse email.");
+        }
+
         repositorio.save(novaGestante);
 
     }
@@ -57,6 +67,16 @@ public class GestanteController {
                 endereco, deletadoEm, previsaoParto, contatoEmergencia, historicoMedico, tipoSanguineo);
 
         novaGestante.setId(id);
+
+        Gestante existingGestante = repositorio.findByCpf(novaGestante.getCpf());
+        if (existingGestante != null && existingGestante.getId() != id) {
+            throw new GestanteException("Já existe uma gestante cadastrada com esse cpf.");
+        }
+        existingGestante = repositorio.findByEmail(novaGestante.getEmail());
+        if (existingGestante != null && existingGestante.getId() != id) {
+            throw new GestanteException("Já existe uma gestante cadastrada com esse email.");
+        }
+
         repositorio.update(novaGestante);
 
     }
