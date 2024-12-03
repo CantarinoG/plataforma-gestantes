@@ -4,7 +4,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.cantarino.souza.controller.AdminController;
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.BackgroundPanel;
 import com.cantarino.souza.view.components.RoundedButton;
@@ -25,9 +27,14 @@ public class DlgAdmins extends JDialog {
     private JButton btnDeletar;
 
     private AdminController adminController;
+    private AutenticacaoController autenticacaoController;
+
+    private Usuario usuario;
 
     public DlgAdmins(JFrame parent, boolean modal) {
         super(parent, modal);
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         initComponents();
         adminController = new AdminController();
         adminController.atualizarTabela(grdAdmins);
@@ -178,6 +185,12 @@ public class DlgAdmins extends JDialog {
         }
 
         id = admin.getId();
+
+        if (id == usuario.getId()) {
+            JOptionPane.showMessageDialog(this, "Você não pode deletar a si mesmo", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         int option = JOptionPane.showConfirmDialog(this,
                 "Tem certeza que deseja excluir este administrador?",

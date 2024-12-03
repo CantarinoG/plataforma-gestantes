@@ -3,8 +3,10 @@ package com.cantarino.souza.view.screens;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.SecretarioController;
 import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.BackgroundPanel;
 import com.cantarino.souza.view.components.RoundedButton;
@@ -25,9 +27,14 @@ public class DlgSecretarios extends JDialog {
     private JButton btnDeletar;
 
     private SecretarioController secretarioController;
+    private AutenticacaoController autenticacaoController;
+
+    private Usuario usuario;
 
     public DlgSecretarios(JFrame parent, boolean modal) {
         super(parent, modal);
+        autenticacaoController = new AutenticacaoController();
+        usuario = autenticacaoController.getUsuario();
         initComponents();
         secretarioController = new SecretarioController();
         secretarioController.atualizarTabela(grdSecretarios);
@@ -166,6 +173,12 @@ public class DlgSecretarios extends JDialog {
 
         Secretario secretario = (Secretario) selectedObject;
         id = secretario.getId();
+
+        if (id == usuario.getId()) {
+            JOptionPane.showMessageDialog(this, "Você não pode deletar a si mesmo", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         int option = JOptionPane.showConfirmDialog(this,
                 "Tem certeza que deseja excluir este secretário?",
