@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import com.cantarino.souza.controller.tablemodels.TMMedico;
 import com.cantarino.souza.model.dao.MedicoDao;
 import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateMedico;
 
@@ -34,6 +35,20 @@ public class MedicoController {
                 deletadoEm, especializacao, crm);
         String hashSenha = Util.hashPassword(novoMedico.getSenha());
         novoMedico.setSenha(hashSenha);
+
+        Medico exisitingMedico = repositorio.findByCpf(novoMedico.getCpf());
+        if (exisitingMedico != null) {
+            throw new GestanteException("Já existe um médico cadastrado com esse cpf.");
+        }
+        exisitingMedico = repositorio.findByEmail(novoMedico.getEmail());
+        if (exisitingMedico != null) {
+            throw new GestanteException("Já existe um médico cadastrado com esse email.");
+        }
+        exisitingMedico = repositorio.findByCrm(novoMedico.getCrm());
+        if (exisitingMedico != null) {
+            throw new GestanteException("Já existe um médico cadastrado com esse CRM.");
+        }
+
         repositorio.save(novoMedico);
 
     }
@@ -51,6 +66,20 @@ public class MedicoController {
         Medico novoMedico = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
                 deletadoEm, especializacao, crm);
         novoMedico.setId(id);
+
+        Medico exisitingMedico = repositorio.findByCpf(novoMedico.getCpf());
+        if (exisitingMedico != null && exisitingMedico.getId() != id) {
+            throw new GestanteException("Já existe um médico cadastrado com esse cpf.");
+        }
+        exisitingMedico = repositorio.findByEmail(novoMedico.getEmail());
+        if (exisitingMedico != null && exisitingMedico.getId() != id) {
+            throw new GestanteException("Já existe um médico cadastrado com esse email.");
+        }
+        exisitingMedico = repositorio.findByCrm(novoMedico.getCrm());
+        if (exisitingMedico != null && exisitingMedico.getId() != id) {
+            throw new GestanteException("Já existe um médico cadastrado com esse CRM.");
+        }
+
         repositorio.update(novoMedico);
     }
 

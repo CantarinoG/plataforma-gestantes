@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import com.cantarino.souza.controller.tablemodels.TMAdmin;
 import com.cantarino.souza.model.dao.AdminDao;
 import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateAdmin;
 
@@ -34,6 +35,15 @@ public class AdminController {
         String hashSenha = Util.hashPassword(novoAdm.getSenha());
         novoAdm.setSenha(hashSenha);
 
+        Admin existingAdmin = repositorio.findByCpf(novoAdm.getCpf());
+        if (existingAdmin != null) {
+            throw new GestanteException("Já existe um administrador cadastrado com esse cpf.");
+        }
+        existingAdmin = repositorio.findByEmail(novoAdm.getEmail());
+        if (existingAdmin != null) {
+            throw new GestanteException("Já existe um administrador cadastrada com esse email.");
+        }
+
         repositorio.save(novoAdm);
     }
 
@@ -46,6 +56,16 @@ public class AdminController {
         Admin novoAdm = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
                 deletadoEm);
         novoAdm.setId(id);
+
+        Admin existingAdmin = repositorio.findByCpf(novoAdm.getCpf());
+        if (existingAdmin != null && existingAdmin.getId() != id) {
+            throw new GestanteException("Já existe um administrador cadastrado com esse cpf.");
+        }
+        existingAdmin = repositorio.findByEmail(novoAdm.getEmail());
+        if (existingAdmin != null && existingAdmin.getId() != id) {
+            throw new GestanteException("Já existe um administrador cadastrada com esse email.");
+        }
+
         repositorio.update(novoAdm);
     }
 

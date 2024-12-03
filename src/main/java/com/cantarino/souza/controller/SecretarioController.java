@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import com.cantarino.souza.controller.tablemodels.TMSecretario;
 import com.cantarino.souza.model.dao.SecretarioDao;
 import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateSecretario;
 
@@ -33,6 +34,16 @@ public class SecretarioController {
                 endereco, deletadoEm, dataContratacao);
         String hashSenha = Util.hashPassword(novoSecretario.getSenha());
         novoSecretario.setSenha(hashSenha);
+
+        Secretario existingSecretario = repositorio.findByCpf(novoSecretario.getCpf());
+        if (existingSecretario != null) {
+            throw new GestanteException("Já existe um secretário cadastrado com esse cpf.");
+        }
+        existingSecretario = repositorio.findByEmail(novoSecretario.getEmail());
+        if (existingSecretario != null) {
+            throw new GestanteException("Já existe um secretário cadastrada com esse email.");
+        }
+
         repositorio.save(novoSecretario);
 
     }
@@ -46,6 +57,16 @@ public class SecretarioController {
         Secretario novoSecretario = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
                 endereco, deletadoEm, dataContratacao);
         novoSecretario.setId(id);
+
+        Secretario existingSecretario = repositorio.findByCpf(novoSecretario.getCpf());
+        if (existingSecretario != null && existingSecretario.getId() != id) {
+            throw new GestanteException("Já existe um secretário cadastrado com esse cpf.");
+        }
+        existingSecretario = repositorio.findByEmail(novoSecretario.getEmail());
+        if (existingSecretario != null && existingSecretario.getId() != id) {
+            throw new GestanteException("Já existe um secretário cadastrada com esse email.");
+        }
+
         repositorio.update(novoSecretario);
     }
 
