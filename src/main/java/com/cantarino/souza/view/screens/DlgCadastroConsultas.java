@@ -10,6 +10,7 @@ import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.components.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 
@@ -105,10 +106,13 @@ public class DlgCadastroConsultas extends JDialog {
         return options;
     }
 
-    private String[] getConsultasOptions() {
+    private String[] getConsultasOptions(int idPaciente, int idMedico) {
         java.util.List<Consulta> consultas = consultaController.buscarTodas();
         java.util.List<Consulta> filteredConsultas = consultas.stream()
-                .filter(consulta -> atualizando == null || consulta.getId() != atualizando.getId())
+                .filter(consulta -> (atualizando == null || consulta.getId() != atualizando.getId())
+                        && consulta.getPaciente().getId() == idPaciente
+                        && consulta.getMedico().getId() == idMedico
+                        && consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValue()))
                 .collect(java.util.stream.Collectors.toList());
 
         String[] options = new String[filteredConsultas.size() + 1];
@@ -156,6 +160,9 @@ public class DlgCadastroConsultas extends JDialog {
         cbPaciente = new JComboBox<>(getGestantesOptions());
         cbPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
         cbPaciente.setBackground(AppColors.FIELD_PINK);
+        cbPaciente.addActionListener(evt -> {
+            cbPacienteActionPerformed(evt);
+        });
         panPacienteField = createCustomTextfield("Paciente", cbPaciente);
         panColumn.add(panPacienteField);
 
@@ -203,11 +210,14 @@ public class DlgCadastroConsultas extends JDialog {
         cbMedico = new JComboBox<>(getMedicosOptions());
         cbMedico.setFont(new Font("Arial", Font.PLAIN, 22));
         cbMedico.setBackground(AppColors.FIELD_PINK);
+        cbPaciente.addActionListener(evt -> {
+            cbMedicoActionPerformed(evt);
+        });
         panMedicoField = createCustomTextfield("Médico", cbMedico);
         panColumn.add(panMedicoField);
 
         // Campo Retorno da Consulta
-        cbRetorno = new JComboBox<>(getConsultasOptions());
+        cbRetorno = new JComboBox<>(getConsultasOptions(0, 0));
         cbRetorno.setFont(new Font("Arial", Font.PLAIN, 22));
         cbRetorno.setBackground(AppColors.FIELD_PINK);
         panRetornoField = createCustomTextfield("Retorno da Consulta", cbRetorno);
@@ -335,5 +345,26 @@ public class DlgCadastroConsultas extends JDialog {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void updateCbRetorno() {
+        String pacienteStr = (String) cbPaciente.getSelectedItem();
+        String medicoStr = (String) cbMedico.getSelectedItem();
+
+        if (pacienteStr != null && medicoStr != null) {
+            int pacienteId = Integer.parseInt(pacienteStr.split(" \\| ")[0]);
+            int medicoId = Integer.parseInt(medicoStr.split(" \\| ")[0]);
+
+            String[] options = getConsultasOptions(pacienteId, medicoId);
+            cbRetorno.setModel(new DefaultComboBoxModel<>(options));
+        }
+    }
+
+    private void cbPacienteActionPerformed(ActionEvent evt) {
+        updateCbRetorno();
+    }
+
+    private void cbMedicoActionPerformed(ActionEvent evt) {
+        updateCbRetorno();
     }
 }
