@@ -85,4 +85,34 @@ public class MedicoDao implements IDao<Medico> {
         return medico;
     }
 
+    public Medico findByEmail(String email) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Medico medico = this.entityManager
+                .createQuery("FROM Medico m WHERE m.email = :email AND m.deletadoEm IS NULL", Medico.class)
+                .setParameter("email", email)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        this.entityManager.close();
+        return medico;
+    }
+
+    public Medico findByCrm(String crm) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Medico medico = this.entityManager
+                .createQuery("FROM Medico m WHERE m.crm = :crm AND m.deletadoEm IS NULL", Medico.class)
+                .setParameter("crm", crm)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        this.entityManager.close();
+        return medico;
+    }
+
 }

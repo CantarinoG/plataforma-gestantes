@@ -87,4 +87,19 @@ public class GestanteDao implements IDao<Gestante> {
         return gestante;
     }
 
+    public Gestante findByEmail(String email) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Gestante gestante = this.entityManager
+                .createQuery("FROM Gestante g WHERE g.email = :email AND g.deletadoEm IS NULL", Gestante.class)
+                .setParameter("email", email)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        this.entityManager.close();
+        return gestante;
+    }
+
 }

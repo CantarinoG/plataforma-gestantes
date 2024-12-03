@@ -85,4 +85,19 @@ public class AdminDao implements IDao<Admin> {
         return admin;
     }
 
+    public Admin findByEmail(String email) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Admin admin = this.entityManager
+                .createQuery("FROM Admin a WHERE a.email = :email AND a.deletadoEm IS NULL", Admin.class)
+                .setParameter("email", email)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        this.entityManager.close();
+        return admin;
+    }
+
 }

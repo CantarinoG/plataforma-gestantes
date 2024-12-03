@@ -85,4 +85,19 @@ public class SecretarioDao implements IDao<Secretario> {
         return secretario;
     }
 
+    public Secretario findByEmail(String email) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        Secretario secretario = this.entityManager
+                .createQuery("FROM Secretario s WHERE s.email = :email AND s.deletadoEm IS NULL", Secretario.class)
+                .setParameter("email", email)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        this.entityManager.close();
+        return secretario;
+    }
+
 }
