@@ -236,6 +236,14 @@ public class DlgAgendaMedico extends JDialog {
             return;
         }
         Consulta consulta = (Consulta) selectedObject;
+
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+            JOptionPane.showMessageDialog(this,
+                    "Não é possível adicionar ou editar um relatório num procedimento cancelado", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         id = consulta.getId();
 
         DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, id);

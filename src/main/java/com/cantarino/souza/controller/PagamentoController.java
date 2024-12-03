@@ -43,6 +43,16 @@ public class PagamentoController {
             throw new PagamentoException("Procedimento não pode ser nulo");
         }
 
+        Pagamento pagamentoExistente = buscarPorIdProcedimento(procedimento.getId());
+        if (pagamentoExistente != null) {
+            throw new PagamentoException("Já existe um pagamento registrado para este procedimento");
+        }
+
+        double valorPago = Double.parseDouble(valor);
+        if (valorPago > procedimento.getValor()) {
+            throw new PagamentoException("O valor informado não pode ser maior que o valor do procedimento");
+        }
+
         Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento);
         novoPagamento.setRegistradoPor(registradoPor);
         novoPagamento.setPaciente(paciente);
@@ -64,6 +74,11 @@ public class PagamentoController {
         }
         if (procedimento == null) {
             throw new PagamentoException("Procedimento não pode ser nulo");
+        }
+
+        double valorPago = Double.parseDouble(valor);
+        if (valorPago > procedimento.getValor()) {
+            throw new PagamentoException("O valor informado não pode ser maior que o valor do procedimento");
         }
 
         Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento);
