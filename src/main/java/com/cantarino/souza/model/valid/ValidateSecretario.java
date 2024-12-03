@@ -29,6 +29,9 @@ public class ValidateSecretario extends ValidateUsuario {
         LocalDate date;
         try {
             date = LocalDate.parse(dataContratacao);
+            if (date.isAfter(LocalDate.now())) {
+                throw new SecretarioException("ERRO: Data de contratação não pode ser no futuro.");
+            }
         } catch (DateTimeParseException e) {
             throw new SecretarioException("ERRO: Formato de data inválido.");
         }
