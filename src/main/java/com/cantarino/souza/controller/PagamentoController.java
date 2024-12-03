@@ -6,6 +6,7 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.exceptions.PagamentoException;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidatePagamento;
 
@@ -32,6 +33,16 @@ public class PagamentoController {
 
     public void cadastrar(String valor, Usuario registradoPor, Gestante paciente, String metodoPagamento,
             Procedimento procedimento, String deletadoEm) {
+        if (registradoPor == null) {
+            throw new PagamentoException("Usuário que registrou não pode ser nulo");
+        }
+        if (paciente == null) {
+            throw new PagamentoException("Paciente não pode ser nulo");
+        }
+        if (procedimento == null) {
+            throw new PagamentoException("Procedimento não pode ser nulo");
+        }
+
         Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento);
         novoPagamento.setRegistradoPor(registradoPor);
         novoPagamento.setPaciente(paciente);
@@ -45,6 +56,16 @@ public class PagamentoController {
 
     public void atualizar(int id, String valor, Usuario registradoPor, Gestante paciente,
             String metodoPagamento, Procedimento procedimento, String deletadoEm) {
+        if (registradoPor == null) {
+            throw new PagamentoException("Usuário que registrou não pode ser nulo");
+        }
+        if (paciente == null) {
+            throw new PagamentoException("Paciente não pode ser nulo");
+        }
+        if (procedimento == null) {
+            throw new PagamentoException("Procedimento não pode ser nulo");
+        }
+
         Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento);
         novoPagamento.setId(id);
         novoPagamento.setRegistradoPor(registradoPor);

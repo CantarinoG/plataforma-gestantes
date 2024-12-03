@@ -12,6 +12,7 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
+import com.cantarino.souza.model.exceptions.ExameException;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateExame;
 
@@ -34,6 +35,10 @@ public class ExameController {
     public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
             Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
 
+        if (paciente == null) {
+            throw new ExameException("Paciente não pode ser nulo");
+        }
+
         Exame novoExame = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
                 dataResultado,
                 laboratorio);
@@ -54,6 +59,10 @@ public class ExameController {
     public void atualizar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
             String status,
             Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
+        if (paciente == null) {
+            throw new ExameException("Paciente não pode ser nulo");
+        }
+
         Exame novoExame = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
                 dataResultado,
                 laboratorio);
