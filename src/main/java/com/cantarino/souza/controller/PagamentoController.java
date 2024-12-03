@@ -6,6 +6,7 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.model.exceptions.PagamentoException;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidatePagamento;
@@ -41,6 +42,10 @@ public class PagamentoController {
         }
         if (procedimento == null) {
             throw new PagamentoException("Procedimento não pode ser nulo");
+        }
+
+        if (procedimento.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+            throw new PagamentoException("Não é possível registrar pagamento para um procedimento cancelado");
         }
 
         Pagamento pagamentoExistente = buscarPorIdProcedimento(procedimento.getId());

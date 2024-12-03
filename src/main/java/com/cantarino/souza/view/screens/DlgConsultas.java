@@ -13,6 +13,7 @@ import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
@@ -291,6 +292,13 @@ public class DlgConsultas extends JDialog {
         }
 
         Consulta consulta = (Consulta) selectedObject;
+
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+            JOptionPane.showMessageDialog(this,
+                    "Não é possível adicionar ou editar um relatório num procedimento cancelado", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, consulta.getId());
         dialog.setVisible(true);
