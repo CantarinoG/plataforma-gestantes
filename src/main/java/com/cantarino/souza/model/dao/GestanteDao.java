@@ -78,7 +78,10 @@ public class GestanteDao implements IDao<Gestante> {
         Gestante gestante = this.entityManager
                 .createQuery("FROM Gestante g WHERE g.cpf = :cpf AND g.deletadoEm IS NULL", Gestante.class)
                 .setParameter("cpf", cpf)
-                .getSingleResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
 
         this.entityManager.close();
         return gestante;

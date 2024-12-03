@@ -1,5 +1,6 @@
 package com.cantarino.souza.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -7,16 +8,19 @@ import javax.swing.JTable;
 import com.cantarino.souza.controller.tablemodels.TMMedico;
 import com.cantarino.souza.model.dao.MedicoDao;
 import com.cantarino.souza.model.entities.Medico;
+import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateMedico;
 
 public class MedicoController {
 
     private MedicoDao repositorio;
     private ValidateMedico validator;
+    private NotificadorEmail notificador;
 
     public MedicoController() {
         repositorio = new MedicoDao();
         validator = new ValidateMedico();
+        notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -60,6 +64,18 @@ public class MedicoController {
         String hashSenha = Util.hashPassword(senhaValidada);
         usuario.setSenha(hashSenha);
         repositorio.update(usuario);
+    }
+
+    public Medico adicionarCodigoRecuperacao(String cpf, String codigo) {
+        Medico medico = repositorio.findByCpf(cpf);
+        if (medico != null) {
+            medico.setCodigoRecuperacao(codigo);
+            medico.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));
+            repositorio.update(medico);
+            notificador.notificar(medico, "BemGestar | Recuperação de Senha", "Seu código de recuperação é: " + codigo
+                    + ". Pelos próximos 30 minutos, você vai conseguir logar na sua conta utilizando este código no lugar da senha. Entre na sua conta e seleciona a opção de mudar senha para redefinir sua senha.");
+        }
+        return medico;
     }
 
 }

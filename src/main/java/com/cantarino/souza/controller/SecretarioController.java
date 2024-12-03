@@ -1,20 +1,25 @@
 package com.cantarino.souza.controller;
 
+import java.time.LocalDateTime;
+
 import javax.swing.JTable;
 
 import com.cantarino.souza.controller.tablemodels.TMSecretario;
 import com.cantarino.souza.model.dao.SecretarioDao;
 import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateSecretario;
 
 public class SecretarioController {
 
     private SecretarioDao repositorio;
     private ValidateSecretario validator;
+    private NotificadorEmail notificador;
 
     public SecretarioController() {
         repositorio = new SecretarioDao();
         validator = new ValidateSecretario();
+        notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -54,6 +59,19 @@ public class SecretarioController {
         String hashSenha = Util.hashPassword(senhaValidada);
         usuario.setSenha(hashSenha);
         repositorio.update(usuario);
+    }
+
+    public Secretario adicionarCodigoRecuperacao(String cpf, String codigo) {
+        Secretario secretario = repositorio.findByCpf(cpf);
+        if (secretario != null) {
+            secretario.setCodigoRecuperacao(codigo);
+            secretario.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));
+            repositorio.update(secretario);
+            notificador.notificar(secretario, "BemGestar | Recuperação de Senha", "Seu código de recuperação é: "
+                    + codigo
+                    + ". Pelos próximos 30 minutos, você vai conseguir logar na sua conta utilizando este código no lugar da senha. Entre na sua conta e seleciona a opção de mudar senha para redefinir sua senha.");
+        }
+        return secretario;
     }
 
 }

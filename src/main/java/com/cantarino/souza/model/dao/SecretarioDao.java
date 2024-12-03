@@ -76,7 +76,10 @@ public class SecretarioDao implements IDao<Secretario> {
         Secretario secretario = this.entityManager
                 .createQuery("FROM Secretario s WHERE s.cpf = :cpf AND s.deletadoEm IS NULL", Secretario.class)
                 .setParameter("cpf", cpf)
-                .getSingleResult();
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
 
         this.entityManager.close();
         return secretario;

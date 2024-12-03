@@ -19,9 +19,11 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 public class Admin extends Usuario {
 
-    public Admin(String cpf, String nome, String email, String senha, LocalDate dataNascimento,
+    public Admin(String cpf, String nome, String email, String senha, String codigoRecuperacao,
+            LocalDateTime validadeCodigoRecuperacao, LocalDate dataNascimento,
             String telefone, String endereco, LocalDateTime deletadoEm) {
-        super(0, cpf, nome, email, senha, dataNascimento, telefone, endereco, deletadoEm);
+        super(0, cpf, nome, email, senha, codigoRecuperacao, validadeCodigoRecuperacao, dataNascimento, telefone,
+                endereco, deletadoEm);
     }
 
 }

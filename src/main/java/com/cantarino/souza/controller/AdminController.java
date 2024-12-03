@@ -1,20 +1,26 @@
 package com.cantarino.souza.controller;
 
+import java.time.LocalDateTime;
+
 import javax.swing.JTable;
 
 import com.cantarino.souza.controller.tablemodels.TMAdmin;
 import com.cantarino.souza.model.dao.AdminDao;
 import com.cantarino.souza.model.entities.Admin;
+import com.cantarino.souza.model.entities.Secretario;
+import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateAdmin;
 
 public class AdminController {
 
     private AdminDao repositorio;
     private ValidateAdmin validator;
+    private NotificadorEmail notificador;
 
     public AdminController() {
         repositorio = new AdminDao();
         validator = new ValidateAdmin();
+        notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -54,6 +60,19 @@ public class AdminController {
         String hashSenha = Util.hashPassword(senhaValidada);
         usuario.setSenha(hashSenha);
         repositorio.update(usuario);
+    }
+
+    public Admin adicionarCodigoRecuperacao(String cpf, String codigo) {
+        Admin admin = repositorio.findByCpf(cpf);
+        if (admin != null) {
+            admin.setCodigoRecuperacao(codigo);
+            admin.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));
+            repositorio.update(admin);
+            notificador.notificar(admin, "BemGestar | Recuperação de Senha", "Seu código de recuperação é: "
+                    + codigo
+                    + ". Pelos próximos 30 minutos, você vai conseguir logar na sua conta utilizando este código no lugar da senha. Entre na sua conta e seleciona a opção de mudar senha para redefinir sua senha.");
+        }
+        return admin;
     }
 
 }
