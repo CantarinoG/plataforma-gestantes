@@ -10,6 +10,7 @@ import com.cantarino.souza.model.dao.ComentarioDao;
 import com.cantarino.souza.model.entities.Comentario;
 import com.cantarino.souza.model.entities.Publicacao;
 import com.cantarino.souza.model.entities.Usuario;
+import com.cantarino.souza.model.exceptions.ComentarioException;
 import com.cantarino.souza.model.valid.ValidateComentario;
 
 public class ComentarioController {
@@ -27,6 +28,16 @@ public class ComentarioController {
 
     public void cadastrar(String conteudo, LocalDateTime data, boolean isAnonimo, Publicacao publicacao, Usuario autor,
             LocalDateTime deletadoEm) {
+        if (data == null) {
+            throw new ComentarioException("Data não pode ser nula");
+        }
+        if (publicacao == null) {
+            throw new ComentarioException("Publicação não pode ser nula");
+        }
+        if (autor == null) {
+            throw new ComentarioException("Autor não pode ser nulo");
+        }
+
         Comentario novoComentario = validator.validaCamposEntrada(conteudo);
         novoComentario.setAutor(autor);
         novoComentario.setPublicacao(publicacao);
@@ -38,6 +49,16 @@ public class ComentarioController {
     public void atualizar(int id, String conteudo, LocalDateTime data, boolean isAnonimo, Publicacao publicacao,
             Usuario autor,
             LocalDateTime deletadoEm) {
+        if (data == null) {
+            throw new ComentarioException("Data não pode ser nula");
+        }
+        if (publicacao == null) {
+            throw new ComentarioException("Publicação não pode ser nula");
+        }
+        if (autor == null) {
+            throw new ComentarioException("Autor não pode ser nulo");
+        }
+
         Comentario novoComentario = validator.validaCamposEntrada(conteudo);
         novoComentario.setId(id);
         novoComentario.setAutor(autor);

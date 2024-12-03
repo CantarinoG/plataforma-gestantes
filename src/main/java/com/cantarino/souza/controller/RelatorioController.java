@@ -12,6 +12,7 @@ import com.cantarino.souza.controller.tablemodels.TMRelatorio;
 import com.cantarino.souza.model.dao.RelatorioDao;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Relatorio;
+import com.cantarino.souza.model.exceptions.RelatorioException;
 import com.cantarino.souza.model.valid.ValidateRelatorio;
 
 public class RelatorioController {
@@ -29,6 +30,9 @@ public class RelatorioController {
 
     public int cadastrar(LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
             LocalDateTime deletadoEm) {
+        if (dataEmissao == null) {
+            throw new RelatorioException("Data de emissão não pode ser nula");
+        }
         Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes, caminhoPdf);
         novoRelatorio.setDataEmissao(dataEmissao);
         repositorio.save(novoRelatorio);
@@ -37,6 +41,9 @@ public class RelatorioController {
 
     public void atualizar(int id, LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
             LocalDateTime deletadoEm) {
+        if (dataEmissao == null) {
+            throw new RelatorioException("Data de emissão não pode ser nula");
+        }
         Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes, caminhoPdf);
         novoRelatorio.setId(id);
         novoRelatorio.setDataEmissao(dataEmissao);
