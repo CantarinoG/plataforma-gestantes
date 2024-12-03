@@ -19,6 +19,7 @@ import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.MetodoPagamento;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.components.*;
 import java.awt.event.ActionEvent;
 
@@ -84,11 +85,13 @@ public class DlgCadastroPagamentos extends JDialog {
 
         java.util.List<String> exameOptions = exames.stream()
                 .filter(e -> !paidProcedureIds.contains(e.getId()))
+                .filter(e -> !e.getStatus().equals(StatusProcedimentos.CANCELADA.getValue()))
                 .map(e -> e.getId() + "|Exame|R$ " + e.getValor() + "| " + e.getDescricao())
                 .collect(java.util.stream.Collectors.toList());
 
         java.util.List<String> consultaOptions = consultas.stream()
                 .filter(c -> !paidProcedureIds.contains(c.getId()))
+                .filter(c -> !c.getStatus().equals(StatusProcedimentos.CANCELADA.getValue()))
                 .map(c -> c.getId() + "|Consulta|R$ " + c.getValor() + "| " + c.getDescricao())
                 .collect(java.util.stream.Collectors.toList());
 

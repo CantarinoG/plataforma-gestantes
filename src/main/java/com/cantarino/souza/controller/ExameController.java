@@ -1,5 +1,6 @@
 package com.cantarino.souza.controller;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.swing.JTable;
 
 import com.cantarino.souza.controller.tablemodels.TMExame;
 import com.cantarino.souza.model.dao.ExameDao;
+import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Relatorio;
@@ -32,6 +34,41 @@ public class ExameController {
         Util.jTableShow(grd, new TMExame(repositorio.findAll()), TMExame.getCustomRenderer());
     }
 
+    private void verificarConflitos(Exame novoExame, Gestante paciente) {
+        List<Consulta> consultasPaciente = new ConsultaController().buscarTodosPorIdGestante(paciente.getId());
+        for (Consulta consulta : consultasPaciente) {
+            LocalDateTime consultaInicio = consulta.getData();
+            LocalDateTime consultaFim = consulta.getData().plusMinutes(consulta.getDuracao());
+            LocalDateTime novoInicio = novoExame.getData();
+            LocalDateTime novoFim = novoExame.getData().plusMinutes(novoExame.getDuracao());
+
+            if ((novoInicio.isAfter(consultaInicio) && novoInicio.isBefore(consultaFim)) ||
+                    (novoFim.isAfter(consultaInicio) && novoFim.isBefore(consultaFim)) ||
+                    (novoInicio.isEqual(consultaInicio)) ||
+                    (novoInicio.isBefore(consultaInicio) && novoFim.isAfter(consultaFim))) {
+                throw new ExameException("Existe um conflito com uma consulta agendada para o paciente.");
+            }
+        }
+
+        List<Exame> examesPaciente = buscarTodasPorIdGestante(paciente.getId());
+        for (Exame exame : examesPaciente) {
+            if (exame.getId() == novoExame.getId())
+                continue;
+
+            LocalDateTime exameInicio = exame.getData();
+            LocalDateTime exameFim = exame.getData().plusMinutes(exame.getDuracao());
+            LocalDateTime novoInicio = novoExame.getData();
+            LocalDateTime novoFim = novoExame.getData().plusMinutes(novoExame.getDuracao());
+
+            if ((novoInicio.isAfter(exameInicio) && novoInicio.isBefore(exameFim)) ||
+                    (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
+                    (novoInicio.isEqual(exameInicio)) ||
+                    (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
+                throw new ExameException("Existe um conflito com outro exame agendado para o paciente.");
+            }
+        }
+    }
+
     public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
             Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
 
@@ -43,31 +80,11 @@ public class ExameController {
                 dataResultado,
                 laboratorio);
 
-        // // Check for time conflicts with existing exams
-        // List<Exame> examesPaciente = repositorio.filterGestanteId(paciente.getId());
-        // for (Exame exame : examesPaciente) {
-        // // Get start and end times for existing exam
-        // var exameInicio = exame.getData();
-        // var exameFim =
-        // exame.getData().plusMinutes(Long.parseLong(exame.getDuracao()));
-
-        // // Get start and end times for new exam
-        // var novoInicio = novoExame.getData();
-        // var novoFim =
-        // novoExame.getData().plusMinutes(Long.parseLong(novoExame.getDuracao()));
-
-        // // Check if times overlap
-        // if ((novoInicio.isAfter(exameInicio) && novoInicio.isBefore(exameFim)) ||
-        // (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
-        // (novoInicio.isEqual(exameInicio)) ||
-        // (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
-        // throw new ExameException("Existe um conflito de horário com outro exame já
-        // agendado");
-        // }
-        // }
-
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
+
+        verificarConflitos(novoExame, paciente);
+
         repositorio.save(novoExame);
 
         String conteudoEmail = "Foi agendada um novo exame: " + novoExame.getDescricao() + ". Data: "
@@ -93,11 +110,18 @@ public class ExameController {
         novoExame.setPaciente(paciente);
         novoExame.setRequisitadoPor(requisitadoPor);
         novoExame.setId(id);
+
+        verificarConflitos(novoExame, paciente);
+
         repositorio.update(novoExame);
     }
 
     public List<Exame> buscarTodas() {
         return repositorio.findAll();
+    }
+
+    public List<Exame> buscarTodasPorIdGestante(int id) {
+        return repositorio.filterGestanteId(id);
     }
 
     public void excluir(int id) {

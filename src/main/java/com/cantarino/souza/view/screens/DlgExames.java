@@ -12,6 +12,7 @@ import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.controller.PagamentoController;
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Pagamento;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.components.AppColors;
 import com.cantarino.souza.view.components.BackgroundPanel;
 import com.cantarino.souza.view.components.RoundedButton;
@@ -271,6 +272,13 @@ public class DlgExames extends JDialog {
         }
 
         Exame exame = (Exame) selectedObject;
+
+        if (exame.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+            JOptionPane.showMessageDialog(this,
+                    "Não é possível adicionar ou editar um relatório num procedimento cancelado", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, exame.getId());
         dialog.setVisible(true);

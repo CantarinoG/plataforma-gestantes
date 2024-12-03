@@ -27,6 +27,9 @@ public class ValidateExame extends ValidateProcedimento {
             LocalDate date;
             try {
                 date = LocalDate.parse(dataResultado);
+                if (date.isBefore(base.getData().toLocalDate())) {
+                    throw new ExameException("ERRO: Data do resultado não pode ser anterior à data do exame.");
+                }
             } catch (DateTimeParseException e) {
                 throw new ExameException("ERRO: Formato de data de resultado inválido.");
             }

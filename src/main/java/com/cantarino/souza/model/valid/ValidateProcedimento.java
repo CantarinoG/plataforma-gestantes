@@ -23,6 +23,9 @@ public class ValidateProcedimento {
         LocalDateTime validDate;
         try {
             validDate = LocalDateTime.parse(data);
+            if (validDate.isBefore(LocalDateTime.now())) {
+                throw new ProcedimentoException("ERRO: Data não pode ser anterior ao momento atual.");
+            }
         } catch (DateTimeParseException e) {
             throw new ProcedimentoException("ERRO: Formato de data inválido.");
         }

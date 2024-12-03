@@ -1,5 +1,6 @@
 package com.cantarino.souza.controller;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.swing.JTable;
 import com.cantarino.souza.controller.tablemodels.TMConsulta;
 import com.cantarino.souza.model.dao.ConsultaDao;
 import com.cantarino.souza.model.entities.Consulta;
+import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Relatorio;
@@ -32,6 +34,63 @@ public class ConsultaController {
         Util.jTableShow(grd, new TMConsulta(repositorio.findAll()), TMConsulta.getCustomRenderer());
     }
 
+    private void verificarConflitos(Consulta novaConsulta, Gestante paciente, Medico medico) {
+        List<Consulta> consultaPaciente = repositorio.filterGestanteId(paciente.getId());
+        for (Consulta consulta : consultaPaciente) {
+            if (consulta.getId() == novaConsulta.getId())
+                continue; // Skip if updating same consultation
+
+            LocalDateTime consultaInicio = consulta.getData();
+            LocalDateTime consultaFim = consulta.getData().plusMinutes(consulta.getDuracao());
+            LocalDateTime novoInicio = novaConsulta.getData();
+            LocalDateTime novoFim = novaConsulta.getData().plusMinutes(novaConsulta.getDuracao());
+
+            if ((novoInicio.isAfter(consultaInicio) && novoInicio.isBefore(consultaFim)) ||
+                    (novoFim.isAfter(consultaInicio) && novoFim.isBefore(consultaFim)) ||
+                    (novoInicio.isEqual(consultaInicio)) ||
+                    (novoInicio.isBefore(consultaInicio) && novoFim.isAfter(consultaFim))) {
+                throw new ConsultaException("Existe um conflito com outra consulta agendada para o paciente.");
+            }
+        }
+
+        List<Consulta> consultaMedico = repositorio.filterMedicoId(medico.getId());
+        for (Consulta consulta : consultaMedico) {
+            if (consulta.getId() == novaConsulta.getId())
+                continue; // Skip if updating same consultation
+
+            LocalDateTime consultaInicio = consulta.getData();
+            LocalDateTime consultaFim = consulta.getData().plusMinutes(consulta.getDuracao());
+            LocalDateTime novoInicio = novaConsulta.getData();
+            LocalDateTime novoFim = novaConsulta.getData().plusMinutes(novaConsulta.getDuracao());
+
+            if ((novoInicio.isAfter(consultaInicio) && novoInicio.isBefore(consultaFim)) ||
+                    (novoFim.isAfter(consultaInicio) && novoFim.isBefore(consultaFim)) ||
+                    (novoInicio.isEqual(consultaInicio)) ||
+                    (novoInicio.isBefore(consultaInicio) && novoFim.isAfter(consultaFim))) {
+                throw new ConsultaException("Existe um conflito com outra consulta agendada para o médico.");
+            }
+        }
+
+        List<Exame> examePaciente = new ExameController().buscarTodasPorIdGestante(paciente.getId());
+        for (Exame exame : examePaciente) {
+            LocalDateTime exameInicio = exame.getData();
+            LocalDateTime exameFim = exame.getData().plusMinutes(exame.getDuracao());
+            LocalDateTime novoInicio = novaConsulta.getData();
+            LocalDateTime novoFim = novaConsulta.getData().plusMinutes(novaConsulta.getDuracao());
+
+            if ((novoInicio.isAfter(exameInicio) && novoInicio.isBefore(exameFim)) ||
+                    (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
+                    (novoInicio.isEqual(exameInicio)) ||
+                    (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
+                throw new ConsultaException("Existe um conflito com um exame agendado para o paciente.");
+            }
+        }
+    }
+
+    List<Consulta> buscarTodosPorIdGestante(int id) {
+        return repositorio.filterGestanteId(id);
+    }
+
     public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
             Relatorio relatorio, String deletadoEm, Medico medico, Consulta retorno) {
 
@@ -46,6 +105,9 @@ public class ConsultaController {
         novaConsulta.setPaciente(paciente);
         novaConsulta.setMedico(medico);
         novaConsulta.setRetorno(retorno);
+
+        verificarConflitos(novaConsulta, paciente, medico);
+
         repositorio.save(novaConsulta);
 
         String conteudoEmail = "Foi agendada uma nova consulta: " + novaConsulta.getDescricao() + ". Data: "
@@ -71,6 +133,8 @@ public class ConsultaController {
         novaConsulta.setMedico(medico);
         novaConsulta.setRetorno(retorno);
         novaConsulta.setId(id);
+
+        verificarConflitos(novaConsulta, paciente, medico);
 
         repositorio.update(novaConsulta);
     }
