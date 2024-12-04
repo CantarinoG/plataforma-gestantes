@@ -26,16 +26,16 @@ public class ValidateSecretario extends ValidateUsuario {
 
         if (dataContratacao == null || dataContratacao.isEmpty())
             throw new SecretarioException("ERRO: Campo data de contratação não pode ser vazio.");
-        LocalDate date;
+        LocalDate dataConvertida;
         try {
-            date = LocalDate.parse(dataContratacao);
-            if (date.isAfter(LocalDate.now())) {
+            dataConvertida = LocalDate.parse(dataContratacao);
+            if (dataConvertida.isAfter(LocalDate.now())) {
                 throw new SecretarioException("ERRO: Data de contratação não pode ser no futuro.");
             }
         } catch (DateTimeParseException e) {
             throw new SecretarioException("ERRO: Formato de data inválido.");
         }
-        secretario.setDataContratacao(date);
+        secretario.setDataContratacao(dataConvertida);
 
         return secretario;
 

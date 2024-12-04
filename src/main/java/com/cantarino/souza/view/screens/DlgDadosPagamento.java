@@ -8,19 +8,19 @@ import com.cantarino.souza.view.components.AppColors;
 
 public class DlgDadosPagamento extends JDialog {
 
-    JPanel panBackground;
-    JPanel panColumn;
-    JLabel lblAction;
-    JPanel panButton;
+    JPanel panFundo;
+    JPanel panColuna;
+    JLabel lblTitulo;
     JLabel lblValor;
     JLabel lblMetodoPagamento;
     JLabel lblProcedimento;
-    JPanel panValorField;
-    JPanel panMetodoField;
-    JPanel panProcedimentoField;
+    JPanel panValor;
+    JPanel panMetodo;
+    JPanel panProcedimento;
 
     public DlgDadosPagamento(JDialog parent, boolean modal, Pagamento pagamento) {
         super(parent, modal);
+
         initComponents();
 
         lblValor.setText(String.valueOf(pagamento.getValor()));
@@ -34,10 +34,10 @@ public class DlgDadosPagamento extends JDialog {
         setSize(1620, 930);
         setLocationRelativeTo(null);
 
-        panBackground = new JPanel();
-        panBackground.setBackground(AppColors.BUTTON_PINK);
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new JPanel();
+        panFundo.setBackground(AppColors.BUTTON_PINK);
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -46,41 +46,41 @@ public class DlgDadosPagamento extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel("Dados de Pagamento");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 32));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        lblTitulo = new JLabel("Dados de Pagamento");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblTitulo, gbc);
 
         gbc.gridy = 1;
-        panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(3, 1, 20, 10));
-        panColumn.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panColumn, gbc);
+        panColuna = new JPanel();
+        panColuna.setLayout(new GridLayout(3, 1, 20, 10));
+        panColuna.setBackground(AppColors.TRANSPARENT);
+        panFundo.add(panColuna, gbc);
 
         lblValor = new JLabel();
         lblValor.setFont(new Font("Arial", Font.PLAIN, 22));
         lblValor.setBackground(AppColors.FIELD_PINK);
         lblValor.setOpaque(true);
-        panValorField = createCustomLabelField("Valor", lblValor);
-        panColumn.add(panValorField);
+        panValor = criarCampoCustomizado("Valor", lblValor);
+        panColuna.add(panValor);
 
         lblProcedimento = new JLabel();
         lblProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
         lblProcedimento.setBackground(AppColors.FIELD_PINK);
         lblProcedimento.setOpaque(true);
-        panProcedimentoField = createCustomLabelField("Procedimento", lblProcedimento);
-        panColumn.add(panProcedimentoField);
+        panProcedimento = criarCampoCustomizado("Procedimento", lblProcedimento);
+        panColuna.add(panProcedimento);
 
         lblMetodoPagamento = new JLabel();
         lblMetodoPagamento.setFont(new Font("Arial", Font.PLAIN, 22));
         lblMetodoPagamento.setBackground(AppColors.FIELD_PINK);
         lblMetodoPagamento.setOpaque(true);
-        panMetodoField = createCustomLabelField("Método de Pagamento", lblMetodoPagamento);
-        panColumn.add(panMetodoField);
+        panMetodo = criarCampoCustomizado("Método de Pagamento", lblMetodoPagamento);
+        panColuna.add(panMetodo);
     }
 
-    private JPanel createCustomLabelField(String hint, JComponent textField) {
+    private JPanel criarCampoCustomizado(String hint, JComponent textField) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));

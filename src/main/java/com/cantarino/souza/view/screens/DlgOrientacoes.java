@@ -8,10 +8,10 @@ import com.cantarino.souza.view.components.*;
 
 public class DlgOrientacoes extends JDialog {
 
-        JPanel panBackground;
-        JPanel panLeft;
-        JLabel lblAction;
-        JPanel panOptions;
+        JPanel panFundo;
+        JPanel panEsquerdo;
+        JLabel lblTitulo;
+        JPanel panOpcoes;
         JButton btn1trimestre;
         JButton btn2trimestre;
         JButton btn3trimestre;
@@ -34,9 +34,9 @@ public class DlgOrientacoes extends JDialog {
                 setSize(1920, 1080);
                 setLocationRelativeTo(null);
 
-                panBackground = new BackgroundPanel("/images/background.png");
-                panBackground.setLayout(new GridBagLayout());
-                setContentPane(panBackground);
+                panFundo = new BackgroundPanel("/images/background.png");
+                panFundo.setLayout(new GridBagLayout());
+                setContentPane(panFundo);
 
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.gridx = 0;
@@ -44,13 +44,13 @@ public class DlgOrientacoes extends JDialog {
                 gbc.weightx = 1.0;
                 gbc.weighty = 1.0;
                 gbc.fill = GridBagConstraints.BOTH;
-                panLeft = new JPanel();
-                panLeft.setBackground(AppColors.TRANSPARENT);
-                panLeft.setPreferredSize(new Dimension(0, 0));
-                panLeft.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-                panBackground.add(panLeft, gbc);
+                panEsquerdo = new JPanel();
+                panEsquerdo.setBackground(AppColors.TRANSPARENT);
+                panEsquerdo.setPreferredSize(new Dimension(0, 0));
+                panEsquerdo.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                panFundo.add(panEsquerdo, gbc);
 
-                panLeft.setLayout(new GridBagLayout());
+                panEsquerdo.setLayout(new GridBagLayout());
 
                 gbc.gridx = 0;
                 gbc.gridy = 0;
@@ -59,17 +59,17 @@ public class DlgOrientacoes extends JDialog {
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 gbc.anchor = GridBagConstraints.NORTH;
                 gbc.insets = new Insets(0, 0, 10, 0);
-                lblAction = new JLabel("Dicas e Orientações", SwingConstants.CENTER);
-                lblAction.setFont(new Font("Arial", Font.BOLD, 64));
-                lblAction.setForeground(AppColors.TITLE_BLUE);
-                panLeft.add(lblAction, gbc);
+                lblTitulo = new JLabel("Dicas e Orientações", SwingConstants.CENTER);
+                lblTitulo.setFont(new Font("Arial", Font.BOLD, 64));
+                lblTitulo.setForeground(AppColors.TITLE_BLUE);
+                panEsquerdo.add(lblTitulo, gbc);
 
                 gbc.gridy = 1;
-                panOptions = new JPanel(new GridLayout(1, 3, 10, 0));
-                panOptions.setBackground(AppColors.TRANSPARENT);
-                panOptions.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-                panOptions.setPreferredSize(new Dimension(0, 75));
-                panLeft.add(panOptions, gbc);
+                panOpcoes = new JPanel(new GridLayout(1, 3, 10, 0));
+                panOpcoes.setBackground(AppColors.TRANSPARENT);
+                panOpcoes.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                panOpcoes.setPreferredSize(new Dimension(0, 75));
+                panEsquerdo.add(panOpcoes, gbc);
 
                 btn1trimestre = new RoundedButton("1° Trimestre", 10);
                 btn1trimestre.setPreferredSize(new Dimension(150, 50));
@@ -80,7 +80,7 @@ public class DlgOrientacoes extends JDialog {
                                 btn1trimestreActionPerformed(evt);
                         }
                 });
-                panOptions.add(btn1trimestre);
+                panOpcoes.add(btn1trimestre);
 
                 btn2trimestre = new RoundedButton("2° Trimestre", 10);
                 btn2trimestre.setPreferredSize(new Dimension(150, 50));
@@ -91,7 +91,7 @@ public class DlgOrientacoes extends JDialog {
                                 btn2trimestreActionPerformed(evt);
                         }
                 });
-                panOptions.add(btn2trimestre);
+                panOpcoes.add(btn2trimestre);
 
                 btn3trimestre = new RoundedButton("3° Trimestre", 10);
                 btn3trimestre.setPreferredSize(new Dimension(150, 50));
@@ -102,7 +102,7 @@ public class DlgOrientacoes extends JDialog {
                                 btn3trimestreActionPerformed(evt);
                         }
                 });
-                panOptions.add(btn3trimestre);
+                panOpcoes.add(btn3trimestre);
 
                 gbc.gridy = 2;
                 gbc.weighty = 1.0;
@@ -112,7 +112,7 @@ public class DlgOrientacoes extends JDialog {
                 txtContent.setBorder(BorderFactory.createEmptyBorder());
                 scrArea = new JScrollPane(txtContent);
                 scrArea.setBorder(null);
-                panLeft.add(scrArea, gbc);
+                panEsquerdo.add(scrArea, gbc);
 
                 scrBar = scrArea.getVerticalScrollBar();
                 scrBar.setBackground(AppColors.BUTTON_PINK);

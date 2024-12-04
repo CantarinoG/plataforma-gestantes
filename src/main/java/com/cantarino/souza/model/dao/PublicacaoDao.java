@@ -12,7 +12,7 @@ public class PublicacaoDao implements IDao<Publicacao> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Publicacao obj) {
+    public void salvar(Publicacao obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -23,7 +23,7 @@ public class PublicacaoDao implements IDao<Publicacao> {
     }
 
     @Override
-    public void update(Publicacao obj) {
+    public void editar(Publicacao obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         this.entityManager.merge(obj);
@@ -32,7 +32,7 @@ public class PublicacaoDao implements IDao<Publicacao> {
     }
 
     @Override
-    public boolean delete(Publicacao obj) {
+    public boolean deletar(Publicacao obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         obj.setDeletadoEm(LocalDateTime.now());
@@ -43,7 +43,7 @@ public class PublicacaoDao implements IDao<Publicacao> {
     }
 
     @Override
-    public Publicacao find(int id) {
+    public Publicacao buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         Publicacao publicacao = this.entityManager.find(Publicacao.class, id);
         this.entityManager.close();
@@ -51,7 +51,7 @@ public class PublicacaoDao implements IDao<Publicacao> {
     }
 
     @Override
-    public List<Publicacao> findAll() {
+    public List<Publicacao> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Publicacao> publicacoes = this.entityManager.createQuery(
                 "FROM Publicacao p WHERE p.deletadoEm IS NULL ORDER BY p.data DESC",
@@ -61,7 +61,7 @@ public class PublicacaoDao implements IDao<Publicacao> {
         return publicacoes;
     }
 
-    public List<Publicacao> filterGestanteId(int id) {
+    public List<Publicacao> buscarPorGestante(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Publicacao> publicacoes = this.entityManager.createQuery(
                 "FROM Publicacao p WHERE p.deletadoEm IS NULL AND p.autor.id = :id ORDER BY p.data DESC",

@@ -6,8 +6,8 @@ import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.model.exceptions.PagamentoException;
+import com.cantarino.souza.model.services.GerenciadorPdf;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidatePagamento;
 
@@ -21,48 +21,30 @@ public class PagamentoController {
     private PagamentoDao repositorio;
     private ValidatePagamento validator;
     private NotificadorEmail notificador;
+    private GerenciadorPdf gerenciadorPdf;
 
     public PagamentoController() {
         this.repositorio = new PagamentoDao();
         this.validator = new ValidatePagamento();
         this.notificador = new NotificadorEmail();
+        this.gerenciadorPdf = new GerenciadorPdf();
     }
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMPagamento(repositorio.findAll()), null);
+        Util.jTableShow(grd, new TMPagamento(repositorio.buscarTodos()), null);
     }
 
     public void cadastrar(String valor, Usuario registradoPor, Gestante paciente, String metodoPagamento,
             Procedimento procedimento, String deletadoEm) {
-        if (registradoPor == null) {
-            throw new PagamentoException("Usuário que registrou não pode ser nulo");
-        }
-        if (paciente == null) {
-            throw new PagamentoException("Paciente não pode ser nulo");
-        }
-        if (procedimento == null) {
-            throw new PagamentoException("Procedimento não pode ser nulo");
-        }
 
-        if (procedimento.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
-            throw new PagamentoException("Não é possível registrar pagamento para um procedimento cancelado");
-        }
-
-        Pagamento pagamentoExistente = buscarPorIdProcedimento(procedimento.getId());
+        Pagamento pagamentoExistente = repositorio.buscarPorProcedimento(procedimento.getId());
         if (pagamentoExistente != null) {
-            throw new PagamentoException("Já existe um pagamento registrado para este procedimento");
+            throw new PagamentoException("ERRO: Já existe um pagamento registrado para este procedimento");
         }
 
-        double valorPago = Double.parseDouble(valor);
-        if (valorPago > procedimento.getValor()) {
-            throw new PagamentoException("O valor informado não pode ser maior que o valor do procedimento");
-        }
-
-        Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento);
-        novoPagamento.setRegistradoPor(registradoPor);
-        novoPagamento.setPaciente(paciente);
-        novoPagamento.setProcedimento(procedimento);
-        repositorio.save(novoPagamento);
+        Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento, registradoPor, paciente,
+                procedimento);
+        repositorio.salvar(novoPagamento);
 
         String conteudoEmail = "Foi registrado um pagamento para o procedimento de id " + procedimento.getId() + ": "
                 + procedimento.getDescricao() + ".";
@@ -71,53 +53,37 @@ public class PagamentoController {
 
     public void atualizar(int id, String valor, Usuario registradoPor, Gestante paciente,
             String metodoPagamento, Procedimento procedimento, String deletadoEm) {
-        if (registradoPor == null) {
-            throw new PagamentoException("Usuário que registrou não pode ser nulo");
-        }
-        if (paciente == null) {
-            throw new PagamentoException("Paciente não pode ser nulo");
-        }
-        if (procedimento == null) {
-            throw new PagamentoException("Procedimento não pode ser nulo");
-        }
 
-        double valorPago = Double.parseDouble(valor);
-        if (valorPago > procedimento.getValor()) {
-            throw new PagamentoException("O valor informado não pode ser maior que o valor do procedimento");
-        }
-
-        Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento);
+        Pagamento novoPagamento = validator.validaCamposEntrada(valor, metodoPagamento, registradoPor, paciente,
+                procedimento);
         novoPagamento.setId(id);
-        novoPagamento.setRegistradoPor(registradoPor);
-        novoPagamento.setPaciente(paciente);
-        novoPagamento.setProcedimento(procedimento);
-        repositorio.update(novoPagamento);
+        repositorio.editar(novoPagamento);
     }
 
     public Pagamento buscarPorId(int id) {
-        return repositorio.find(id);
+        return repositorio.buscar(id);
     }
 
     public List<Pagamento> buscarTodas() {
-        return repositorio.findAll();
+        return repositorio.buscarTodos();
     }
 
     public Pagamento buscarPorIdProcedimento(int id) {
-        return repositorio.filterProcedimentoId(id);
+        return repositorio.buscarPorProcedimento(id);
     }
 
     public void excluir(int id) {
-        Pagamento pagamento = repositorio.find(id);
-        repositorio.delete(pagamento);
+        Pagamento pagamento = repositorio.buscar(id);
+        repositorio.deletar(pagamento);
     }
 
     public void filtrarTabelaPorIdPaciente(JTable grd, int id) {
-        Util.jTableShow(grd, new TMPagamento(repositorio.filterGestanteId(id)), null);
+        Util.jTableShow(grd, new TMPagamento(repositorio.buscarPorGestante(id)), null);
     }
 
     public void gerarRecibo(String path, int id) {
-        Pagamento pagamento = repositorio.find(id);
-        Util.generatePdf(path,
+        Pagamento pagamento = repositorio.buscar(id);
+        gerenciadorPdf.gerarPdf(path,
                 "PDF gerado em: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), "\n",
                 "Bem Gestar" + "\n",
                 "Recibo de Pagamento", "\n",

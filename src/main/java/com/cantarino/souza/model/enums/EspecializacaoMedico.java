@@ -10,13 +10,13 @@ public enum EspecializacaoMedico {
     CLINICO_GERAL("Clínico Geral"),
     OUTRO("Outro");
 
-    private final String value;
+    private final String valor;
 
-    EspecializacaoMedico(String value) {
-        this.value = value;
+    EspecializacaoMedico(String valor) {
+        this.valor = valor;
     }
 
-    public String getValue() {
-        return value;
+    public String getValor() {
+        return valor;
     }
 }

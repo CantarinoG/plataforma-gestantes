@@ -19,10 +19,10 @@ import com.cantarino.souza.view.components.RoundedButton;
 
 public class DlgExames extends JDialog {
 
-    private JPanel panBackground;
+    private JPanel panFundo;
     private JPanel panHeader;
-    private JLabel lblTitle;
-    private JPanel panContent;
+    private JLabel lblTitulo;
+    private JPanel panConteudo;
     private JTable grdExames;
     private JScrollPane scrollPane;
     private JPanel panFooter;
@@ -40,9 +40,12 @@ public class DlgExames extends JDialog {
 
     public DlgExames(JFrame parent, boolean modal) {
         super(parent, modal);
+
         pagamentoController = new PagamentoController();
-        initComponents();
         exameController = new ExameController();
+
+        initComponents();
+
         exameController.atualizarTabela(grdExames);
     }
 
@@ -52,9 +55,9 @@ public class DlgExames extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new BorderLayout());
+        setContentPane(panFundo);
 
         panHeader = new JPanel();
         panHeader.setPreferredSize(new Dimension(getWidth(), 80));
@@ -63,22 +66,22 @@ public class DlgExames extends JDialog {
         panHeader.setOpaque(true);
         panHeader.setLayout(new GridBagLayout());
 
-        lblTitle = new JLabel("Exames");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
-        lblTitle.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo = new JLabel("Exames");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        panHeader.add(lblTitle, gbc);
+        panHeader.add(lblTitulo, gbc);
 
-        panBackground.add(panHeader, BorderLayout.NORTH);
-        panContent = new PanConsultasAgendadas();
-        panContent.setLayout(new BorderLayout());
-        panContent.setBackground(new Color(255, 255, 255));
-        panContent.setOpaque(true);
+        panFundo.add(panHeader, BorderLayout.NORTH);
+        panConteudo = new PanConsultasAgendadas();
+        panConteudo.setLayout(new BorderLayout());
+        panConteudo.setBackground(new Color(255, 255, 255));
+        panConteudo.setOpaque(true);
 
         grdExames = new JTable();
         grdExames.setModel(new DefaultTableModel(
@@ -91,7 +94,7 @@ public class DlgExames extends JDialog {
                 new String[] {
                 }));
         scrollPane = new JScrollPane(grdExames);
-        panContent.add(scrollPane, BorderLayout.CENTER);
+        panConteudo.add(scrollPane, BorderLayout.CENTER);
 
         panFooter = new JPanel();
         panFooter.setPreferredSize(new Dimension(getWidth(), 80));
@@ -184,9 +187,9 @@ public class DlgExames extends JDialog {
         panFooter.add(btnGerenciarRelatorio);
         panFooter.add(btnVerPagamento);
 
-        panContent.add(panFooter, BorderLayout.SOUTH);
+        panConteudo.add(panFooter, BorderLayout.SOUTH);
 
-        panBackground.add(panContent, BorderLayout.CENTER);
+        panFundo.add(panConteudo, BorderLayout.CENTER);
 
     }
 
@@ -207,7 +210,6 @@ public class DlgExames extends JDialog {
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -215,15 +217,14 @@ public class DlgExames extends JDialog {
         }
 
         Exame exame = (Exame) selectedObject;
-        id = exame.getId();
-        DlgCadastroExames dialog = new DlgCadastroExames(this, true, id);
+
+        DlgCadastroExames dialog = new DlgCadastroExames(this, true, exame.getId());
         dialog.setVisible(true);
         exameController.atualizarTabela(grdExames);
 
     }
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -231,7 +232,6 @@ public class DlgExames extends JDialog {
         }
 
         Exame exame = (Exame) selectedObject;
-        id = exame.getId();
 
         int option = JOptionPane.showConfirmDialog(this,
                 "Tem certeza que deseja excluir este exame?",
@@ -239,7 +239,7 @@ public class DlgExames extends JDialog {
                 JOptionPane.YES_NO_OPTION);
 
         if (option == JOptionPane.YES_OPTION) {
-            exameController.excluir(id);
+            exameController.deletar(exame.getId());
             exameController.atualizarTabela(grdExames);
         }
     }
@@ -273,7 +273,7 @@ public class DlgExames extends JDialog {
 
         Exame exame = (Exame) selectedObject;
 
-        if (exame.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+        if (exame.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
             JOptionPane.showMessageDialog(this,
                     "Não é possível adicionar ou editar um relatório num procedimento cancelado", "Aviso",
                     JOptionPane.WARNING_MESSAGE);
@@ -289,7 +289,7 @@ public class DlgExames extends JDialog {
     private void filterTable() {
         String searchText = edtNome.getText();
 
-        exameController.filtrarTabelaPorInicioNomeGestante(grdExames, searchText);
+        exameController.atualizarTabelaPorNomeGestante(grdExames, searchText);
 
     }
 

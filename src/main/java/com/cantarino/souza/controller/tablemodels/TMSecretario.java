@@ -72,7 +72,7 @@ public class TMSecretario extends AbstractTableModel {
                 case id:
                     return aux.getId();
                 case cpf:
-                    return aux.getCpf();
+                    return aux.getCpf().replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
                 case nome:
                     return aux.getNome();
                 case email:
@@ -80,15 +80,13 @@ public class TMSecretario extends AbstractTableModel {
                 case dataNascimento:
                     return aux.getDataNascimento() != null
                             ? aux.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                            : "-";
+                            : "";
                 case telefone:
                     return aux.getTelefone();
                 case endereco:
                     return aux.getEndereco();
                 case dataContratacao:
-                    return aux.getDataContratacao() != null
-                            ? aux.getDataContratacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                            : "-";
+                    return aux.getDataContratacao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 default:
                     return null;
             }

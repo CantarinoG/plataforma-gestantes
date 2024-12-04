@@ -40,15 +40,15 @@ public class TMPagamento extends AbstractTableModel {
                 case id:
                     return aux.getId();
                 case valor:
-                    return aux.getValor();
+                    return "R$ " + aux.getValor();
                 case registradoPor:
-                    return aux.getRegistradoPor().getNome();
+                    return "(" + aux.getRegistradoPor().getId() + ") " + aux.getRegistradoPor().getNome();
                 case paciente:
-                    return aux.getPaciente().getNome();
+                    return "(" + aux.getPaciente().getId() + ") " + aux.getPaciente().getNome();
                 case metodoPagamento:
                     return aux.getMetodoPagamento();
                 case procedimento:
-                    return aux.getProcedimento().getId() + " | " + aux.getProcedimento().getDescricao();
+                    return "(" + aux.getProcedimento().getId() + ") " + aux.getProcedimento().getDescricao();
                 default:
                     return null;
             }

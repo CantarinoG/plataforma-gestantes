@@ -14,8 +14,8 @@ import com.cantarino.souza.view.components.*;
 
 public class FrMenu extends JFrame {
 
-    JPanel panBackground;
-    JLabel lblIcon;
+    JPanel panFundo;
+    JLabel lblIcone;
     JButton btnTrocarSenha;
     JButton btnOrientacoes;
     JButton btnAgendaGestante;
@@ -30,27 +30,27 @@ public class FrMenu extends JFrame {
     JButton btnMedicos;
     JButton btnSecretarios;
     JButton btnAdmins;
-    JPanel headerPanel;
-    JPanel rightButtomPanel;
-    JPanel leftLabelsPanel;
-    JPanel userInfoPanel;
-    JPanel titlePanel;
-    JLabel lblSubtitle;
-    JLabel lblSubtext;
-    JPanel centerTextPanel;
-    JLabel centerLabel;
-    JPanel contentPanel;
-    JLabel titleLabel;
-    JPanel gridPanel;
-    JPanel centeringPanel;
+    JPanel panHeader;
+    JPanel panDireito;
+    JPanel panEsquerdo;
+    JPanel panInfoUsuario;
+    JPanel panTitulo;
+    JLabel lblSubtitulo;
+    JLabel lblSubtexto;
+    JPanel panTextoCentral;
+    JLabel lblCentral;
+    JPanel panConteudo;
+    JPanel panGrid;
+    JPanel panCentral;
 
     private AutenticacaoController autenticacaoController;
 
-    Usuario userAutenticado = null;
+    Usuario usuario = null;
 
     public FrMenu() {
-        initComponents();
         autenticacaoController = new AutenticacaoController();
+
+        initComponents();
     }
 
     private void initComponents() {
@@ -60,20 +60,20 @@ public class FrMenu extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new BorderLayout());
+        setContentPane(panFundo);
 
-        headerPanel = new JPanel();
-        headerPanel.setPreferredSize(new Dimension(getWidth(), 138));
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 64, 10, 64));
-        headerPanel.setBackground(AppColors.BUTTON_PINK);
-        headerPanel.setOpaque(true);
-        headerPanel.setLayout(new BorderLayout());
+        panHeader = new JPanel();
+        panHeader.setPreferredSize(new Dimension(getWidth(), 138));
+        panHeader.setBorder(BorderFactory.createEmptyBorder(10, 64, 10, 64));
+        panHeader.setBackground(AppColors.BUTTON_PINK);
+        panHeader.setOpaque(true);
+        panHeader.setLayout(new BorderLayout());
 
-        rightButtomPanel = new JPanel();
-        rightButtomPanel.setLayout(new BoxLayout(rightButtomPanel, BoxLayout.X_AXIS));
-        rightButtomPanel.setOpaque(false);
+        panDireito = new JPanel();
+        panDireito.setLayout(new BoxLayout(panDireito, BoxLayout.X_AXIS));
+        panDireito.setOpaque(false);
 
         btnTrocarSenha = new RoundedButton("Trocar Senha", 10);
         btnTrocarSenha.setBackground(Color.white);
@@ -95,59 +95,59 @@ public class FrMenu extends JFrame {
             }
         });
 
-        rightButtomPanel.add(btnTrocarSenha);
-        rightButtomPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-        rightButtomPanel.add(btnSair);
+        panDireito.add(btnTrocarSenha);
+        panDireito.add(Box.createRigidArea(new Dimension(20, 0)));
+        panDireito.add(btnSair);
 
-        leftLabelsPanel = new JPanel();
-        leftLabelsPanel.setLayout(new BoxLayout(leftLabelsPanel, BoxLayout.Y_AXIS));
-        leftLabelsPanel.setOpaque(false);
+        panEsquerdo = new JPanel();
+        panEsquerdo.setLayout(new BoxLayout(panEsquerdo, BoxLayout.Y_AXIS));
+        panEsquerdo.setOpaque(false);
 
-        userInfoPanel = new JPanel();
-        userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.X_AXIS));
-        userInfoPanel.setOpaque(false);
+        panInfoUsuario = new JPanel();
+        panInfoUsuario.setLayout(new BoxLayout(panInfoUsuario, BoxLayout.X_AXIS));
+        panInfoUsuario.setOpaque(false);
 
-        lblIcon = new JLabel(new ImageIcon(getClass().getResource("/images/anon.png")));
-        titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setOpaque(false);
+        lblIcone = new JLabel(new ImageIcon(getClass().getResource("/images/anon.png")));
+        panTitulo = new JPanel();
+        panTitulo.setLayout(new BoxLayout(panTitulo, BoxLayout.Y_AXIS));
+        panTitulo.setOpaque(false);
 
-        lblSubtitle = new JLabel("Convidado");
-        lblSubtitle.setFont(new Font("Arial", Font.BOLD, 24));
-        lblSubtext = new JLabel("Bem-vindo ao sistema");
-        lblSubtext.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblSubtitulo = new JLabel("Convidado");
+        lblSubtitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblSubtexto = new JLabel("Bem-vindo ao sistema");
+        lblSubtexto.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        titlePanel.add(lblSubtitle);
-        titlePanel.add(lblSubtext);
+        panTitulo.add(lblSubtitulo);
+        panTitulo.add(lblSubtexto);
 
-        userInfoPanel.add(lblIcon);
-        userInfoPanel.add(Box.createRigidArea(new Dimension(20, 0)));
-        userInfoPanel.add(titlePanel);
+        panInfoUsuario.add(lblIcone);
+        panInfoUsuario.add(Box.createRigidArea(new Dimension(20, 0)));
+        panInfoUsuario.add(panTitulo);
 
-        leftLabelsPanel.add(userInfoPanel);
+        panEsquerdo.add(panInfoUsuario);
 
-        centerTextPanel = new JPanel();
-        centerTextPanel.setOpaque(false);
-        centerTextPanel.setLayout(new BoxLayout(centerTextPanel, BoxLayout.Y_AXIS));
+        panTextoCentral = new JPanel();
+        panTextoCentral.setOpaque(false);
+        panTextoCentral.setLayout(new BoxLayout(panTextoCentral, BoxLayout.Y_AXIS));
 
-        centerLabel = new JLabel("BemGestar");
-        centerLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        centerLabel.setForeground(AppColors.TITLE_BLUE);
-        centerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerTextPanel.add(centerLabel);
+        lblCentral = new JLabel("BemGestar");
+        lblCentral.setFont(new Font("Arial", Font.BOLD, 28));
+        lblCentral.setForeground(AppColors.TITLE_BLUE);
+        lblCentral.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panTextoCentral.add(lblCentral);
 
-        headerPanel.add(rightButtomPanel, BorderLayout.EAST);
-        headerPanel.add(leftLabelsPanel, BorderLayout.WEST);
-        headerPanel.add(centerTextPanel, BorderLayout.CENTER);
-        panBackground.add(headerPanel, BorderLayout.NORTH);
+        panHeader.add(panDireito, BorderLayout.EAST);
+        panHeader.add(panEsquerdo, BorderLayout.WEST);
+        panHeader.add(panTextoCentral, BorderLayout.CENTER);
+        panFundo.add(panHeader, BorderLayout.NORTH);
 
-        contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBorder(BorderFactory.createEmptyBorder(20, 64, 20, 64));
-        contentPanel.setBackground(AppColors.TRANSPARENT);
+        panConteudo = new JPanel(new BorderLayout());
+        panConteudo.setBorder(BorderFactory.createEmptyBorder(20, 64, 20, 64));
+        panConteudo.setBackground(AppColors.TRANSPARENT);
 
-        gridPanel = new JPanel(new GridLayout(0, 2, 20, 20));
-        gridPanel.setOpaque(false);
-        gridPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
+        panGrid = new JPanel(new GridLayout(0, 2, 20, 20));
+        panGrid.setOpaque(false);
+        panGrid.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
 
         btnOrientacoes = new RoundedButton("Orientações", 20);
         btnOrientacoes.addActionListener(new java.awt.event.ActionListener() {
@@ -250,15 +250,15 @@ public class FrMenu extends JFrame {
             button.setFont(new Font("Arial", Font.BOLD, 18));
         }
 
-        gridPanel.add(btnLogin);
-        gridPanel.add(btnOrientacoes);
+        panGrid.add(btnLogin);
+        panGrid.add(btnOrientacoes);
 
-        centeringPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        centeringPanel.setOpaque(false);
-        centeringPanel.add(gridPanel);
-        contentPanel.add(centeringPanel, BorderLayout.CENTER);
+        panCentral = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panCentral.setOpaque(false);
+        panCentral.add(panGrid);
+        panConteudo.add(panCentral, BorderLayout.CENTER);
 
-        panBackground.add(contentPanel, BorderLayout.CENTER);
+        panFundo.add(panConteudo, BorderLayout.CENTER);
 
         btnSair.setVisible(false);
         btnTrocarSenha.setVisible(false);
@@ -268,69 +268,69 @@ public class FrMenu extends JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
         DlgLogin dialog = new DlgLogin(this, true);
         dialog.setVisible(true);
-        userAutenticado = autenticacaoController.getUsuario();
+        usuario = autenticacaoController.getUsuario();
 
-        if (userAutenticado != null) {
+        if (usuario != null) {
             btnSair.setVisible(true);
             btnTrocarSenha.setVisible(true);
-            lblSubtitle.setText(userAutenticado.getNome());
-            lblSubtext.setText(userAutenticado.getEmail());
-            gridPanel.removeAll();
+            lblSubtitulo.setText(usuario.getNome());
+            lblSubtexto.setText(usuario.getEmail());
+            panGrid.removeAll();
 
-            if (userAutenticado instanceof Gestante) {
+            if (usuario instanceof Gestante) {
                 initGestanteComponents();
-            } else if (userAutenticado instanceof Medico) {
+            } else if (usuario instanceof Medico) {
                 initMedicoComponents();
-            } else if (userAutenticado instanceof Secretario) {
+            } else if (usuario instanceof Secretario) {
                 initSecretarioComponents();
-            } else if (userAutenticado instanceof Admin) {
+            } else if (usuario instanceof Admin) {
                 initAdminComponents();
             }
 
-            gridPanel.revalidate();
-            gridPanel.repaint();
+            panGrid.revalidate();
+            panGrid.repaint();
             repaint();
         }
     }
 
     private void initGestanteComponents() {
-        lblIcon.setIcon(new ImageIcon(getClass().getResource("/images/patient.png")));
-        gridPanel.add(btnAgendaGestante);
-        gridPanel.add(btnPagamentos);
-        gridPanel.add(btnComunidade);
-        gridPanel.add(btnOrientacoes);
+        lblIcone.setIcon(new ImageIcon(getClass().getResource("/images/patient.png")));
+        panGrid.add(btnAgendaGestante);
+        panGrid.add(btnPagamentos);
+        panGrid.add(btnComunidade);
+        panGrid.add(btnOrientacoes);
     }
 
     private void initMedicoComponents() {
-        lblIcon.setIcon(new ImageIcon(getClass().getResource("/images/doctor.png")));
-        gridPanel.add(btnAgendaMedico);
-        gridPanel.add(btnComunidade);
-        gridPanel.add(btnOrientacoes);
+        lblIcone.setIcon(new ImageIcon(getClass().getResource("/images/doctor.png")));
+        panGrid.add(btnAgendaMedico);
+        panGrid.add(btnComunidade);
+        panGrid.add(btnOrientacoes);
     }
 
     private void initSecretarioComponents() {
-        lblIcon.setIcon(new ImageIcon(getClass().getResource("/images/secretary.png")));
-        gridPanel.add(btnPagamentos);
-        gridPanel.add(btnConsultas);
-        gridPanel.add(btnExames);
-        gridPanel.add(btnGestantes);
-        gridPanel.add(btnMedicos);
-        gridPanel.add(btnSecretarios);
-        gridPanel.add(btnComunidade);
-        gridPanel.add(btnOrientacoes);
+        lblIcone.setIcon(new ImageIcon(getClass().getResource("/images/secretary.png")));
+        panGrid.add(btnPagamentos);
+        panGrid.add(btnConsultas);
+        panGrid.add(btnExames);
+        panGrid.add(btnGestantes);
+        panGrid.add(btnMedicos);
+        panGrid.add(btnSecretarios);
+        panGrid.add(btnComunidade);
+        panGrid.add(btnOrientacoes);
     }
 
     private void initAdminComponents() {
-        lblIcon.setIcon(new ImageIcon(getClass().getResource("/images/adm.png")));
-        gridPanel.add(btnPagamentos);
-        gridPanel.add(btnConsultas);
-        gridPanel.add(btnExames);
-        gridPanel.add(btnGestantes);
-        gridPanel.add(btnMedicos);
-        gridPanel.add(btnSecretarios);
-        gridPanel.add(btnAdmins);
-        gridPanel.add(btnComunidade);
-        gridPanel.add(btnOrientacoes);
+        lblIcone.setIcon(new ImageIcon(getClass().getResource("/images/adm.png")));
+        panGrid.add(btnPagamentos);
+        panGrid.add(btnConsultas);
+        panGrid.add(btnExames);
+        panGrid.add(btnGestantes);
+        panGrid.add(btnMedicos);
+        panGrid.add(btnSecretarios);
+        panGrid.add(btnAdmins);
+        panGrid.add(btnComunidade);
+        panGrid.add(btnOrientacoes);
     }
 
     private void btnOrientacoesActionPerformed(java.awt.event.ActionEvent evt) {
@@ -369,7 +369,7 @@ public class FrMenu extends JFrame {
     }
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {
-        autenticacaoController.logOut();
+        autenticacaoController.deslogar();
         initComponents();
         repaint();
     }

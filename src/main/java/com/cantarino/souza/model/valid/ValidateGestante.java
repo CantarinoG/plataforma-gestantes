@@ -27,13 +27,13 @@ public class ValidateGestante extends ValidateUsuario {
 
         if (previsaoParto == null || previsaoParto.isEmpty())
             throw new GestanteException("ERRO: Campo previsão de parto não pode ser vazio.");
-        LocalDate date;
+        LocalDate dataConvertida;
         try {
-            date = LocalDate.parse(previsaoParto);
+            dataConvertida = LocalDate.parse(previsaoParto);
         } catch (DateTimeParseException e) {
             throw new GestanteException("ERRO: Formato de data inválido.");
         }
-        gestante.setPrevisaoParto(date);
+        gestante.setPrevisaoParto(dataConvertida);
 
         if (contatoEmergencia == null || contatoEmergencia.isEmpty())
             throw new GestanteException("ERRO: Campo contato de emergência não pode ser vazio.");

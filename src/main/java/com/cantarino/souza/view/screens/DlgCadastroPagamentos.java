@@ -24,17 +24,17 @@ import com.cantarino.souza.view.components.*;
 import java.awt.event.ActionEvent;
 
 public class DlgCadastroPagamentos extends JDialog {
-    JPanel panBackground;
-    JPanel panColumn;
-    JLabel lblAction;
-    JPanel panButton;
+    JPanel panFundo;
+    JPanel panColuna;
+    JLabel lblTitulo;
+    JPanel panBotao;
     RoundedButton btnCadastrarPagamento;
-    JTextField txtValor;
+    JTextField edtValor;
     JComboBox<String> cmbMetodoPagamento;
     JComboBox<String> cmbProcedimento;
-    JPanel panValorField;
-    JPanel panMetodoField;
-    JPanel panProcedimentoField;
+    JPanel panValor;
+    JPanel panMetodo;
+    JPanel panProcedimento;
 
     PagamentoController pagamentoController;
     GestanteController gestanteController;
@@ -43,10 +43,11 @@ public class DlgCadastroPagamentos extends JDialog {
     AutenticacaoController autenticacaoController;
     Pagamento atualizando;
 
-    Usuario usuario;
+    Usuario usuario = null;
 
-    public DlgCadastroPagamentos(JDialog parent, boolean modal, int id) {
+    public DlgCadastroPagamentos(JDialog parent, boolean modal, int id) { // Construtor com id para edição
         super(parent, modal);
+
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
         pagamentoController = new PagamentoController();
@@ -54,23 +55,25 @@ public class DlgCadastroPagamentos extends JDialog {
         exameController = new ExameController();
         consultaController = new ConsultaController();
         atualizando = pagamentoController.buscarPorId(id);
+
         initComponents();
 
         if (atualizando != null) {
-            txtValor.setText(String.valueOf(atualizando.getValor()));
+            edtValor.setText(String.valueOf(atualizando.getValor()));
             cmbMetodoPagamento.setSelectedItem(atualizando.getMetodoPagamento());
         }
     }
 
-    public DlgCadastroPagamentos(JDialog parent, boolean modal) {
+    public DlgCadastroPagamentos(JDialog parent, boolean modal) { // Construtor sem id para criação
         super(parent, modal);
+
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
         pagamentoController = new PagamentoController();
         gestanteController = new GestanteController();
         exameController = new ExameController();
         consultaController = new ConsultaController();
-        atualizando = null;
+
         initComponents();
     }
 
@@ -85,13 +88,13 @@ public class DlgCadastroPagamentos extends JDialog {
 
         java.util.List<String> exameOptions = exames.stream()
                 .filter(e -> !paidProcedureIds.contains(e.getId()))
-                .filter(e -> !e.getStatus().equals(StatusProcedimentos.CANCELADA.getValue()))
+                .filter(e -> !e.getStatus().equals(StatusProcedimentos.CANCELADA.getValor()))
                 .map(e -> e.getId() + "|Exame|R$ " + e.getValor() + "| " + e.getDescricao())
                 .collect(java.util.stream.Collectors.toList());
 
         java.util.List<String> consultaOptions = consultas.stream()
                 .filter(c -> !paidProcedureIds.contains(c.getId()))
-                .filter(c -> !c.getStatus().equals(StatusProcedimentos.CANCELADA.getValue()))
+                .filter(c -> !c.getStatus().equals(StatusProcedimentos.CANCELADA.getValor()))
                 .map(c -> c.getId() + "|Consulta|R$ " + c.getValor() + "| " + c.getDescricao())
                 .collect(java.util.stream.Collectors.toList());
 
@@ -103,7 +106,7 @@ public class DlgCadastroPagamentos extends JDialog {
         MetodoPagamento[] values = MetodoPagamento.values();
         String[] options = new String[values.length];
         for (int i = 0; i < values.length; i++) {
-            options[i] = values[i].getValue();
+            options[i] = values[i].getValor();
         }
         return options;
     }
@@ -114,9 +117,9 @@ public class DlgCadastroPagamentos extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -125,40 +128,39 @@ public class DlgCadastroPagamentos extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel("Cadastrar Pagamento");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 32));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        lblTitulo = new JLabel("Cadastrar Pagamento");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblTitulo, gbc);
 
         gbc.gridy = 1;
-        panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(atualizando == null ? 3 : 2, 1, 20, 10));
-        panColumn.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panColumn, gbc);
+        panColuna = new JPanel();
+        panColuna.setLayout(new GridLayout(atualizando == null ? 3 : 2, 1, 20, 10));
+        panColuna.setBackground(AppColors.TRANSPARENT);
+        panFundo.add(panColuna, gbc);
 
-        txtValor = new JTextField();
-        txtValor.setFont(new Font("Arial", Font.PLAIN, 22));
-        txtValor.setBackground(AppColors.FIELD_PINK);
-        ((AbstractDocument) txtValor.getDocument()).setDocumentFilter(new NumericDocumentFilter());
-        panValorField = createCustomTextfield("Valor", txtValor);
-        panColumn.add(panValorField);
+        edtValor = new JTextField();
+        edtValor.setFont(new Font("Arial", Font.PLAIN, 22));
+        edtValor.setBackground(AppColors.FIELD_PINK);
+        ((AbstractDocument) edtValor.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+        panValor = criarTextFieldsCustomizados("Valor", edtValor);
+        panColuna.add(panValor);
 
         if (atualizando == null) {
             cmbProcedimento = new JComboBox<>(getProcedimentosOptions());
             cmbProcedimento.setFont(new Font("Arial", Font.PLAIN, 22));
             cmbProcedimento.setBackground(AppColors.FIELD_PINK);
-            panProcedimentoField = createCustomTextfield("Procedimento", cmbProcedimento);
-            panColumn.add(panProcedimentoField);
+            panProcedimento = criarTextFieldsCustomizados("Procedimento", cmbProcedimento);
+            panColuna.add(panProcedimento);
         }
 
         cmbMetodoPagamento = new JComboBox<>(getPagamentoOptions());
         cmbMetodoPagamento.setFont(new Font("Arial", Font.PLAIN, 22));
         cmbMetodoPagamento.setBackground(AppColors.FIELD_PINK);
-        panMetodoField = createCustomTextfield("Método de Pagamento", cmbMetodoPagamento);
-        panColumn.add(panMetodoField);
+        panMetodo = criarTextFieldsCustomizados("Método de Pagamento", cmbMetodoPagamento);
+        panColuna.add(panMetodo);
 
-        // Botão
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
         gbcButton.gridy = 2;
@@ -167,8 +169,8 @@ public class DlgCadastroPagamentos extends JDialog {
         gbcButton.anchor = GridBagConstraints.CENTER;
         gbcButton.insets = new java.awt.Insets(20, 0, 0, 0);
 
-        panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panButton.setBackground(AppColors.TRANSPARENT);
+        panBotao = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        panBotao.setBackground(AppColors.TRANSPARENT);
 
         btnCadastrarPagamento = new RoundedButton("Confirmar Pagamento", 10);
         btnCadastrarPagamento.setPreferredSize(new Dimension(150, 50));
@@ -176,11 +178,11 @@ public class DlgCadastroPagamentos extends JDialog {
         btnCadastrarPagamento.setForeground(Color.WHITE);
         btnCadastrarPagamento.addActionListener(evt -> btnCadastrarPagamentoActionPerformed(evt));
 
-        panButton.add(btnCadastrarPagamento);
-        panBackground.add(panButton, gbcButton);
+        panBotao.add(btnCadastrarPagamento);
+        panFundo.add(panBotao, gbcButton);
     }
 
-    private JPanel createCustomTextfield(String hint, JComponent textField) {
+    private JPanel criarTextFieldsCustomizados(String hint, JComponent textField) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -211,13 +213,13 @@ public class DlgCadastroPagamentos extends JDialog {
         try {
             Usuario registradoPor = new Usuario();
             if (usuario instanceof Secretario) {
-                registradoPor = new SecretarioController().buscarPorId(usuario.getId());
+                registradoPor = new SecretarioController().buscar(usuario.getId());
             } else if (usuario instanceof Admin) {
-                registradoPor = new AdminController().buscarPorId(usuario.getId());
+                registradoPor = new AdminController().buscar(usuario.getId());
             }
 
             String metodoPagamento = (String) cmbMetodoPagamento.getSelectedItem();
-            String valor = txtValor.getText();
+            String valor = edtValor.getText();
 
             double valorPago = Double.parseDouble(valor);
 
@@ -225,13 +227,18 @@ public class DlgCadastroPagamentos extends JDialog {
                 double valorProcedimento = atualizando.getProcedimento().getValor();
                 if (valorPago < valorProcedimento) {
                     double desconto = valorProcedimento - valorPago;
-                    int option = JOptionPane.showConfirmDialog(this,
+                    Object[] options = { "Sim", "Não" };
+                    int option = JOptionPane.showOptionDialog(this,
                             "O valor informado é menor que o valor do procedimento. Deseja confirmar o desconto de R$"
                                     + desconto + "?",
                             "Confirmar desconto",
-                            JOptionPane.YES_NO_OPTION);
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[0]);
 
-                    if (option != JOptionPane.YES_OPTION) {
+                    if (option != 0) {
                         return;
                     }
                 }
@@ -249,22 +256,27 @@ public class DlgCadastroPagamentos extends JDialog {
 
             Procedimento procedimento;
             if (procedimentoTipo.equals("Exame")) {
-                procedimento = exameController.buscarPorId(procedimentoId);
+                procedimento = exameController.buscar(procedimentoId);
             } else {
-                procedimento = consultaController.buscarPorId(procedimentoId);
+                procedimento = consultaController.buscar(procedimentoId);
             }
 
             double valorProcedimento = procedimento.getValor();
 
             if (valorPago < valorProcedimento) {
                 double desconto = valorProcedimento - valorPago;
-                int option = JOptionPane.showConfirmDialog(this,
+                Object[] options = { "Sim", "Não" };
+                int option = JOptionPane.showOptionDialog(this,
                         "O valor informado é menor que o valor do procedimento. Deseja confirmar o desconto de R$"
                                 + desconto + "?",
                         "Confirmar desconto",
-                        JOptionPane.YES_NO_OPTION);
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[0]);
 
-                if (option != JOptionPane.YES_OPTION) {
+                if (option != 0) {
                     return;
                 }
             }

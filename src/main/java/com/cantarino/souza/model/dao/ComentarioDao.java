@@ -12,7 +12,7 @@ public class ComentarioDao implements IDao<Comentario> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Comentario obj) {
+    public void salvar(Comentario obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -23,7 +23,7 @@ public class ComentarioDao implements IDao<Comentario> {
     }
 
     @Override
-    public void update(Comentario obj) {
+    public void editar(Comentario obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         this.entityManager.merge(obj);
@@ -32,7 +32,7 @@ public class ComentarioDao implements IDao<Comentario> {
     }
 
     @Override
-    public boolean delete(Comentario obj) {
+    public boolean deletar(Comentario obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         obj.setDeletadoEm(LocalDateTime.now());
@@ -44,7 +44,7 @@ public class ComentarioDao implements IDao<Comentario> {
     }
 
     @Override
-    public Comentario find(int id) {
+    public Comentario buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         Comentario comentario = this.entityManager.find(Comentario.class, id);
         this.entityManager.close();
@@ -52,7 +52,7 @@ public class ComentarioDao implements IDao<Comentario> {
     }
 
     @Override
-    public List<Comentario> findAll() {
+    public List<Comentario> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Comentario> comentarios = this.entityManager.createQuery(
                 "FROM Comentario c WHERE c.deletadoEm IS NULL ORDER BY c.data DESC",
@@ -62,7 +62,7 @@ public class ComentarioDao implements IDao<Comentario> {
         return comentarios;
     }
 
-    public List<Comentario> findByPost(int id) {
+    public List<Comentario> buscarPorPublicacao(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Comentario> comentarios = this.entityManager.createQuery(
                 "FROM Comentario c WHERE c.deletadoEm IS NULL AND c.publicacao.id = :id ORDER BY c.data DESC",

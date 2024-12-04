@@ -10,13 +10,13 @@ public enum TipoSanguineo {
     O_POSITIVO("O+"),
     O_NEGATIVO("O-");
 
-    private final String value;
+    private final String valor;
 
-    TipoSanguineo(String value) {
-        this.value = value;
+    TipoSanguineo(String valor) {
+        this.valor = valor;
     }
 
-    public String getValue() {
-        return value;
+    public String getValor() {
+        return valor;
     }
 }

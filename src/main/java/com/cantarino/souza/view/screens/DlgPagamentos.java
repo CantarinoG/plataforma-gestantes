@@ -16,10 +16,10 @@ import com.cantarino.souza.view.components.*;
 
 public class DlgPagamentos extends JDialog {
 
-    JPanel panBackground;
+    JPanel panFundo;
     JPanel panHeader;
-    JLabel lblTitle;
-    JPanel panContent;
+    JLabel lblTitulo;
+    JPanel panConteudo;
     JTable grdPagamento;
     JScrollPane scrollPane;
     JPanel panFooter;
@@ -28,17 +28,20 @@ public class DlgPagamentos extends JDialog {
     JButton btnEditar;
     JButton btnDeletar;
 
-    private Usuario usuario;
+    private Usuario usuario = null;
 
     private PagamentoController controller;
     private AutenticacaoController autenticacaoController;
 
     public DlgPagamentos(JFrame parent, boolean modal) {
         super(parent, modal);
+
         controller = new PagamentoController();
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
+
         initComponents();
+
         atualizarTabela();
     }
 
@@ -48,9 +51,9 @@ public class DlgPagamentos extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new BorderLayout());
+        setContentPane(panFundo);
 
         panHeader = new JPanel();
         panHeader.setPreferredSize(new Dimension(getWidth(), 80));
@@ -59,22 +62,22 @@ public class DlgPagamentos extends JDialog {
         panHeader.setOpaque(true);
         panHeader.setLayout(new GridBagLayout());
 
-        lblTitle = new JLabel("Pagamentos");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
-        lblTitle.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo = new JLabel("Pagamentos");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        panHeader.add(lblTitle, gbc);
+        panHeader.add(lblTitulo, gbc);
 
-        panBackground.add(panHeader, BorderLayout.NORTH);
-        panContent = new PanConsultasAgendadas();
-        panContent.setLayout(new BorderLayout());
-        panContent.setBackground(new Color(255, 255, 255));
-        panContent.setOpaque(true);
+        panFundo.add(panHeader, BorderLayout.NORTH);
+        panConteudo = new PanConsultasAgendadas();
+        panConteudo.setLayout(new BorderLayout());
+        panConteudo.setBackground(new Color(255, 255, 255));
+        panConteudo.setOpaque(true);
 
         grdPagamento = new JTable();
         grdPagamento.setModel(new DefaultTableModel(
@@ -87,7 +90,7 @@ public class DlgPagamentos extends JDialog {
                 new String[] {
                 }));
         scrollPane = new JScrollPane(grdPagamento);
-        panContent.add(scrollPane, BorderLayout.CENTER);
+        panConteudo.add(scrollPane, BorderLayout.CENTER);
 
         panFooter = new JPanel();
         panFooter.setPreferredSize(new Dimension(getWidth(), 80));
@@ -149,7 +152,7 @@ public class DlgPagamentos extends JDialog {
 
         add(panFooter, BorderLayout.SOUTH);
 
-        panBackground.add(panContent, BorderLayout.CENTER);
+        panFundo.add(panConteudo, BorderLayout.CENTER);
     }
 
     private void atualizarTabela() {
@@ -170,7 +173,6 @@ public class DlgPagamentos extends JDialog {
     }
 
     private void btnReciboActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Selecione um pagamento para gerar o recibo", "Aviso",
@@ -179,7 +181,6 @@ public class DlgPagamentos extends JDialog {
         }
         try {
             Pagamento pagamento = (Pagamento) selectedObject;
-            id = pagamento.getId();
 
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Salvar Recibo");
@@ -188,7 +189,7 @@ public class DlgPagamentos extends JDialog {
             int result = fileChooser.showSaveDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 String selectedPath = fileChooser.getSelectedFile().getAbsolutePath();
-                controller.gerarRecibo(selectedPath, id);
+                controller.gerarRecibo(selectedPath, pagamento.getId());
             }
             JOptionPane.showMessageDialog(this, "Recibo Gerado com Sucesso!", "Sucesso",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -206,7 +207,6 @@ public class DlgPagamentos extends JDialog {
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -214,14 +214,13 @@ public class DlgPagamentos extends JDialog {
         }
 
         Pagamento pagamento = (Pagamento) selectedObject;
-        id = pagamento.getId();
-        DlgCadastroPagamentos dialog = new DlgCadastroPagamentos(null, true, id);
+
+        DlgCadastroPagamentos dialog = new DlgCadastroPagamentos(null, true, pagamento.getId());
         dialog.setVisible(true);
         atualizarTabela();
     }
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -229,15 +228,19 @@ public class DlgPagamentos extends JDialog {
         }
 
         Pagamento pagamento = (Pagamento) selectedObject;
-        id = pagamento.getId();
 
-        int option = JOptionPane.showConfirmDialog(this,
+        Object[] options = { "Sim", "Não" };
+        int option = JOptionPane.showOptionDialog(this,
                 "Tem certeza que deseja excluir este pagamento?",
                 "Confirmar exclusão",
-                JOptionPane.YES_NO_OPTION);
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
 
         if (option == JOptionPane.YES_OPTION) {
-            controller.excluir(id);
+            controller.excluir(pagamento.getId());
             atualizarTabela();
         }
     }

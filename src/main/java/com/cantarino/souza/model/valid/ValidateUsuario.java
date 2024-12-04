@@ -97,13 +97,13 @@ public class ValidateUsuario {
 
         if (dataNascimento == null || dataNascimento.isEmpty())
             throw new UsuarioException("ERRO: Campo data de nascimento não pode ser vazio.");
-        LocalDate date;
+        LocalDate dataConvertida;
         try {
-            date = LocalDate.parse(dataNascimento);
+            dataConvertida = LocalDate.parse(dataNascimento);
         } catch (DateTimeParseException e) {
             throw new UsuarioException("ERRO: Formato de data inválido.");
         }
-        usuario.setDataNascimento(date);
+        usuario.setDataNascimento(dataConvertida);
 
         if (telefone == null || telefone.isEmpty())
             throw new UsuarioException("ERRO: Campo telefone não pode ser vazio.");
@@ -117,13 +117,13 @@ public class ValidateUsuario {
         usuario.setEndereco(endereco);
 
         if (deletadoEm != null) {
-            LocalDateTime deleteDate;
+            LocalDateTime dataExclusao;
             try {
-                deleteDate = LocalDateTime.parse(deletadoEm);
+                dataExclusao = LocalDateTime.parse(deletadoEm);
             } catch (DateTimeParseException e) {
                 throw new UsuarioException("ERRO: Formato de data inválido.");
             }
-            usuario.setDeletadoEm(deleteDate);
+            usuario.setDeletadoEm(dataExclusao);
         }
 
         return usuario;

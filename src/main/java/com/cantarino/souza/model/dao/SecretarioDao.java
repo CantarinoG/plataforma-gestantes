@@ -13,7 +13,7 @@ public class SecretarioDao implements IDao<Secretario> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Secretario obj) {
+    public void salvar(Secretario obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -24,7 +24,7 @@ public class SecretarioDao implements IDao<Secretario> {
     }
 
     @Override
-    public void update(Secretario obj) {
+    public void editar(Secretario obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -35,7 +35,7 @@ public class SecretarioDao implements IDao<Secretario> {
     }
 
     @Override
-    public boolean delete(Secretario obj) {
+    public boolean deletar(Secretario obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -48,7 +48,7 @@ public class SecretarioDao implements IDao<Secretario> {
     }
 
     @Override
-    public Secretario find(int id) {
+    public Secretario buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Secretario secretario = this.entityManager.find(Secretario.class, id);
@@ -59,7 +59,7 @@ public class SecretarioDao implements IDao<Secretario> {
     }
 
     @Override
-    public List<Secretario> findAll() {
+    public List<Secretario> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Secretario> secretarios = this.entityManager
@@ -70,7 +70,7 @@ public class SecretarioDao implements IDao<Secretario> {
         return secretarios;
     }
 
-    public Secretario findByCpf(String cpf) {
+    public Secretario buscarPorCpf(String cpf) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Secretario secretario = this.entityManager
@@ -85,7 +85,7 @@ public class SecretarioDao implements IDao<Secretario> {
         return secretario;
     }
 
-    public Secretario findByEmail(String email) {
+    public Secretario buscarPorEmail(String email) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Secretario secretario = this.entityManager

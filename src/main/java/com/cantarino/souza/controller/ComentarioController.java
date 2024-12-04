@@ -10,71 +10,44 @@ import com.cantarino.souza.model.dao.ComentarioDao;
 import com.cantarino.souza.model.entities.Comentario;
 import com.cantarino.souza.model.entities.Publicacao;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.model.exceptions.ComentarioException;
 import com.cantarino.souza.model.valid.ValidateComentario;
 
 public class ComentarioController {
     private ComentarioDao repositorio;
-    private ValidateComentario validator;
+    private ValidateComentario validador;
 
     public ComentarioController() {
         this.repositorio = new ComentarioDao();
-        this.validator = new ValidateComentario();
+        this.validador = new ValidateComentario();
     }
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMComentario(repositorio.findAll()), null);
+        Util.jTableShow(grd, new TMComentario(repositorio.buscarTodos()), null);
     }
 
-    public void cadastrar(String conteudo, LocalDateTime data, boolean isAnonimo, Publicacao publicacao, Usuario autor,
+    public List<Comentario> buscarPorPublicacao(int id) {
+        return repositorio.buscarPorPublicacao(id);
+    }
+
+    public void salvar(String conteudo, LocalDateTime data, boolean isAnonimo, Publicacao publicacao, Usuario autor,
             LocalDateTime deletadoEm) {
-        if (data == null) {
-            throw new ComentarioException("Data não pode ser nula");
-        }
-        if (publicacao == null) {
-            throw new ComentarioException("Publicação não pode ser nula");
-        }
-        if (autor == null) {
-            throw new ComentarioException("Autor não pode ser nulo");
-        }
 
-        Comentario novoComentario = validator.validaCamposEntrada(conteudo);
-        novoComentario.setAutor(autor);
-        novoComentario.setPublicacao(publicacao);
-        novoComentario.setData(data);
-        novoComentario.setAnonimo(isAnonimo);
-        repositorio.save(novoComentario);
+        Comentario novoComentario = validador.validaCamposEntrada(conteudo, data, isAnonimo, autor, publicacao);
+        repositorio.salvar(novoComentario);
     }
 
-    public void atualizar(int id, String conteudo, LocalDateTime data, boolean isAnonimo, Publicacao publicacao,
+    public void editar(int id, String conteudo, LocalDateTime data, boolean isAnonimo, Publicacao publicacao,
             Usuario autor,
             LocalDateTime deletadoEm) {
-        if (data == null) {
-            throw new ComentarioException("Data não pode ser nula");
-        }
-        if (publicacao == null) {
-            throw new ComentarioException("Publicação não pode ser nula");
-        }
-        if (autor == null) {
-            throw new ComentarioException("Autor não pode ser nulo");
-        }
 
-        Comentario novoComentario = validator.validaCamposEntrada(conteudo);
+        Comentario novoComentario = validador.validaCamposEntrada(conteudo, data, isAnonimo, autor, publicacao);
         novoComentario.setId(id);
-        novoComentario.setAutor(autor);
-        novoComentario.setPublicacao(publicacao);
-        novoComentario.setData(data);
-        novoComentario.setAnonimo(isAnonimo);
-        repositorio.update(novoComentario);
+        repositorio.editar(novoComentario);
     }
 
-    public void excluir(int id) {
-        Comentario comentario = repositorio.find(id);
-        repositorio.delete(comentario);
-    }
-
-    public List<Comentario> filtrarPorIdPublicacao(int id) {
-        return repositorio.findByPost(id);
+    public void deletar(int id) {
+        Comentario comentario = repositorio.buscar(id);
+        repositorio.deletar(comentario);
     }
 
 }

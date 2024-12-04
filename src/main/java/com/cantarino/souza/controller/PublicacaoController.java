@@ -9,70 +9,52 @@ import com.cantarino.souza.controller.tablemodels.TMPublicacao;
 import com.cantarino.souza.model.dao.PublicacaoDao;
 import com.cantarino.souza.model.entities.Publicacao;
 import com.cantarino.souza.model.entities.Usuario;
-import com.cantarino.souza.model.exceptions.PublicacaoException;
 import com.cantarino.souza.model.valid.ValidatePublicacao;
 
 public class PublicacaoController {
     private PublicacaoDao repositorio;
-    private ValidatePublicacao validator;
+    private ValidatePublicacao validador;
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMPublicacao(repositorio.findAll()), TMPublicacao.getCustomRenderer());
+        Util.jTableShow(grd, new TMPublicacao(repositorio.buscarTodos()), TMPublicacao.getCustomRenderer());
     }
 
     public PublicacaoController() {
         this.repositorio = new PublicacaoDao();
-        this.validator = new ValidatePublicacao();
+        this.validador = new ValidatePublicacao();
     }
 
-    public void filtrarTabelaPorIdGestante(JTable grd, int id) {
-        Util.jTableShow(grd, new TMPublicacao(repositorio.filterGestanteId(id)), null);
+    public void atualizarTabelaPorGestante(JTable grd, int id) {
+        Util.jTableShow(grd, new TMPublicacao(repositorio.buscarPorGestante(id)), null);
     }
 
-    public void cadastrar(String titulo, String corpo, Boolean isAnonimo, LocalDateTime data, Usuario autor,
+    public void salvar(String titulo, String corpo, Boolean isAnonimo, LocalDateTime data, Usuario autor,
             LocalDateTime deletadoEm) {
-        if (autor == null) {
-            throw new PublicacaoException("Autor não pode ser nulo");
-        }
-        if (data == null) {
-            throw new PublicacaoException("Data não pode ser nula");
-        }
 
-        Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo);
-        novaPublicacao.setAutor(autor);
-        novaPublicacao.setData(data);
-        novaPublicacao.setAnonimo(isAnonimo);
-        repositorio.save(novaPublicacao);
+        Publicacao novaPublicacao = validador.validaCamposEntrada(titulo, corpo, autor, data, isAnonimo);
+        repositorio.salvar(novaPublicacao);
     }
 
-    public void atualizar(int id, String titulo, String corpo, Boolean isAnonimo, LocalDateTime data, Usuario autor,
+    public void editar(int id, String titulo, String corpo, Boolean isAnonimo, LocalDateTime data, Usuario autor,
             LocalDateTime deletadoEm) {
-        if (autor == null) {
-            throw new PublicacaoException("Autor não pode ser nulo");
-        }
-        if (data == null) {
-            throw new PublicacaoException("Data não pode ser nula");
-        }
 
-        Publicacao novaPublicacao = validator.validaCamposEntrada(titulo, corpo);
+        Publicacao novaPublicacao = validador.validaCamposEntrada(titulo, corpo, autor, data, isAnonimo);
         novaPublicacao.setId(id);
-        novaPublicacao.setAutor(autor);
-        novaPublicacao.setData(data);
-        novaPublicacao.setAnonimo(isAnonimo);
-        repositorio.update(novaPublicacao);
+
+        repositorio.editar(novaPublicacao);
     }
 
-    public Publicacao buscarPorId(int id) {
-        return repositorio.find(id);
+    public Publicacao buscar(int id) {
+        return repositorio.buscar(id);
     }
 
     public List<Publicacao> buscarTodos() {
-        return repositorio.findAll();
+        return repositorio.buscarTodos();
     }
 
-    public void excluir(int id) {
-        Publicacao publicacao = repositorio.find(id);
-        repositorio.delete(publicacao);
+    public void deletar(int id) {
+        Publicacao publicacao = repositorio.buscar(id);
+        repositorio.deletar(publicacao);
     }
 
 }

@@ -13,7 +13,7 @@ public class GestanteDao implements IDao<Gestante> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Gestante obj) {
+    public void salvar(Gestante obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -24,7 +24,7 @@ public class GestanteDao implements IDao<Gestante> {
     }
 
     @Override
-    public void update(Gestante obj) {
+    public void editar(Gestante obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -36,7 +36,7 @@ public class GestanteDao implements IDao<Gestante> {
     }
 
     @Override
-    public boolean delete(Gestante obj) {
+    public boolean deletar(Gestante obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -49,7 +49,7 @@ public class GestanteDao implements IDao<Gestante> {
     }
 
     @Override
-    public Gestante find(int id) {
+    public Gestante buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Gestante gestante = this.entityManager.find(Gestante.class, id);
@@ -61,7 +61,7 @@ public class GestanteDao implements IDao<Gestante> {
     }
 
     @Override
-    public List<Gestante> findAll() {
+    public List<Gestante> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Gestante> gestantes = this.entityManager
@@ -72,7 +72,7 @@ public class GestanteDao implements IDao<Gestante> {
         return gestantes;
     }
 
-    public Gestante findByCpf(String cpf) {
+    public Gestante buscarPorCpf(String cpf) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Gestante gestante = this.entityManager
@@ -87,7 +87,7 @@ public class GestanteDao implements IDao<Gestante> {
         return gestante;
     }
 
-    public Gestante findByEmail(String email) {
+    public Gestante buscarPorEmail(String email) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Gestante gestante = this.entityManager

@@ -8,86 +8,89 @@ import com.cantarino.souza.controller.tablemodels.TMSecretario;
 import com.cantarino.souza.model.dao.SecretarioDao;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.exceptions.GestanteException;
+import com.cantarino.souza.model.services.GerenciadorCriptografia;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateSecretario;
 
 public class SecretarioController {
 
     private SecretarioDao repositorio;
-    private ValidateSecretario validator;
+    private ValidateSecretario validador;
     private NotificadorEmail notificador;
+    private GerenciadorCriptografia gerenciadorCriptografia;
 
     public SecretarioController() {
         repositorio = new SecretarioDao();
-        validator = new ValidateSecretario();
+        validador = new ValidateSecretario();
         notificador = new NotificadorEmail();
+        gerenciadorCriptografia = new GerenciadorCriptografia();
     }
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMSecretario(repositorio.findAll()), null);
+        Util.jTableShow(grd, new TMSecretario(repositorio.buscarTodos()), null);
     }
 
-    public void cadastrar(String cpf, String nome, String email, String senha, String dataNascimento,
+    public void salvar(String cpf, String nome, String email, String senha, String dataNascimento,
             String telefone, String endereco, String deletadoEm, String dataContratacao) {
 
-        Secretario novoSecretario = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
+        Secretario novoSecretario = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
                 endereco, deletadoEm, dataContratacao);
-        String hashSenha = Util.hashPassword(novoSecretario.getSenha());
+        String hashSenha = gerenciadorCriptografia.criptografarSenha(novoSecretario.getSenha());
         novoSecretario.setSenha(hashSenha);
 
-        Secretario existingSecretario = repositorio.findByCpf(novoSecretario.getCpf());
+        Secretario existingSecretario = repositorio.buscarPorCpf(novoSecretario.getCpf());
         if (existingSecretario != null) {
-            throw new GestanteException("Já existe um secretário cadastrado com esse cpf.");
+            throw new GestanteException("ERRO: Já existe um secretário cadastrado com esse cpf.");
         }
-        existingSecretario = repositorio.findByEmail(novoSecretario.getEmail());
+        existingSecretario = repositorio.buscarPorEmail(novoSecretario.getEmail());
         if (existingSecretario != null) {
-            throw new GestanteException("Já existe um secretário cadastrada com esse email.");
+            throw new GestanteException("ERRO: Já existe um secretário cadastrada com esse email.");
         }
 
-        repositorio.save(novoSecretario);
+        repositorio.salvar(novoSecretario);
 
     }
 
-    public Secretario buscarPorId(int id) {
-        return repositorio.find(id);
+    public Secretario buscar(int id) {
+        return repositorio.buscar(id);
     }
 
-    public void atualizar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
+    public void editar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
             String telefone, String endereco, String deletadoEm, String dataContratacao) {
-        Secretario novoSecretario = validator.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
+        Secretario novoSecretario = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
                 endereco, deletadoEm, dataContratacao);
         novoSecretario.setId(id);
 
-        Secretario existingSecretario = repositorio.findByCpf(novoSecretario.getCpf());
+        Secretario existingSecretario = repositorio.buscarPorCpf(novoSecretario.getCpf());
         if (existingSecretario != null && existingSecretario.getId() != id) {
-            throw new GestanteException("Já existe um secretário cadastrado com esse cpf.");
+            throw new GestanteException("ERRO: Já existe um secretário cadastrado com esse cpf.");
         }
-        existingSecretario = repositorio.findByEmail(novoSecretario.getEmail());
+        existingSecretario = repositorio.buscarPorEmail(novoSecretario.getEmail());
         if (existingSecretario != null && existingSecretario.getId() != id) {
-            throw new GestanteException("Já existe um secretário cadastrada com esse email.");
+            throw new GestanteException("ERRO: Já existe um secretário cadastrada com esse email.");
         }
 
-        repositorio.update(novoSecretario);
+        repositorio.editar(novoSecretario);
     }
 
-    public void excluir(int id) {
-        Secretario secretario = repositorio.find(id);
-        repositorio.delete(secretario);
+    public void deletar(int id) {
+        Secretario secretario = repositorio.buscar(id);
+        repositorio.deletar(secretario);
     }
 
-    public void atualizaSenha(Secretario usuario, String senha) {
-        String senhaValidada = validator.validaSenha(senha);
-        String hashSenha = Util.hashPassword(senhaValidada);
+    public void atualizarSenha(Secretario usuario, String senha) {
+        String senhaValidada = validador.validaSenha(senha);
+        String hashSenha = gerenciadorCriptografia.criptografarSenha(senhaValidada);
         usuario.setSenha(hashSenha);
-        repositorio.update(usuario);
+        repositorio.editar(usuario);
     }
 
     public Secretario adicionarCodigoRecuperacao(String cpf, String codigo) {
-        Secretario secretario = repositorio.findByCpf(cpf);
+        Secretario secretario = repositorio.buscarPorCpf(cpf);
         if (secretario != null) {
             secretario.setCodigoRecuperacao(codigo);
             secretario.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));
-            repositorio.update(secretario);
+            repositorio.editar(secretario);
             notificador.notificar(secretario, "BemGestar | Recuperação de Senha", "Seu código de recuperação é: "
                     + codigo
                     + ". Pelos próximos 30 minutos, você vai conseguir logar na sua conta utilizando este código no lugar da senha. Entre na sua conta e seleciona a opção de mudar senha para redefinir sua senha.");

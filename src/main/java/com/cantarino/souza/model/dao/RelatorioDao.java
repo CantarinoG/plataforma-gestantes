@@ -12,7 +12,7 @@ public class RelatorioDao implements IDao<Relatorio> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Relatorio obj) {
+    public void salvar(Relatorio obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -23,7 +23,7 @@ public class RelatorioDao implements IDao<Relatorio> {
     }
 
     @Override
-    public void update(Relatorio obj) {
+    public void editar(Relatorio obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         this.entityManager.merge(obj);
@@ -32,7 +32,7 @@ public class RelatorioDao implements IDao<Relatorio> {
     }
 
     @Override
-    public boolean delete(Relatorio obj) {
+    public boolean deletar(Relatorio obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         obj.setDeletadoEm(LocalDateTime.now());
@@ -43,7 +43,7 @@ public class RelatorioDao implements IDao<Relatorio> {
     }
 
     @Override
-    public Relatorio find(int id) {
+    public Relatorio buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         Relatorio relatorio = this.entityManager.find(Relatorio.class, id);
         this.entityManager.close();
@@ -51,7 +51,7 @@ public class RelatorioDao implements IDao<Relatorio> {
     }
 
     @Override
-    public List<Relatorio> findAll() {
+    public List<Relatorio> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Relatorio> relatorios = this.entityManager.createQuery(
                 "FROM Relatorio r WHERE r.deletadoEm IS NULL ORDER BY r.id DESC",

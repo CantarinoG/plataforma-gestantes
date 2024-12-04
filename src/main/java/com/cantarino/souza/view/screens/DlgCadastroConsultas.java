@@ -18,57 +18,59 @@ import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
 public class DlgCadastroConsultas extends JDialog {
-    private JPanel panBackground;
-    private JPanel panColumn;
-    private JLabel lblAction;
-    private JPanel panButton;
+    private JPanel panFundo;
+    private JPanel panColuna;
+    private JLabel lblTitulo;
+    private JPanel panBotao;
     private JButton btnCadastrarConsulta;
     private JComboBox<String> cbPaciente;
-    private JTextArea txtDescricao;
-    private JFormattedTextField txtData;
-    private JTextField txtValor;
+    private JTextArea edtDescricao;
+    private JFormattedTextField edtData;
+    private JTextField edtValor;
     private JComboBox<String> cbMedico;
     private JComboBox<String> cbStatus;
-    private JPanel panPacienteField;
-    private JPanel panDescricaoField;
-    private JPanel panDataField;
-    private JPanel panValorField;
-    private JPanel panMedicoField;
-    private JPanel panStatusField;
-    private JTextField txtDuracao;
-    private JPanel panDuracaoField;
+    private JPanel panCampoPaciente;
+    private JPanel panCampoDescricao;
+    private JPanel panCampoData;
+    private JPanel panCampoValor;
+    private JPanel panCampoMedico;
+    private JPanel panCampoStatus;
+    private JTextField edtDuracao;
+    private JPanel panCampoDuracao;
     private JComboBox<String> cbRetorno;
-    private JPanel panRetornoField;
+    private JPanel panCampoRetorno;
 
     private MedicoController medicoController;
     private GestanteController gestanteController;
     private ConsultaController consultaController;
 
-    private Consulta atualizando;
+    private Consulta atualizando = null;
 
-    public DlgCadastroConsultas(JDialog parent, boolean modal) {
+    public DlgCadastroConsultas(JDialog parent, boolean modal) { // Construtor sem id para cadastro
         super(parent, modal);
+
         medicoController = new MedicoController();
         gestanteController = new GestanteController();
         consultaController = new ConsultaController();
-        atualizando = null;
+
         initComponents();
     }
 
-    public DlgCadastroConsultas(JDialog parent, boolean modal, int id) {
+    public DlgCadastroConsultas(JDialog parent, boolean modal, int id) { // Construtor com id para edição
         super(parent, modal);
+
         medicoController = new MedicoController();
         gestanteController = new GestanteController();
         consultaController = new ConsultaController();
-        atualizando = consultaController.buscarPorId(id);
+        atualizando = consultaController.buscar(id);
+
         initComponents();
 
-        // Fill fields with existing data
         cbPaciente.setSelectedItem(atualizando.getPaciente().getId() + " | " + atualizando.getPaciente().getNome());
-        txtDescricao.setText(atualizando.getDescricao());
-        txtData.setText(atualizando.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        txtDuracao.setText(String.valueOf(atualizando.getDuracao()));
-        txtValor.setText(String.valueOf(atualizando.getValor()));
+        edtDescricao.setText(atualizando.getDescricao());
+        edtData.setText(atualizando.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        edtDuracao.setText(String.valueOf(atualizando.getDuracao()));
+        edtValor.setText(String.valueOf(atualizando.getValor()));
         cbMedico.setSelectedItem(atualizando.getMedico().getId() + " | " + atualizando.getMedico().getNome());
         cbStatus.setSelectedItem(atualizando.getStatus());
         if (atualizando.getRetorno() != null) {
@@ -78,7 +80,7 @@ public class DlgCadastroConsultas extends JDialog {
     }
 
     private String[] getGestantesOptions() {
-        java.util.List<Gestante> gestantes = gestanteController.buscarTodas();
+        java.util.List<Gestante> gestantes = gestanteController.buscarTodos();
         String[] options = new String[gestantes.size()];
         for (int i = 0; i < gestantes.size(); i++) {
             Gestante gestante = gestantes.get(i);
@@ -88,7 +90,7 @@ public class DlgCadastroConsultas extends JDialog {
     }
 
     private String[] getMedicosOptions() {
-        java.util.List<Medico> medicos = medicoController.buscarTodas();
+        java.util.List<Medico> medicos = medicoController.buscarTodos();
         String[] options = new String[medicos.size()];
         for (int i = 0; i < medicos.size(); i++) {
             Medico medico = medicos.get(i);
@@ -101,7 +103,7 @@ public class DlgCadastroConsultas extends JDialog {
         StatusProcedimentos[] values = StatusProcedimentos.values();
         String[] options = new String[values.length];
         for (int i = 0; i < values.length; i++) {
-            options[i] = values[i].getValue();
+            options[i] = values[i].getValor();
         }
         return options;
     }
@@ -112,7 +114,7 @@ public class DlgCadastroConsultas extends JDialog {
                 .filter(consulta -> (atualizando == null || consulta.getId() != atualizando.getId())
                         && consulta.getPaciente().getId() == idPaciente
                         && consulta.getMedico().getId() == idMedico
-                        && consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValue()))
+                        && consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValor()))
                 .collect(java.util.stream.Collectors.toList());
 
         String[] options = new String[filteredConsultas.size() + 1];
@@ -130,9 +132,9 @@ public class DlgCadastroConsultas extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -141,98 +143,87 @@ public class DlgCadastroConsultas extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        // Título
-        lblAction = new JLabel(atualizando != null ? "Editar Consulta" : "Cadastrar Consulta");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 32));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        lblTitulo = new JLabel(atualizando != null ? "Editar Consulta" : "Cadastrar Consulta");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblTitulo, gbc);
 
-        // Configuração para o painel de campos
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
-        panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(atualizando != null ? 8 : 7, 1, 20, 5));
-        panColumn.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panColumn, gbc);
+        panColuna = new JPanel();
+        panColuna.setLayout(new GridLayout(atualizando != null ? 8 : 7, 1, 20, 5));
+        panColuna.setBackground(AppColors.TRANSPARENT);
+        panFundo.add(panColuna, gbc);
 
-        // Campo Paciente
         cbPaciente = new JComboBox<>(getGestantesOptions());
         cbPaciente.setFont(new Font("Arial", Font.PLAIN, 22));
         cbPaciente.setBackground(AppColors.FIELD_PINK);
         cbPaciente.addActionListener(evt -> {
             cbPacienteActionPerformed(evt);
         });
-        panPacienteField = createCustomTextfield("Paciente", cbPaciente);
-        panColumn.add(panPacienteField);
+        panCampoPaciente = criarTextFieldCustomizado("Paciente", cbPaciente);
+        panColuna.add(panCampoPaciente);
 
-        // Campo Descrição da Consulta
-        txtDescricao = new JTextArea();
-        txtDescricao.setFont(new Font("Arial", Font.PLAIN, 22));
-        txtDescricao.setBackground(AppColors.FIELD_PINK);
-        txtDescricao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        txtDescricao.setLineWrap(true);
-        txtDescricao.setWrapStyleWord(true);
-        panDescricaoField = createCustomTextfield("Descrição da Consulta", txtDescricao);
-        panColumn.add(panDescricaoField);
+        edtDescricao = new JTextArea();
+        edtDescricao.setFont(new Font("Arial", Font.PLAIN, 22));
+        edtDescricao.setBackground(AppColors.FIELD_PINK);
+        edtDescricao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        edtDescricao.setLineWrap(true);
+        edtDescricao.setWrapStyleWord(true);
+        panCampoDescricao = criarTextFieldCustomizado("Descrição da Consulta", edtDescricao);
+        panColuna.add(panCampoDescricao);
 
-        // Campo Data
         try {
             MaskFormatter maskData = new MaskFormatter("##/##/#### ##:##");
             maskData.setPlaceholderCharacter('_');
-            txtData = new JFormattedTextField(maskData);
-            txtData.setFont(new Font("Arial", Font.PLAIN, 22));
-            txtData.setBackground(AppColors.FIELD_PINK);
-            txtData.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            panDataField = createCustomTextfield("Data e Hora", txtData);
-            panColumn.add(panDataField);
+            edtData = new JFormattedTextField(maskData);
+            edtData.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtData.setBackground(AppColors.FIELD_PINK);
+            edtData.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panCampoData = criarTextFieldCustomizado("Data e Hora", edtData);
+            panColuna.add(panCampoData);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        // Campo Duração
-        txtDuracao = new JTextField();
-        txtDuracao.setFont(new Font("Arial", Font.PLAIN, 22));
-        txtDuracao.setBackground(AppColors.FIELD_PINK);
-        txtDuracao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panDuracaoField = createCustomTextfield("Duração(minutos)", txtDuracao);
-        panColumn.add(panDuracaoField);
+        edtDuracao = new JTextField();
+        edtDuracao.setFont(new Font("Arial", Font.PLAIN, 22));
+        edtDuracao.setBackground(AppColors.FIELD_PINK);
+        edtDuracao.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panCampoDuracao = criarTextFieldCustomizado("Duração(minutos)", edtDuracao);
+        panColuna.add(panCampoDuracao);
 
-        // Campo Valor
-        txtValor = new JTextField();
-        txtValor.setFont(new Font("Arial", Font.PLAIN, 22));
-        txtValor.setBackground(AppColors.FIELD_PINK);
-        txtValor.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panValorField = createCustomTextfield("Valor", txtValor);
-        panColumn.add(panValorField);
+        edtValor = new JTextField();
+        edtValor.setFont(new Font("Arial", Font.PLAIN, 22));
+        edtValor.setBackground(AppColors.FIELD_PINK);
+        edtValor.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        panCampoValor = criarTextFieldCustomizado("Valor", edtValor);
+        panColuna.add(panCampoValor);
 
-        // Campo Médico
         cbMedico = new JComboBox<>(getMedicosOptions());
         cbMedico.setFont(new Font("Arial", Font.PLAIN, 22));
         cbMedico.setBackground(AppColors.FIELD_PINK);
         cbPaciente.addActionListener(evt -> {
             cbMedicoActionPerformed(evt);
         });
-        panMedicoField = createCustomTextfield("Médico", cbMedico);
-        panColumn.add(panMedicoField);
+        panCampoMedico = criarTextFieldCustomizado("Médico", cbMedico);
+        panColuna.add(panCampoMedico);
 
-        // Campo Retorno da Consulta
         cbRetorno = new JComboBox<>(getConsultasOptions(0, 0));
         cbRetorno.setFont(new Font("Arial", Font.PLAIN, 22));
         cbRetorno.setBackground(AppColors.FIELD_PINK);
-        panRetornoField = createCustomTextfield("Retorno da Consulta", cbRetorno);
-        panColumn.add(panRetornoField);
+        panCampoRetorno = criarTextFieldCustomizado("Retorno da Consulta", cbRetorno);
+        panColuna.add(panCampoRetorno);
 
-        // Campo Status (apenas quando editando)
         if (atualizando != null) {
             cbStatus = new JComboBox<>(getStatusOptions());
             cbStatus.setFont(new Font("Arial", Font.PLAIN, 22));
             cbStatus.setBackground(AppColors.FIELD_PINK);
-            panStatusField = createCustomTextfield("Status", cbStatus);
-            panColumn.add(panStatusField);
+            panCampoStatus = criarTextFieldCustomizado("Status", cbStatus);
+            panColuna.add(panCampoStatus);
         }
 
-        // Botão
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
         gbcButton.gridy = 2;
@@ -241,8 +232,8 @@ public class DlgCadastroConsultas extends JDialog {
         gbcButton.anchor = GridBagConstraints.NORTH;
         gbcButton.insets = new java.awt.Insets(10, 0, 0, 0);
 
-        panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panButton.setBackground(AppColors.TRANSPARENT);
+        panBotao = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        panBotao.setBackground(AppColors.TRANSPARENT);
 
         btnCadastrarConsulta = new RoundedButton(atualizando != null ? "Editar Consulta" : "Cadastrar Consulta", 10);
         btnCadastrarConsulta.setPreferredSize(new Dimension(150, 50));
@@ -250,11 +241,11 @@ public class DlgCadastroConsultas extends JDialog {
         btnCadastrarConsulta.setForeground(Color.WHITE);
         btnCadastrarConsulta.addActionListener(evt -> btnCadastrarConsultaActionPerformed(evt));
 
-        panButton.add(btnCadastrarConsulta);
-        panBackground.add(panButton, gbcButton);
+        panBotao.add(btnCadastrarConsulta);
+        panFundo.add(panBotao, gbcButton);
     }
 
-    private JPanel createCustomTextfield(String hint, JComponent textField) {
+    private JPanel criarTextFieldCustomizado(String hint, JComponent textField) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -287,52 +278,52 @@ public class DlgCadastroConsultas extends JDialog {
         try {
             String selectedPaciente = (String) cbPaciente.getSelectedItem();
             int pacienteId = Integer.parseInt(selectedPaciente.split(" \\| ")[0]);
-            Gestante paciente = gestanteController.buscarPorId(pacienteId);
+            Gestante paciente = gestanteController.buscar(pacienteId);
 
             String selectedMedico = (String) cbMedico.getSelectedItem();
             int medicoId = Integer.parseInt(selectedMedico.split(" \\| ")[0]);
-            Medico medico = medicoController.buscarPorId(medicoId);
+            Medico medico = medicoController.buscar(medicoId);
 
             String selectedRetorno = (String) cbRetorno.getSelectedItem();
             Consulta retorno = null;
             if (!"Nenhuma".equals(selectedRetorno)) {
                 int retornoId = Integer.parseInt(selectedRetorno.split(" \\| ")[0]);
-                retorno = consultaController.buscarPorId(retornoId);
+                retorno = consultaController.buscar(retornoId);
             }
 
-            String dataStr = txtData.getText(); // Format: dd/MM/yyyy HH:mm
+            String dataStr = edtData.getText(); // Formato: dd/MM/yyyy HH:mm
             String[] dateParts = dataStr.split(" ")[0].split("/");
             String[] timeParts = dataStr.split(" ")[1].split(":");
 
             String formattedData = String.format("%s-%s-%sT%s:%s:00",
-                    dateParts[2], // year
-                    dateParts[1], // month
-                    dateParts[0], // day
-                    timeParts[0], // hour
-                    timeParts[1] // minute
+                    dateParts[2], // ano
+                    dateParts[1], // mês
+                    dateParts[0], // dia
+                    timeParts[0], // hora
+                    timeParts[1] // minuto
             );
 
-            if (atualizando == null) {
-                consultaController.cadastrar(
+            if (atualizando == null) { // Criando nova consulta
+                consultaController.salvar(
                         paciente,
-                        txtDescricao.getText(),
+                        edtDescricao.getText(),
                         formattedData,
-                        txtDuracao.getText(),
-                        txtValor.getText(),
-                        StatusProcedimentos.AGENDADA.getValue(),
+                        edtDuracao.getText(),
+                        edtValor.getText(),
+                        StatusProcedimentos.AGENDADA.getValor(),
                         null,
                         null,
                         medico,
                         retorno);
                 dispose();
-            } else {
-                consultaController.atualizar(
+            } else { // Editando consulta
+                consultaController.editar(
                         atualizando.getId(),
                         paciente,
-                        txtDescricao.getText(),
+                        edtDescricao.getText(),
                         formattedData,
-                        txtDuracao.getText(),
-                        txtValor.getText(),
+                        edtDuracao.getText(),
+                        edtValor.getText(),
                         (String) cbStatus.getSelectedItem(),
                         null,
                         null,
@@ -347,7 +338,7 @@ public class DlgCadastroConsultas extends JDialog {
         }
     }
 
-    private void updateCbRetorno() {
+    private void atualizarOpcoesCbRetorno() {
         String pacienteStr = (String) cbPaciente.getSelectedItem();
         String medicoStr = (String) cbMedico.getSelectedItem();
 
@@ -361,10 +352,10 @@ public class DlgCadastroConsultas extends JDialog {
     }
 
     private void cbPacienteActionPerformed(ActionEvent evt) {
-        updateCbRetorno();
+        atualizarOpcoesCbRetorno();
     }
 
     private void cbMedicoActionPerformed(ActionEvent evt) {
-        updateCbRetorno();
+        atualizarOpcoesCbRetorno();
     }
 }
