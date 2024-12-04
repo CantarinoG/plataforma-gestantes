@@ -16,15 +16,15 @@ import com.cantarino.souza.view.components.RoundedButton;
 
 public class DlgAgendaMedico extends JDialog {
 
-    private JPanel panBackground;
+    private JPanel panFundo;
     private JPanel panHeader;
-    private JLabel lblTitle;
-    private JPanel panContent;
+    private JLabel lblTitulo;
+    private JPanel panConteudo;
     private JTable grdConsultas;
     private JScrollPane scrollPane;
     private JPanel panFooter;
-    private JLabel lblFilter;
-    private JComboBox<String> cbFilter;
+    private JLabel lblFiltro;
+    private JComboBox<String> cbFiltro;
     private JButton btnCancelar;
     private JButton btnVerRelatorio;
     private JButton btnCadastrarRelatorio;
@@ -37,11 +37,14 @@ public class DlgAgendaMedico extends JDialog {
 
     public DlgAgendaMedico(JFrame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
+
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
         consultaController = new ConsultaController();
-        consultaController.filtrarTabelaPorIdMedico(grdConsultas, usuario.getId());
+
+        initComponents();
+
+        consultaController.atualizarTabelaPorMedico(grdConsultas, usuario.getId());
     }
 
     private void initComponents() {
@@ -50,9 +53,9 @@ public class DlgAgendaMedico extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new BorderLayout());
+        setContentPane(panFundo);
 
         panHeader = new JPanel();
         panHeader.setPreferredSize(new Dimension(getWidth(), 80));
@@ -61,22 +64,22 @@ public class DlgAgendaMedico extends JDialog {
         panHeader.setOpaque(true);
         panHeader.setLayout(new GridBagLayout());
 
-        lblTitle = new JLabel("Minha Agenda");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
-        lblTitle.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo = new JLabel("Minha Agenda");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        panHeader.add(lblTitle, gbc);
+        panHeader.add(lblTitulo, gbc);
 
-        panBackground.add(panHeader, BorderLayout.NORTH);
-        panContent = new PanConsultasAgendadas();
-        panContent.setLayout(new BorderLayout());
-        panContent.setBackground(new Color(255, 255, 255));
-        panContent.setOpaque(true);
+        panFundo.add(panHeader, BorderLayout.NORTH);
+        panConteudo = new PanConsultasAgendadas();
+        panConteudo.setLayout(new BorderLayout());
+        panConteudo.setBackground(new Color(255, 255, 255));
+        panConteudo.setOpaque(true);
 
         grdConsultas = new JTable();
         grdConsultas.setModel(new DefaultTableModel(
@@ -89,7 +92,7 @@ public class DlgAgendaMedico extends JDialog {
                 new String[] {
                 }));
         scrollPane = new JScrollPane(grdConsultas);
-        panContent.add(scrollPane, BorderLayout.CENTER);
+        panConteudo.add(scrollPane, BorderLayout.CENTER);
 
         panFooter = new JPanel();
         panFooter.setPreferredSize(new Dimension(getWidth(), 80));
@@ -97,13 +100,13 @@ public class DlgAgendaMedico extends JDialog {
         panFooter.setBorder(BorderFactory.createEmptyBorder(5, 64, 10, 5));
         panFooter.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 5));
 
-        lblFilter = new JLabel("Filtrar por:");
-        cbFilter = new JComboBox<>(
-                new String[] { "Todos", StatusProcedimentos.AGENDADA.getValue(),
-                        StatusProcedimentos.CONCLUIDA.getValue(), StatusProcedimentos.CANCELADA.getValue() });
-        cbFilter.addActionListener(new java.awt.event.ActionListener() {
+        lblFiltro = new JLabel("Filtrar por:");
+        cbFiltro = new JComboBox<>(
+                new String[] { "Todos", StatusProcedimentos.AGENDADA.getValor(),
+                        StatusProcedimentos.CONCLUIDA.getValor(), StatusProcedimentos.CANCELADA.getValor() });
+        cbFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbFilterActionPerformed(evt);
+                cbFiltroActionPerformed(evt);
             }
         });
 
@@ -147,24 +150,24 @@ public class DlgAgendaMedico extends JDialog {
             }
         });
 
-        panFooter.add(lblFilter);
-        panFooter.add(cbFilter);
+        panFooter.add(lblFiltro);
+        panFooter.add(cbFiltro);
         panFooter.add(btnCancelar);
         panFooter.add(btnPaciente);
         panFooter.add(btnVerRelatorio);
         panFooter.add(btnCadastrarRelatorio);
 
-        panContent.add(panFooter, BorderLayout.SOUTH);
+        panConteudo.add(panFooter, BorderLayout.SOUTH);
 
-        panBackground.add(panContent, BorderLayout.CENTER);
+        panFundo.add(panConteudo, BorderLayout.CENTER);
     }
 
-    private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {
-        String selectedFilter = (String) cbFilter.getSelectedItem();
+    private void cbFiltroActionPerformed(java.awt.event.ActionEvent evt) {
+        String selectedFilter = (String) cbFiltro.getSelectedItem();
         if (selectedFilter.equals("Todos")) {
-            consultaController.filtrarTabelaPorIdMedico(grdConsultas, usuario.getId());
+            consultaController.atualizarTabelaPorMedico(grdConsultas, usuario.getId());
         } else {
-            consultaController.filtrarTabelaPorIdMedicoStatus(grdConsultas, usuario.getId(), selectedFilter);
+            consultaController.atualizarTabelaPorMedicoEStatus(grdConsultas, usuario.getId(), selectedFilter);
         }
     }
 
@@ -187,21 +190,28 @@ public class DlgAgendaMedico extends JDialog {
 
         Consulta consulta = (Consulta) selectedObject;
 
-        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
             JOptionPane.showMessageDialog(this, "Consulta já cancelada", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
-        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValue())) {
+        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValor())) {
             JOptionPane.showMessageDialog(this, "Consulta já concluída", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
-            int option = JOptionPane.showConfirmDialog(this,
+            // Precisei fazer essa verificação direto na view, para conseguir fazer com que,
+            // caso não seja válido, já interrompa antes de mostrar o dialog de confirmação.
+            Object[] options = { "Sim", "Não" };
+            int option = JOptionPane.showOptionDialog(this,
                     "Tem certeza que deseja cancelar esta consulta?",
                     "Confirmar cancelamento",
-                    JOptionPane.YES_NO_OPTION);
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
 
             if (option == JOptionPane.YES_OPTION) {
                 id = consulta.getId();
                 consultaController.cancelar(id);
-                cbFilterActionPerformed(null);
+                cbFiltroActionPerformed(null);
 
                 JOptionPane.showMessageDialog(this, "Consulta cancelada com sucesso!", "Sucesso",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -229,7 +239,6 @@ public class DlgAgendaMedico extends JDialog {
     }
 
     private void btnCadastrarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -237,18 +246,16 @@ public class DlgAgendaMedico extends JDialog {
         }
         Consulta consulta = (Consulta) selectedObject;
 
-        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
             JOptionPane.showMessageDialog(this,
                     "Não é possível adicionar ou editar um relatório num procedimento cancelado", "Aviso",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        id = consulta.getId();
-
-        DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, id);
+        DlgCadastroRelatorio dialog = new DlgCadastroRelatorio(this, true, consulta.getId());
         dialog.setVisible(true);
-        consultaController.filtrarTabelaPorIdMedico(grdConsultas, usuario.getId());
+        consultaController.atualizarTabelaPorMedico(grdConsultas, usuario.getId());
 
     }
 

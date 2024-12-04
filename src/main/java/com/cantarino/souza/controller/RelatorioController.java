@@ -12,60 +12,58 @@ import com.cantarino.souza.controller.tablemodels.TMRelatorio;
 import com.cantarino.souza.model.dao.RelatorioDao;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Relatorio;
-import com.cantarino.souza.model.exceptions.RelatorioException;
+import com.cantarino.souza.model.services.GerenciadorPdf;
 import com.cantarino.souza.model.valid.ValidateRelatorio;
 
 public class RelatorioController {
     private RelatorioDao repositorio;
-    private ValidateRelatorio validator;
+    private ValidateRelatorio validador;
+    private GerenciadorPdf gerenciadorPdf;
 
     public RelatorioController() {
         this.repositorio = new RelatorioDao();
-        this.validator = new ValidateRelatorio();
+        this.validador = new ValidateRelatorio();
+        this.gerenciadorPdf = new GerenciadorPdf();
     }
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMRelatorio(repositorio.findAll()), null);
+        Util.jTableShow(grd, new TMRelatorio(repositorio.buscarTodos()), null);
     }
 
-    public int cadastrar(LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
+    public int salvar(LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
             LocalDateTime deletadoEm) {
-        if (dataEmissao == null) {
-            throw new RelatorioException("Data de emissão não pode ser nula");
-        }
-        Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes, caminhoPdf);
-        novoRelatorio.setDataEmissao(dataEmissao);
-        repositorio.save(novoRelatorio);
+
+        Relatorio novoRelatorio = validador.validaCamposEntrada(resultado, observacoes, caminhoPdf, dataEmissao);
+
+        repositorio.salvar(novoRelatorio);
         return novoRelatorio.getId();
     }
 
-    public void atualizar(int id, LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
+    public void editar(int id, LocalDateTime dataEmissao, String resultado, String observacoes, String caminhoPdf,
             LocalDateTime deletadoEm) {
-        if (dataEmissao == null) {
-            throw new RelatorioException("Data de emissão não pode ser nula");
-        }
-        Relatorio novoRelatorio = validator.validaCamposEntrada(resultado, observacoes, caminhoPdf);
+
+        Relatorio novoRelatorio = validador.validaCamposEntrada(resultado, observacoes, caminhoPdf, dataEmissao);
         novoRelatorio.setId(id);
-        novoRelatorio.setDataEmissao(dataEmissao);
-        repositorio.update(novoRelatorio);
+
+        repositorio.editar(novoRelatorio);
     }
 
-    public void excluir(int id) {
-        Relatorio relatorio = repositorio.find(id);
-        repositorio.delete(relatorio);
+    public void deletar(int id) {
+        Relatorio relatorio = repositorio.buscar(id);
+        repositorio.deletar(relatorio);
     }
 
-    public Relatorio buscarPorId(int id) {
-        return repositorio.find(id);
+    public Relatorio buscar(int id) {
+        return repositorio.buscar(id);
     }
 
-    public void gerarPdf(String path, int id, Procedimento procedimento) {
-        Relatorio relatorio = repositorio.find(id);
-        String tempPath = "storage/relatorios/temp";
+    public void gerarPdf(String caminho, int id, Procedimento procedimento) {
+        Relatorio relatorio = repositorio.buscar(id);
+        String caminhoTemporario = "storage/relatorios/temp";
 
-        new File(tempPath).mkdirs();
+        new File(caminhoTemporario).mkdirs();
 
-        Util.generatePdf(tempPath,
+        gerenciadorPdf.gerarPdf(caminhoTemporario,
                 "PDF gerado em: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), "\n",
                 "Bem Gestar" + "\n",
                 "Relatório de Procedimento", "\n",
@@ -80,8 +78,8 @@ public class RelatorioController {
                         + procedimento.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 "Status: " + procedimento.getStatus() + "\n\n" + "Resultado: " + relatorio.getResultado(),
                 "Observações: " + relatorio.getObeservacoes());
-        String filePath = tempPath + "/recibo.pdf";
-        List<String> inputPaths = Arrays.asList(filePath, relatorio.getCaminhoPdf());
-        Util.mergePdfs(path, inputPaths);
+        String caminhoArquivo = caminhoTemporario + "/recibo.pdf";
+        List<String> caminhosEntrada = Arrays.asList(caminhoArquivo, relatorio.getCaminhoPdf());
+        gerenciadorPdf.combinarPdfs(caminho, caminhosEntrada);
     }
 }

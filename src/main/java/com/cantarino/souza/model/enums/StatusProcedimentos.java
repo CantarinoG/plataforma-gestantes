@@ -5,13 +5,13 @@ public enum StatusProcedimentos {
     CANCELADA("Cancelado(a)"),
     CONCLUIDA("Concluído(a)");
 
-    private final String value;
+    private final String valor;
 
-    StatusProcedimentos(String value) {
-        this.value = value;
+    StatusProcedimentos(String valor) {
+        this.valor = valor;
     }
 
-    public String getValue() {
-        return value;
+    public String getValor() {
+        return valor;
     }
 }

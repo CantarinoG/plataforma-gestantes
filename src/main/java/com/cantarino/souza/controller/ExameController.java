@@ -21,21 +21,21 @@ import com.cantarino.souza.model.valid.ValidateExame;
 public class ExameController {
 
     private ExameDao repositorio;
-    private ValidateExame validator;
+    private ValidateExame validador;
     private NotificadorEmail notificador;
 
     public ExameController() {
         repositorio = new ExameDao();
-        validator = new ValidateExame();
+        validador = new ValidateExame();
         notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMExame(repositorio.findAll()), TMExame.getCustomRenderer());
+        Util.jTableShow(grd, new TMExame(repositorio.buscarTodos()), TMExame.getCustomRenderer());
     }
 
-    private void verificarConflitos(Exame novoExame, Gestante paciente) {
-        List<Consulta> consultasPaciente = new ConsultaController().buscarTodosPorIdGestante(paciente.getId());
+    private void verificarConflitos(Exame novoExame) {
+        List<Consulta> consultasPaciente = new ConsultaController().buscarPorGestante(novoExame.getPaciente().getId());
         for (Consulta consulta : consultasPaciente) {
             LocalDateTime consultaInicio = consulta.getData();
             LocalDateTime consultaFim = consulta.getData().plusMinutes(consulta.getDuracao());
@@ -46,11 +46,11 @@ public class ExameController {
                     (novoFim.isAfter(consultaInicio) && novoFim.isBefore(consultaFim)) ||
                     (novoInicio.isEqual(consultaInicio)) ||
                     (novoInicio.isBefore(consultaInicio) && novoFim.isAfter(consultaFim))) {
-                throw new ExameException("Existe um conflito com uma consulta agendada para o paciente.");
+                throw new ExameException("ERRO: Existe um conflito com uma consulta agendada para o paciente.");
             }
         }
 
-        List<Exame> examesPaciente = buscarTodasPorIdGestante(paciente.getId());
+        List<Exame> examesPaciente = buscarPorGestante(novoExame.getPaciente().getId());
         for (Exame exame : examesPaciente) {
             if (exame.getId() == novoExame.getId())
                 continue;
@@ -64,28 +64,21 @@ public class ExameController {
                     (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
                     (novoInicio.isEqual(exameInicio)) ||
                     (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
-                throw new ExameException("Existe um conflito com outro exame agendado para o paciente.");
+                throw new ExameException("ERRO: Existe um conflito com outro exame agendado para o paciente.");
             }
         }
     }
 
-    public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
+    public void salvar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
             Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
 
-        if (paciente == null) {
-            throw new ExameException("Paciente não pode ser nulo");
-        }
-
-        Exame novoExame = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+        Exame novoExame = validador.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
                 dataResultado,
-                laboratorio);
+                laboratorio, paciente, requisitadoPor);
 
-        novoExame.setPaciente(paciente);
-        novoExame.setRequisitadoPor(requisitadoPor);
+        verificarConflitos(novoExame);
 
-        verificarConflitos(novoExame, paciente);
-
-        repositorio.save(novoExame);
+        repositorio.salvar(novoExame);
 
         String conteudoEmail = "Foi agendada um novo exame: " + novoExame.getDescricao() + ". Data: "
                 + novoExame.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + ".";
@@ -93,59 +86,55 @@ public class ExameController {
 
     }
 
-    public Exame buscarPorId(int id) {
-        return repositorio.find(id);
+    public Exame buscar(int id) {
+        return repositorio.buscar(id);
     }
 
-    public void atualizar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
+    public void editar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
             String status,
             Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
-        if (paciente == null) {
-            throw new ExameException("Paciente não pode ser nulo");
-        }
 
-        Exame novoExame = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+        Exame novoExame = validador.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
                 dataResultado,
-                laboratorio);
-        novoExame.setPaciente(paciente);
-        novoExame.setRequisitadoPor(requisitadoPor);
+                laboratorio, paciente, requisitadoPor);
         novoExame.setId(id);
 
-        verificarConflitos(novoExame, paciente);
+        verificarConflitos(novoExame);
 
-        repositorio.update(novoExame);
+        repositorio.editar(novoExame);
     }
 
     public List<Exame> buscarTodas() {
-        return repositorio.findAll();
+        return repositorio.buscarTodos();
     }
 
-    public List<Exame> buscarTodasPorIdGestante(int id) {
-        return repositorio.filterGestanteId(id);
+    public List<Exame> buscarPorGestante(int id) {
+        return repositorio.buscarPorGestante(id);
     }
 
-    public void excluir(int id) {
-        Exame exame = repositorio.find(id);
-        repositorio.delete(exame);
+    public void deletar(int id) {
+        Exame exame = repositorio.buscar(id);
+        repositorio.deletar(exame);
     }
 
-    public void filtrarTabelaPorIdGestante(JTable grd, int id) {
-        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteId(id)), TMExame.getCustomRenderer());
+    public void atualizarTabelaPorGestante(JTable grd, int id) {
+        Util.jTableShow(grd, new TMExame(repositorio.buscarPorGestante(id)), TMExame.getCustomRenderer());
     }
 
-    public void filtrarTabelaPorIdGestanteStatus(JTable grd, int id, String status) {
-        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteIdStatus(id, status)), TMExame.getCustomRenderer());
+    public void atualizarTabelaPorGestanteEStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMExame(repositorio.buscarPorGestanteEStatus(id, status)),
+                TMExame.getCustomRenderer());
     }
 
-    public void filtrarTabelaPorInicioNomeGestante(JTable grd, String substring) {
-        Util.jTableShow(grd, new TMExame(repositorio.filterGestanteNameStartsWith(substring)),
+    public void atualizarTabelaPorNomeGestante(JTable grd, String substring) {
+        Util.jTableShow(grd, new TMExame(repositorio.buscarPorNomeGestante(substring)),
                 TMExame.getCustomRenderer());
     }
 
     public void cancelar(int id) {
-        Exame exame = repositorio.find(id);
-        exame.setStatus(StatusProcedimentos.CANCELADA.getValue());
-        repositorio.update(exame);
+        Exame exame = repositorio.buscar(id);
+        exame.setStatus(StatusProcedimentos.CANCELADA.getValor());
+        repositorio.editar(exame);
 
         String conteudoEmail = "Foi concelado o exame de id: " + exame.getId() + ": "
                 + exame.getDescricao() + ".";
@@ -153,10 +142,10 @@ public class ExameController {
     }
 
     public void adicionarRelatorio(int id, Gestante paciente, Relatorio relatorio) {
-        Exame exame = repositorio.find(id);
-        exame.setStatus(StatusProcedimentos.CONCLUIDA.getValue());
+        Exame exame = repositorio.buscar(id);
+        exame.setStatus(StatusProcedimentos.CONCLUIDA.getValor());
         exame.setRelatorio(relatorio);
-        repositorio.update(exame);
+        repositorio.editar(exame);
 
         String conteudoEmail = "Foi cadastrado um relatório para o exame de id: " + exame.getId() + ": "
                 + exame.getDescricao() + ".";

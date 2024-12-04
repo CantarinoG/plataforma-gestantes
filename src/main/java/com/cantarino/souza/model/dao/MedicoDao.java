@@ -13,7 +13,7 @@ public class MedicoDao implements IDao<Medico> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Medico obj) {
+    public void salvar(Medico obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -24,7 +24,7 @@ public class MedicoDao implements IDao<Medico> {
     }
 
     @Override
-    public void update(Medico obj) {
+    public void editar(Medico obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -35,7 +35,7 @@ public class MedicoDao implements IDao<Medico> {
     }
 
     @Override
-    public boolean delete(Medico obj) {
+    public boolean deletar(Medico obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -48,7 +48,7 @@ public class MedicoDao implements IDao<Medico> {
     }
 
     @Override
-    public Medico find(int id) {
+    public Medico buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Medico medico = this.entityManager.find(Medico.class, id);
@@ -59,7 +59,7 @@ public class MedicoDao implements IDao<Medico> {
     }
 
     @Override
-    public List<Medico> findAll() {
+    public List<Medico> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Medico> medicos = this.entityManager
@@ -70,7 +70,7 @@ public class MedicoDao implements IDao<Medico> {
         return medicos;
     }
 
-    public Medico findByCpf(String cpf) {
+    public Medico buscarPorCpf(String cpf) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Medico medico = this.entityManager
@@ -85,7 +85,7 @@ public class MedicoDao implements IDao<Medico> {
         return medico;
     }
 
-    public Medico findByEmail(String email) {
+    public Medico buscarPorEmail(String email) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Medico medico = this.entityManager
@@ -100,7 +100,7 @@ public class MedicoDao implements IDao<Medico> {
         return medico;
     }
 
-    public Medico findByCrm(String crm) {
+    public Medico buscarPorCrm(String crm) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Medico medico = this.entityManager

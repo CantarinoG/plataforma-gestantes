@@ -3,8 +3,6 @@ package com.cantarino.souza.view.screens;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.jdatepicker.impl.JDatePickerImpl;
-
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.controller.GestanteController;
@@ -22,18 +20,15 @@ import java.awt.event.MouseEvent;
 
 public class DlgDadosGestante extends JDialog {
 
-    JPanel panBackground;
-    JPanel panColumn;
-    JLabel lblAction;
+    JPanel panFundo;
+    JPanel panColuna;
+    JLabel lblTitulo;
     JLabel lblNome;
     JLabel lblCPF;
-    JPanel panNomeField;
-    JLabel lblPass;
-    JPanel panPassField;
-    JPanel panButton;
+    JPanel panNome;
+    JPanel panBotao;
     JButton btnCriarConta;
-    JDatePickerImpl datePicker;
-    JPanel panDateField;
+    JPanel panData;
     JLabel lblEmail;
     JLabel lblDataNascimento;
     JLabel lblTelefone;
@@ -42,16 +37,14 @@ public class DlgDadosGestante extends JDialog {
     JLabel lblContatoEmergencia;
     JLabel lblTipoSanguineo;
     JLabel lblHistoricoMedico;
-    JPanel panCPFField;
-    JPanel panEmailField;
-    JPanel panTelefoneField;
-    JPanel panEnderecoField;
-    JPanel panPrevisaoPartoField;
-    JPanel panContatoEmergenciaField;
-    JPanel panTipoSanguineoField;
-    JPanel panHistoricoMedicoField;
-    JLabel lblConfirmPass;
-    JPanel panConfirmPassField;
+    JPanel panCpf;
+    JPanel panEmail;
+    JPanel panTelefone;
+    JPanel panEndereco;
+    JPanel panPrevisaoParto;
+    JPanel panContatoEmergencia;
+    JPanel panTipoSanguineo;
+    JPanel panHistoricoMedico;
     JButton btnConsultas;
     JButton btnExames;
     JButton btnPublicacoes;
@@ -73,15 +66,17 @@ public class DlgDadosGestante extends JDialog {
 
     public DlgDadosGestante(JDialog parent, boolean modal, int id) {
         super(parent, modal);
+
         gestanteController = new GestanteController();
         consultaController = new ConsultaController();
         exameController = new ExameController();
         publicacaoController = new PublicacaoController();
-        gestante = gestanteController.buscarPorId(id);
+        gestante = gestanteController.buscar(id);
         exibindo = CONSULTA;
+
         initComponents();
 
-        consultaController.filtrarTabelaPorIdGestante(grdDados, gestante.getId());
+        consultaController.atualizarTabelaPorGestante(grdDados, gestante.getId());
     }
 
     private void initComponents() {
@@ -90,10 +85,10 @@ public class DlgDadosGestante extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new JPanel();
-        panBackground.setBackground(AppColors.BUTTON_PINK);
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new JPanel();
+        panFundo.setBackground(AppColors.BUTTON_PINK);
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -102,90 +97,90 @@ public class DlgDadosGestante extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel("Dados da Gestante");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 32));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        lblTitulo = new JLabel("Dados da Gestante");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblTitulo, gbc);
 
         gbc.gridy = 1;
-        panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(6, 2, 20, 10));
-        panColumn.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panColumn, gbc);
+        panColuna = new JPanel();
+        panColuna.setLayout(new GridLayout(6, 2, 20, 10));
+        panColuna.setBackground(AppColors.TRANSPARENT);
+        panFundo.add(panColuna, gbc);
 
         lblCPF = new JLabel(gestante.getCpf());
         lblCPF.setFont(new Font("Arial", Font.PLAIN, 22));
         lblCPF.setBackground(AppColors.FIELD_PINK);
         lblCPF.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panCPFField = createCustomLabelField("CPF", lblCPF);
-        panColumn.add(panCPFField);
+        panCpf = criarCampoCustomizado("CPF", lblCPF);
+        panColuna.add(panCpf);
 
         lblNome = new JLabel(gestante.getNome());
         lblNome.setFont(new Font("Arial", Font.PLAIN, 22));
         lblNome.setBackground(AppColors.FIELD_PINK);
         lblNome.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panNomeField = createCustomLabelField("Nome", lblNome);
-        panColumn.add(panNomeField);
+        panNome = criarCampoCustomizado("Nome", lblNome);
+        panColuna.add(panNome);
 
         lblEmail = new JLabel(gestante.getEmail());
         lblEmail.setFont(new Font("Arial", Font.PLAIN, 22));
         lblEmail.setBackground(AppColors.FIELD_PINK);
         lblEmail.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panEmailField = createCustomLabelField("Email", lblEmail);
-        panColumn.add(panEmailField);
+        panEmail = criarCampoCustomizado("Email", lblEmail);
+        panColuna.add(panEmail);
 
         lblDataNascimento = new JLabel(
                 gestante.getDataNascimento().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblDataNascimento.setFont(new Font("Arial", Font.PLAIN, 22));
         lblDataNascimento.setBackground(AppColors.FIELD_PINK);
         lblDataNascimento.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panDateField = createCustomLabelField("Data de Nascimento", lblDataNascimento);
-        panColumn.add(panDateField);
+        panData = criarCampoCustomizado("Data de Nascimento", lblDataNascimento);
+        panColuna.add(panData);
 
         lblTelefone = new JLabel(gestante.getTelefone());
         lblTelefone.setFont(new Font("Arial", Font.PLAIN, 22));
         lblTelefone.setBackground(AppColors.FIELD_PINK);
         lblTelefone.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panTelefoneField = createCustomLabelField("Telefone", lblTelefone);
-        panColumn.add(panTelefoneField);
+        panTelefone = criarCampoCustomizado("Telefone", lblTelefone);
+        panColuna.add(panTelefone);
 
         lblEndereco = new JLabel(gestante.getEndereco());
         lblEndereco.setFont(new Font("Arial", Font.PLAIN, 22));
         lblEndereco.setBackground(AppColors.FIELD_PINK);
         lblEndereco.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panEnderecoField = createCustomLabelField("Endereço", lblEndereco);
-        panColumn.add(panEnderecoField);
+        panEndereco = criarCampoCustomizado("Endereço", lblEndereco);
+        panColuna.add(panEndereco);
 
         lblPrevisaoParto = new JLabel(
                 gestante.getPrevisaoParto().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         lblPrevisaoParto.setFont(new Font("Arial", Font.PLAIN, 22));
         lblPrevisaoParto.setBackground(AppColors.FIELD_PINK);
         lblPrevisaoParto.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panPrevisaoPartoField = createCustomLabelField("Previsão de Parto", lblPrevisaoParto);
-        panColumn.add(panPrevisaoPartoField);
+        panPrevisaoParto = criarCampoCustomizado("Previsão de Parto", lblPrevisaoParto);
+        panColuna.add(panPrevisaoParto);
 
         lblContatoEmergencia = new JLabel(gestante.getContatoEmergencia());
         lblContatoEmergencia.setFont(new Font("Arial", Font.PLAIN, 22));
         lblContatoEmergencia.setBackground(AppColors.FIELD_PINK);
         lblContatoEmergencia.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panContatoEmergenciaField = createCustomLabelField("Contato de Emergência", lblContatoEmergencia);
-        panColumn.add(panContatoEmergenciaField);
+        panContatoEmergencia = criarCampoCustomizado("Contato de Emergência", lblContatoEmergencia);
+        panColuna.add(panContatoEmergencia);
 
         lblTipoSanguineo = new JLabel(gestante.getTipoSanguineo());
         lblTipoSanguineo.setFont(new Font("Arial", Font.PLAIN, 22));
         lblTipoSanguineo.setBackground(AppColors.FIELD_PINK);
         lblTipoSanguineo.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        panTipoSanguineoField = createCustomLabelField("Tipo Sanguíneo", lblTipoSanguineo);
-        panColumn.add(panTipoSanguineoField);
+        panTipoSanguineo = criarCampoCustomizado("Tipo Sanguíneo", lblTipoSanguineo);
+        panColuna.add(panTipoSanguineo);
 
         lblHistoricoMedico = new JLabel(gestante.getHistoricoMedico());
         lblHistoricoMedico.setFont(new Font("Arial", Font.PLAIN, 22));
         lblHistoricoMedico.setBackground(AppColors.FIELD_PINK);
         lblHistoricoMedico.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panHistoricoMedicoField = createCustomLabelField("Histórico Médico(Opcional)", lblHistoricoMedico);
-        panColumn.add(panHistoricoMedicoField);
+        panHistoricoMedico = criarCampoCustomizado("Histórico Médico(Opcional)", lblHistoricoMedico);
+        panColuna.add(panHistoricoMedico);
 
         gbc.gridy = 2;
         gbc.weighty = 1.0;
@@ -198,15 +193,15 @@ public class DlgDadosGestante extends JDialog {
             }
         });
         scrollPane = new JScrollPane(grdDados);
-        panBackground.add(scrollPane, gbc);
+        panFundo.add(scrollPane, gbc);
 
         gbc.gridy = 3;
         gbc.weighty = 0.0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        panButton.setBackground(AppColors.TRANSPARENT);
+        panBotao = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        panBotao.setBackground(AppColors.TRANSPARENT);
 
         btnConsultas = new RoundedButton("Consultas", 10);
         btnConsultas.setPreferredSize(new Dimension(150, 50));
@@ -226,14 +221,14 @@ public class DlgDadosGestante extends JDialog {
         btnPublicacoes.setBackground(Color.WHITE);
         btnPublicacoes.addActionListener(evt -> btnPublicacoesActionPerformed(evt));
 
-        panButton.add(btnConsultas);
-        panButton.add(btnExames);
-        panButton.add(btnPublicacoes);
+        panBotao.add(btnConsultas);
+        panBotao.add(btnExames);
+        panBotao.add(btnPublicacoes);
 
-        panBackground.add(panButton, gbc);
+        panFundo.add(panBotao, gbc);
     }
 
-    private JPanel createCustomLabelField(String hint, JComponent textField) {
+    private JPanel criarCampoCustomizado(String hint, JComponent textField) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -260,17 +255,17 @@ public class DlgDadosGestante extends JDialog {
     }
 
     private void btnConsultasActionPerformed(ActionEvent evt) {
-        consultaController.filtrarTabelaPorIdGestante(grdDados, gestante.getId());
+        consultaController.atualizarTabelaPorGestante(grdDados, gestante.getId());
         exibindo = CONSULTA;
     }
 
     private void btnExamesActionPerformed(ActionEvent evt) {
-        exameController.filtrarTabelaPorIdGestante(grdDados, gestante.getId());
+        exameController.atualizarTabelaPorGestante(grdDados, gestante.getId());
         exibindo = EXAME;
     }
 
     private void btnPublicacoesActionPerformed(ActionEvent evt) {
-        publicacaoController.filtrarTabelaPorIdGestante(grdDados, gestante.getId());
+        publicacaoController.atualizarTabelaPorGestante(grdDados, gestante.getId());
         grdDados.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
         exibindo = PUBLICACAO;
     }

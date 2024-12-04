@@ -14,14 +14,15 @@ import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
+import com.cantarino.souza.model.enums.TipoUsuario;
 import com.cantarino.souza.view.components.*;
 
 public class DlgConsultas extends JDialog {
 
-    private JPanel panBackground;
+    private JPanel panFundo;
     private JPanel panHeader;
-    private JLabel lblTitle;
-    private JPanel panContent;
+    private JLabel lblTitulo;
+    private JPanel panConteudo;
     private JTable grdConsultas;
     private JScrollPane scrollPane;
     private JPanel panFooter;
@@ -35,10 +36,7 @@ public class DlgConsultas extends JDialog {
     private JComboBox<String> cmbFiltro;
     private JTextField edtFiltro;
 
-    private final String GESTANTE = "Gestante";
-    private final String MEDICO = "Médico(a)";
-
-    private Usuario usuario;
+    private Usuario usuario = null;
 
     private ConsultaController consultaController;
     private PagamentoController pagamentoController;
@@ -46,11 +44,14 @@ public class DlgConsultas extends JDialog {
 
     public DlgConsultas(JFrame parent, boolean modal) {
         super(parent, modal);
+
         autenticacaoController = new AutenticacaoController();
         pagamentoController = new PagamentoController();
         usuario = autenticacaoController.getUsuario();
-        initComponents();
         consultaController = new ConsultaController();
+
+        initComponents();
+
         consultaController.atualizarTabela(grdConsultas);
     }
 
@@ -60,9 +61,9 @@ public class DlgConsultas extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new BorderLayout());
+        setContentPane(panFundo);
 
         panHeader = new JPanel();
         panHeader.setPreferredSize(new Dimension(getWidth(), 80));
@@ -71,22 +72,22 @@ public class DlgConsultas extends JDialog {
         panHeader.setOpaque(true);
         panHeader.setLayout(new GridBagLayout());
 
-        lblTitle = new JLabel("Consultas");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
-        lblTitle.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo = new JLabel("Consultas");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        panHeader.add(lblTitle, gbc);
+        panHeader.add(lblTitulo, gbc);
 
-        panBackground.add(panHeader, BorderLayout.NORTH);
-        panContent = new PanConsultasAgendadas();
-        panContent.setLayout(new BorderLayout());
-        panContent.setBackground(new Color(255, 255, 255));
-        panContent.setOpaque(true);
+        panFundo.add(panHeader, BorderLayout.NORTH);
+        panConteudo = new PanConsultasAgendadas();
+        panConteudo.setLayout(new BorderLayout());
+        panConteudo.setBackground(new Color(255, 255, 255));
+        panConteudo.setOpaque(true);
 
         grdConsultas = new JTable();
         grdConsultas.setModel(new DefaultTableModel(
@@ -99,7 +100,7 @@ public class DlgConsultas extends JDialog {
                 new String[] {
                 }));
         scrollPane = new JScrollPane(grdConsultas);
-        panContent.add(scrollPane, BorderLayout.CENTER);
+        panConteudo.add(scrollPane, BorderLayout.CENTER);
 
         panFooter = new JPanel();
         panFooter.setPreferredSize(new Dimension(getWidth(), 80));
@@ -110,7 +111,7 @@ public class DlgConsultas extends JDialog {
         lblFiltro = new JLabel("Filtrar por:");
         lblFiltro.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        String[] userTypes = { GESTANTE, MEDICO };
+        String[] userTypes = { TipoUsuario.GESTANTE.getValor(), TipoUsuario.MEDICO.getValor() };
         cmbFiltro = new JComboBox<String>(userTypes);
         cmbFiltro.setPreferredSize(new Dimension(150, 30));
 
@@ -204,9 +205,9 @@ public class DlgConsultas extends JDialog {
             panFooter.add(btnVerPagamento);
         }
 
-        panContent.add(panFooter, BorderLayout.SOUTH);
+        panConteudo.add(panFooter, BorderLayout.SOUTH);
 
-        panBackground.add(panContent, BorderLayout.CENTER);
+        panFundo.add(panConteudo, BorderLayout.CENTER);
 
     }
 
@@ -227,7 +228,6 @@ public class DlgConsultas extends JDialog {
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -235,15 +235,15 @@ public class DlgConsultas extends JDialog {
         }
 
         Consulta consulta = (Consulta) selectedObject;
-        id = consulta.getId();
-        DlgCadastroConsultas dialog = new DlgCadastroConsultas(this, true, id);
+
+        DlgCadastroConsultas dialog = new DlgCadastroConsultas(this, true, consulta.getId());
         dialog.setVisible(true);
         consultaController.atualizarTabela(grdConsultas);
 
     }
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
+
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -251,15 +251,19 @@ public class DlgConsultas extends JDialog {
         }
 
         Consulta consulta = (Consulta) selectedObject;
-        id = consulta.getId();
 
-        int option = JOptionPane.showConfirmDialog(this,
+        Object[] options = { "Sim", "Não" };
+        int option = JOptionPane.showOptionDialog(this,
                 "Tem certeza que deseja excluir esta consulta?",
                 "Confirmar exclusão",
-                JOptionPane.YES_NO_OPTION);
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
 
         if (option == JOptionPane.YES_OPTION) {
-            consultaController.excluir(id);
+            consultaController.deletar(consulta.getId());
             consultaController.atualizarTabela(grdConsultas);
         }
     }
@@ -293,7 +297,7 @@ public class DlgConsultas extends JDialog {
 
         Consulta consulta = (Consulta) selectedObject;
 
-        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
             JOptionPane.showMessageDialog(this,
                     "Não é possível adicionar ou editar um relatório num procedimento cancelado", "Aviso",
                     JOptionPane.WARNING_MESSAGE);
@@ -330,10 +334,10 @@ public class DlgConsultas extends JDialog {
 
         String filterType = (String) cmbFiltro.getSelectedItem();
 
-        if (filterType.equals(GESTANTE)) {
-            consultaController.filtrarTabelaPorInicioNomeGestante(grdConsultas, searchText);
-        } else if (filterType.equals(MEDICO)) {
-            consultaController.filtrarTabelaPorInicioNomeMedico(grdConsultas, searchText);
+        if (filterType.equals(TipoUsuario.GESTANTE.getValor())) {
+            consultaController.atualizarTabelaPorNomeGestante(grdConsultas, searchText);
+        } else if (filterType.equals(TipoUsuario.MEDICO.getValor())) {
+            consultaController.atualizarTabelaPorNomeMedico(grdConsultas, searchText);
         }
 
     }

@@ -20,29 +20,29 @@ public class ValidateProcedimento {
 
         if (data == null || data.isEmpty())
             throw new ProcedimentoException("ERRO: Campo data não pode ser vazio.");
-        LocalDateTime validDate;
+        LocalDateTime dataValida;
         try {
-            validDate = LocalDateTime.parse(data);
-            if (validDate.isBefore(LocalDateTime.now())) {
+            dataValida = LocalDateTime.parse(data);
+            if (dataValida.isBefore(LocalDateTime.now())) {
                 throw new ProcedimentoException("ERRO: Data não pode ser anterior ao momento atual.");
             }
         } catch (DateTimeParseException e) {
             throw new ProcedimentoException("ERRO: Formato de data inválido.");
         }
-        procedimento.setData(validDate);
+        procedimento.setData(dataValida);
 
         if (duracao == null || duracao.isEmpty())
             throw new ProcedimentoException("ERRO: Campo duração não pode ser vazio.");
-        int validDuracao;
+        int duracaoValida;
         try {
-            validDuracao = Integer.parseInt(duracao.trim());
-            if (validDuracao <= 0) {
+            duracaoValida = Integer.parseInt(duracao.trim());
+            if (duracaoValida <= 0) {
                 throw new ProcedimentoException("ERRO: Duração deve ser maior que zero.");
             }
         } catch (NumberFormatException e) {
             throw new ProcedimentoException("ERRO: Campo duração deve conter um número válido.");
         }
-        procedimento.setDuracao(validDuracao);
+        procedimento.setDuracao(duracaoValida);
 
         if (valor == null || valor.isEmpty())
             throw new ProcedimentoException("ERRO: Campo valor não pode ser vazio.");

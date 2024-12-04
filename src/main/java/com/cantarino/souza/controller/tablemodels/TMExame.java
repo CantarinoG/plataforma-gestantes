@@ -85,25 +85,26 @@ public class TMExame extends AbstractTableModel {
                 case COL_ID:
                     return aux.getId();
                 case COL_PACIENTE:
-                    return aux.getPaciente() != null ? aux.getPaciente().getNome() : "-";
+                    return "(" + aux.getPaciente().getId() + ") " + aux.getPaciente().getNome();
                 case COL_DESCRICAO:
                     return aux.getDescricao();
                 case COL_DATA:
-                    return aux.getData() != null ? aux.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-                            : "-";
+                    return aux.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 case COL_DURACAO:
                     return aux.getDuracao();
                 case COL_VALOR:
-                    return aux.getValor();
+                    return "R$ " + aux.getValor();
                 case COL_STATUS:
                     return aux.getStatus();
                 case COL_RELATORIO:
-                    return aux.getRelatorio() == null ? "-" : "REGISTRADO";
+                    return aux.getRelatorio() == null ? "" : "REGISTRADO";
                 case COL_DATA_RESULTADO:
-                    return aux.getDataResultado() == null ? "-"
+                    return aux.getDataResultado() == null ? ""
                             : aux.getDataResultado().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
                 case COL_REQUISITADO_POR:
-                    return aux.getRequisitadoPor() != null ? aux.getRequisitadoPor().getNome() : "-";
+                    return aux.getRequisitadoPor() != null
+                            ? "(" + aux.getRequisitadoPor().getId() + ") " + aux.getRequisitadoPor().getNome()
+                            : "";
                 case COL_LABORATORIO:
                     return aux.getLaboratorio();
                 default:
@@ -127,10 +128,10 @@ public class TMExame extends AbstractTableModel {
                 TMExame model = (TMExame) table.getModel();
                 Exame exame = model.lista.get(row);
 
-                if (StatusProcedimentos.CANCELADA.getValue().equals(exame.getStatus())) {
+                if (StatusProcedimentos.CANCELADA.getValor().equals(exame.getStatus())) {
                     c.setBackground(new Color(255, 200, 200));
                     setBackground(new Color(255, 200, 200));
-                } else if (StatusProcedimentos.CONCLUIDA.getValue().equals(exame.getStatus())) {
+                } else if (StatusProcedimentos.CONCLUIDA.getValor().equals(exame.getStatus())) {
                     c.setBackground(new Color(200, 255, 200));
                     setBackground(new Color(200, 255, 200));
                 } else {

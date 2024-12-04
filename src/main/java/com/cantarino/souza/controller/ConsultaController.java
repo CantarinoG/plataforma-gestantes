@@ -21,24 +21,32 @@ import com.cantarino.souza.model.valid.ValidateConsulta;
 public class ConsultaController {
 
     private ConsultaDao repositorio;
-    private ValidateConsulta validator;
+    private ValidateConsulta validador;
     private NotificadorEmail notificador;
 
     public ConsultaController() {
         repositorio = new ConsultaDao();
-        validator = new ValidateConsulta();
+        validador = new ValidateConsulta();
         notificador = new NotificadorEmail();
     }
 
     public void atualizarTabela(JTable grd) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.findAll()), TMConsulta.getCustomRenderer());
+        Util.jTableShow(grd, new TMConsulta(repositorio.buscarTodos()), TMConsulta.getCustomRenderer());
     }
 
-    private void verificarConflitos(Consulta novaConsulta, Gestante paciente, Medico medico) {
-        List<Consulta> consultaPaciente = repositorio.filterGestanteId(paciente.getId());
+    public List<Consulta> buscarTodas() {
+        return repositorio.buscarTodos();
+    }
+
+    List<Consulta> buscarPorGestante(int id) {
+        return repositorio.buscarPorGestante(id);
+    }
+
+    private void verificarConflitos(Consulta novaConsulta) {
+        List<Consulta> consultaPaciente = repositorio.buscarPorGestante(novaConsulta.getPaciente().getId());
         for (Consulta consulta : consultaPaciente) {
             if (consulta.getId() == novaConsulta.getId())
-                continue; // Skip if updating same consultation
+                continue; // Pula se é a mesma consulta
 
             LocalDateTime consultaInicio = consulta.getData();
             LocalDateTime consultaFim = consulta.getData().plusMinutes(consulta.getDuracao());
@@ -49,14 +57,14 @@ public class ConsultaController {
                     (novoFim.isAfter(consultaInicio) && novoFim.isBefore(consultaFim)) ||
                     (novoInicio.isEqual(consultaInicio)) ||
                     (novoInicio.isBefore(consultaInicio) && novoFim.isAfter(consultaFim))) {
-                throw new ConsultaException("Existe um conflito com outra consulta agendada para o paciente.");
+                throw new ConsultaException("ERRO: Existe um conflito com outra consulta agendada para o paciente.");
             }
         }
 
-        List<Consulta> consultaMedico = repositorio.filterMedicoId(medico.getId());
+        List<Consulta> consultaMedico = repositorio.buscarPorGestante(novaConsulta.getMedico().getId());
         for (Consulta consulta : consultaMedico) {
             if (consulta.getId() == novaConsulta.getId())
-                continue; // Skip if updating same consultation
+                continue; // Pula se é a mesma consulta
 
             LocalDateTime consultaInicio = consulta.getData();
             LocalDateTime consultaFim = consulta.getData().plusMinutes(consulta.getDuracao());
@@ -67,11 +75,11 @@ public class ConsultaController {
                     (novoFim.isAfter(consultaInicio) && novoFim.isBefore(consultaFim)) ||
                     (novoInicio.isEqual(consultaInicio)) ||
                     (novoInicio.isBefore(consultaInicio) && novoFim.isAfter(consultaFim))) {
-                throw new ConsultaException("Existe um conflito com outra consulta agendada para o médico.");
+                throw new ConsultaException("ERRO: Existe um conflito com outra consulta agendada para o médico.");
             }
         }
 
-        List<Exame> examePaciente = new ExameController().buscarTodasPorIdGestante(paciente.getId());
+        List<Exame> examePaciente = new ExameController().buscarPorGestante(novaConsulta.getPaciente().getId());
         for (Exame exame : examePaciente) {
             LocalDateTime exameInicio = exame.getData();
             LocalDateTime exameFim = exame.getData().plusMinutes(exame.getDuracao());
@@ -82,33 +90,20 @@ public class ConsultaController {
                     (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
                     (novoInicio.isEqual(exameInicio)) ||
                     (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
-                throw new ConsultaException("Existe um conflito com um exame agendado para o paciente.");
+                throw new ConsultaException("ERRO: Existe um conflito com um exame agendado para o paciente.");
             }
         }
     }
 
-    List<Consulta> buscarTodosPorIdGestante(int id) {
-        return repositorio.filterGestanteId(id);
-    }
-
-    public void cadastrar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
+    public void salvar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
             Relatorio relatorio, String deletadoEm, Medico medico, Consulta retorno) {
 
-        if (paciente == null) {
-            throw new ConsultaException("Paciente não pode ser nulo");
-        }
-        if (medico == null) {
-            throw new ConsultaException("Médico não pode ser nulo");
-        }
+        Consulta novaConsulta = validador.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+                paciente, medico, retorno);
 
-        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm);
-        novaConsulta.setPaciente(paciente);
-        novaConsulta.setMedico(medico);
-        novaConsulta.setRetorno(retorno);
+        verificarConflitos(novaConsulta);
 
-        verificarConflitos(novaConsulta, paciente, medico);
-
-        repositorio.save(novaConsulta);
+        repositorio.salvar(novaConsulta);
 
         String conteudoEmail = "Foi agendada uma nova consulta: " + novaConsulta.getDescricao() + ". Data: "
                 + novaConsulta.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + ".";
@@ -117,73 +112,60 @@ public class ConsultaController {
 
     }
 
-    public void atualizar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
+    public void editar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
             String status,
             Relatorio relatorio, String deletadoEm, Medico medico, Consulta retorno) {
 
-        if (paciente == null) {
-            throw new ConsultaException("Paciente não pode ser nulo");
-        }
-        if (medico == null) {
-            throw new ConsultaException("Médico não pode ser nulo");
-        }
-
-        Consulta novaConsulta = validator.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm);
-        novaConsulta.setPaciente(paciente);
-        novaConsulta.setMedico(medico);
-        novaConsulta.setRetorno(retorno);
+        Consulta novaConsulta = validador.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
+                paciente, medico, retorno);
         novaConsulta.setId(id);
 
-        verificarConflitos(novaConsulta, paciente, medico);
+        verificarConflitos(novaConsulta);
 
-        repositorio.update(novaConsulta);
+        repositorio.editar(novaConsulta);
     }
 
-    public List<Consulta> buscarTodas() {
-        return repositorio.findAll();
+    public void deletar(int id) {
+        Consulta consulta = repositorio.buscar(id);
+        repositorio.deletar(consulta);
     }
 
-    public void excluir(int id) {
-        Consulta consulta = repositorio.find(id);
-        repositorio.delete(consulta);
+    public Consulta buscar(int id) {
+        return repositorio.buscar(id);
     }
 
-    public Consulta buscarPorId(int id) {
-        return repositorio.find(id);
+    public void atualizarTabelaPorMedico(JTable grd, int id) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.buscarPorMedico(id)), TMConsulta.getCustomRenderer());
     }
 
-    public void filtrarTabelaPorIdMedico(JTable grd, int id) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.filterMedicoId(id)), TMConsulta.getCustomRenderer());
-    }
-
-    public void filtrarTabelaPorIdMedicoStatus(JTable grd, int id, String status) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.filterMedicoIdStatus(id, status)),
+    public void atualizarTabelaPorMedicoEStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.buscarPorMedicoEStatus(id, status)),
                 TMConsulta.getCustomRenderer());
     }
 
-    public void filtrarTabelaPorIdGestante(JTable grd, int id) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.filterGestanteId(id)), TMConsulta.getCustomRenderer());
+    public void atualizarTabelaPorGestante(JTable grd, int id) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.buscarPorGestante(id)), TMConsulta.getCustomRenderer());
     }
 
-    public void filtrarTabelaPorIdGestanteStatus(JTable grd, int id, String status) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.filterGestanteIdStatus(id, status)),
+    public void atualizarTabelaPorGestanteEStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.buscarPorGestanteEStatus(id, status)),
                 TMConsulta.getCustomRenderer());
     }
 
-    public void filtrarTabelaPorInicioNomeGestante(JTable grd, String substring) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.filterGestanteNameStartsWith(substring)),
+    public void atualizarTabelaPorNomeGestante(JTable grd, String substring) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.buscarPorNomeGestante(substring)),
                 TMConsulta.getCustomRenderer());
     }
 
-    public void filtrarTabelaPorInicioNomeMedico(JTable grd, String substring) {
-        Util.jTableShow(grd, new TMConsulta(repositorio.filterMedicoNameStartsWith(substring)),
+    public void atualizarTabelaPorNomeMedico(JTable grd, String substring) {
+        Util.jTableShow(grd, new TMConsulta(repositorio.buscarPorNomeMedico(substring)),
                 TMConsulta.getCustomRenderer());
     }
 
     public void cancelar(int id) {
-        Consulta consulta = repositorio.find(id);
-        consulta.setStatus(StatusProcedimentos.CANCELADA.getValue());
-        repositorio.update(consulta);
+        Consulta consulta = repositorio.buscar(id);
+        consulta.setStatus(StatusProcedimentos.CANCELADA.getValor());
+        repositorio.editar(consulta);
 
         String conteudoEmail = "Foi concelada a consulta de id: " + consulta.getId() + ": "
                 + consulta.getDescricao() + ".";
@@ -192,10 +174,10 @@ public class ConsultaController {
     }
 
     public void adicionarRelatorio(int id, Gestante paciente, Relatorio relatorio) {
-        Consulta consulta = repositorio.find(id);
-        consulta.setStatus(StatusProcedimentos.CONCLUIDA.getValue());
+        Consulta consulta = repositorio.buscar(id);
+        consulta.setStatus(StatusProcedimentos.CONCLUIDA.getValor());
         consulta.setRelatorio(relatorio);
-        repositorio.update(consulta);
+        repositorio.editar(consulta);
 
         String conteudoEmail = "Foi cadastrado um relatório para a consulta de id: " + consulta.getId() + ": "
                 + consulta.getDescricao() + ".";

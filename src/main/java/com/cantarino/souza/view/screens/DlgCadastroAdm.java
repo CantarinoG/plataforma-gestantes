@@ -13,39 +13,38 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
-import org.jdatepicker.impl.JDatePickerImpl;
-
 public class DlgCadastroAdm extends JDialog {
-    JPanel panBackground;
-    JPanel panColumn;
-    JLabel lblAction;
+    JPanel panFundo;
+    JPanel panColuna;
+    JLabel lblTitulo;
     JTextField edtNome;
     JFormattedTextField edtCPF;
-    JPanel panNomeField;
-    JPasswordField edtPass;
-    JPanel panPassField;
-    JPanel panButton;
+    JPanel panCampoNome;
+    JPasswordField edtSenha;
+    JPanel panCampoSenha;
+    JPanel panBotao;
     JButton btnCriarConta;
-    JDatePickerImpl datePicker;
-    JPanel panDateField;
+    JPanel panCampoData;
     JTextField edtEmail;
     JFormattedTextField edtDataNascimento;
     JFormattedTextField edtTelefone;
     JTextField edtEndereco;
-    JPanel panCPFField;
-    JPanel panEmailField;
-    JPanel panTelefoneField;
-    JPanel panEnderecoField;
-    JPasswordField edtConfirmPass;
-    JPanel panConfirmPassField;
+    JPanel panCampoCpf;
+    JPanel panCampoEmail;
+    JPanel panCampoTelefone;
+    JPanel panCampoEndereco;
+    JPasswordField edtConfSenha;
+    JPanel panCampoConfSenha;
 
     private AdminController adminController;
-    private Admin atualizando;
+    private Admin atualizando = null;
 
-    public DlgCadastroAdm(JDialog parent, boolean modal, int id) {
+    public DlgCadastroAdm(JDialog parent, boolean modal, int id) { // Construtor com id para edição
         super(parent, modal);
+
         adminController = new AdminController();
-        atualizando = adminController.buscarPorId(id);
+        atualizando = adminController.buscar(id);
+
         initComponents();
 
         edtCPF.setText(atualizando.getCpf());
@@ -56,10 +55,11 @@ public class DlgCadastroAdm extends JDialog {
         edtEndereco.setText(atualizando.getEndereco());
     }
 
-    public DlgCadastroAdm(JDialog parent, boolean modal) {
+    public DlgCadastroAdm(JDialog parent, boolean modal) { // Construtor sem id para criação
         super(parent, modal);
+
         adminController = new AdminController();
-        atualizando = null;
+
         initComponents();
     }
 
@@ -69,9 +69,9 @@ public class DlgCadastroAdm extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -80,58 +80,53 @@ public class DlgCadastroAdm extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        // Adiciona o título
-        lblAction = new JLabel(atualizando != null ? "Editar Administrador(a)" : "Cadastrar Administrador(a)");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 32));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        lblTitulo = new JLabel(atualizando != null ? "Editar Administrador(a)" : "Cadastrar Administrador(a)");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblTitulo, gbc);
 
-        // Configuração para o painel de campos
-        gbc.gridy = 1; // Próxima linha
-        panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(6, 2, 20, 10));
-        panColumn.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panColumn, gbc);
+        gbc.gridy = 1;
+        panColuna = new JPanel();
+        panColuna.setLayout(new GridLayout(6, 2, 20, 10));
+        panColuna.setBackground(AppColors.TRANSPARENT);
+        panFundo.add(panColuna, gbc);
 
-        // CPF
         edtCPF = new JFormattedTextField();
         edtCPF.setFont(new Font("Arial", Font.PLAIN, 22));
         edtCPF.setBackground(AppColors.FIELD_PINK);
         edtCPF.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panCPFField = createCustomTextfield("CPF", edtCPF);
-        panColumn.add(panCPFField);
+        panCampoCpf = criarTextFieldCustomizado("CPF", edtCPF);
+        panColuna.add(panCampoCpf);
 
-        // Campo para Nome
         edtNome = new JTextField();
         edtNome.setFont(new Font("Arial", Font.PLAIN, 22));
         edtNome.setBackground(AppColors.FIELD_PINK);
         edtNome.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panNomeField = createCustomTextfield("Nome", edtNome);
-        panColumn.add(panNomeField);
+        panCampoNome = criarTextFieldCustomizado("Nome", edtNome);
+        panColuna.add(panCampoNome);
 
-        // Campo para Email
         edtEmail = new JTextField();
         edtEmail.setFont(new Font("Arial", Font.PLAIN, 22));
         edtEmail.setBackground(AppColors.FIELD_PINK);
         edtEmail.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panEmailField = createCustomTextfield("Email", edtEmail);
-        panColumn.add(panEmailField);
+        panCampoEmail = criarTextFieldCustomizado("Email", edtEmail);
+        panColuna.add(panCampoEmail);
 
         if (atualizando == null) {
-            edtPass = new JPasswordField();
-            edtPass.setFont(new Font("Arial", Font.PLAIN, 22));
-            edtPass.setBackground(AppColors.FIELD_PINK);
-            edtPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            panPassField = createCustomTextfield("Senha", edtPass);
-            panColumn.add(panPassField);
+            edtSenha = new JPasswordField();
+            edtSenha.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtSenha.setBackground(AppColors.FIELD_PINK);
+            edtSenha.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panCampoSenha = criarTextFieldCustomizado("Senha", edtSenha);
+            panColuna.add(panCampoSenha);
 
-            edtConfirmPass = new JPasswordField();
-            edtConfirmPass.setFont(new Font("Arial", Font.PLAIN, 22));
-            edtConfirmPass.setBackground(AppColors.FIELD_PINK);
-            edtConfirmPass.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-            panConfirmPassField = createCustomTextfield("Confirmar Senha", edtConfirmPass);
-            panColumn.add(panConfirmPassField);
+            edtConfSenha = new JPasswordField();
+            edtConfSenha.setFont(new Font("Arial", Font.PLAIN, 22));
+            edtConfSenha.setBackground(AppColors.FIELD_PINK);
+            edtConfSenha.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+            panCampoConfSenha = criarTextFieldCustomizado("Confirmar Senha", edtConfSenha);
+            panColuna.add(panCampoConfSenha);
         }
 
         try {
@@ -144,27 +139,25 @@ public class DlgCadastroAdm extends JDialog {
             edtDataNascimento.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             edtDataNascimento.setToolTipText("Digite a data no formato: dd/mm/aaaa");
 
-            panDateField = createCustomTextfield("Data de Nascimento", edtDataNascimento);
-            panColumn.add(panDateField);
+            panCampoData = criarTextFieldCustomizado("Data de Nascimento", edtDataNascimento);
+            panColuna.add(panCampoData);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        // Campo para Telefone
         edtTelefone = new JFormattedTextField();
         edtTelefone.setFont(new Font("Arial", Font.PLAIN, 22));
         edtTelefone.setBackground(AppColors.FIELD_PINK);
         edtTelefone.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panTelefoneField = createCustomTextfield("Telefone", edtTelefone);
-        panColumn.add(panTelefoneField);
+        panCampoTelefone = criarTextFieldCustomizado("Telefone", edtTelefone);
+        panColuna.add(panCampoTelefone);
 
-        // Campo para Endereço
         edtEndereco = new JTextField();
         edtEndereco.setFont(new Font("Arial", Font.PLAIN, 22));
         edtEndereco.setBackground(AppColors.FIELD_PINK);
         edtEndereco.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panEnderecoField = createCustomTextfield("Endereço", edtEndereco);
-        panColumn.add(panEnderecoField);
+        panCampoEndereco = criarTextFieldCustomizado("Endereço", edtEndereco);
+        panColuna.add(panCampoEndereco);
 
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
@@ -174,8 +167,8 @@ public class DlgCadastroAdm extends JDialog {
         gbcButton.anchor = GridBagConstraints.CENTER;
         gbcButton.insets = new java.awt.Insets(20, 0, 0, 0);
 
-        panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panButton.setBackground(AppColors.TRANSPARENT);
+        panBotao = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        panBotao.setBackground(AppColors.TRANSPARENT);
 
         btnCriarConta = new RoundedButton(atualizando != null ? "Editar Conta" : "Cadastrar Conta", 10);
         btnCriarConta.setPreferredSize(new Dimension(150, 50));
@@ -183,9 +176,9 @@ public class DlgCadastroAdm extends JDialog {
         btnCriarConta.setForeground(Color.WHITE);
         btnCriarConta.addActionListener(evt -> btnCriarContaActionPerformed(evt));
 
-        panButton.add(btnCriarConta);
+        panBotao.add(btnCriarConta);
 
-        panBackground.add(panButton, gbcButton);
+        panFundo.add(panBotao, gbcButton);
 
         try {
             MaskFormatter maskCPF = new MaskFormatter("###.###.###-##");
@@ -194,7 +187,7 @@ public class DlgCadastroAdm extends JDialog {
         }
     }
 
-    private JPanel createCustomTextfield(String hint, JComponent textField) {
+    private JPanel criarTextFieldCustomizado(String hint, JComponent textField) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -229,23 +222,23 @@ public class DlgCadastroAdm extends JDialog {
                     edtDataNascimento.getText().split("/")[1] + "-" +
                     edtDataNascimento.getText().split("/")[0];
 
-            if (atualizando == null) {
-                if (!(new String(edtPass.getPassword()).equals(new String(edtConfirmPass.getPassword())))) {
+            if (atualizando == null) { // Criando novo adm
+                if (!(new String(edtSenha.getPassword()).equals(new String(edtConfSenha.getPassword())))) {
                     throw new SecretarioException("As senhas não coincidem.");
                 }
 
-                adminController.cadastrar(
+                adminController.salvar(
                         cpf,
                         edtNome.getText(),
                         edtEmail.getText(),
-                        new String(edtPass.getPassword()),
+                        new String(edtSenha.getPassword()),
                         dataNascimento,
                         edtTelefone.getText(),
                         edtEndereco.getText(),
                         null);
                 dispose();
-            } else {
-                adminController.atualizar(
+            } else { // Atualizando adm
+                adminController.editar(
                         atualizando.getId(),
                         cpf,
                         edtNome.getText(),

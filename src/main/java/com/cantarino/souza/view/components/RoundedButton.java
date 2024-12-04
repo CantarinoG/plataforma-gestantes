@@ -17,13 +17,11 @@ public class RoundedButton extends JButton {
         super(text);
         this.radius = radius;
 
-        // Initial setup
         setContentAreaFilled(false);
         setFocusPainted(false);
         setBorderPainted(false);
         setOpaque(false);
 
-        // Default colors
         backgroundColor = AppColors.BUTTON_PINK;
         hoverColor = backgroundColor.darker();
         pressedColor = hoverColor.darker();
@@ -78,7 +76,6 @@ public class RoundedButton extends JButton {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Paint background
         if (isPressed) {
             g2d.setColor(pressedColor);
         } else if (isHovered) {
@@ -88,7 +85,6 @@ public class RoundedButton extends JButton {
         }
         g2d.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius, radius);
 
-        // Paint text
         FontMetrics metrics = g2d.getFontMetrics(getFont());
         Rectangle stringBounds = metrics.getStringBounds(getText(), g2d).getBounds();
 

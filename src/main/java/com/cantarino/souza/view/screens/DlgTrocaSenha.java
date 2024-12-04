@@ -17,23 +17,23 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 
 public class DlgTrocaSenha extends JDialog {
-    JPanel panBackground;
-    JPanel panColumn;
+    JPanel panFundo;
     JPasswordField edtSenha;
     JPasswordField edtConfirmarSenha;
-    JPanel panButton;
     RoundedButton btnTrocarSenha;
     JLabel lblHint;
     JPanel panField;
 
-    Usuario usuario;
+    Usuario usuario = null;
 
     private AutenticacaoController autenticacaoController;
 
     public DlgTrocaSenha(JFrame parent, boolean modal) {
         super(parent, modal);
+
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
+
         initComponents();
     }
 
@@ -43,9 +43,9 @@ public class DlgTrocaSenha extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -56,12 +56,12 @@ public class DlgTrocaSenha extends JDialog {
 
         edtSenha = new JPasswordField();
         configurarCampoSenha(edtSenha);
-        panBackground.add(createCustomTextfield("Nova Senha", edtSenha), gbc);
+        panFundo.add(criarTextFieldCustomizado("Nova Senha", edtSenha), gbc);
 
         gbc.gridy++;
         edtConfirmarSenha = new JPasswordField();
         configurarCampoSenha(edtConfirmarSenha);
-        panBackground.add(createCustomTextfield("Confirmar Nova Senha", edtConfirmarSenha), gbc);
+        panFundo.add(criarTextFieldCustomizado("Confirmar Nova Senha", edtConfirmarSenha), gbc);
 
         gbc.gridy++;
         btnTrocarSenha = new RoundedButton("Trocar Senha", 10);
@@ -74,7 +74,7 @@ public class DlgTrocaSenha extends JDialog {
         btnTrocarSenha.setPreferredSize(new Dimension(200, 40));
         btnTrocarSenha.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnTrocarSenha.addActionListener(evt -> btnTrocarSenhaActionPerformed(evt));
-        panBackground.add(btnTrocarSenha, gbc);
+        panFundo.add(btnTrocarSenha, gbc);
     }
 
     private void configurarCampoSenha(JPasswordField campo) {
@@ -83,7 +83,7 @@ public class DlgTrocaSenha extends JDialog {
         campo.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
     }
 
-    private JPanel createCustomTextfield(String hint, JComponent textField) {
+    private JPanel criarTextFieldCustomizado(String hint, JComponent textField) {
         panField = new JPanel();
         panField.setLayout(new BorderLayout());
         panField.setBorder(BorderFactory.createCompoundBorder(
@@ -116,16 +116,16 @@ public class DlgTrocaSenha extends JDialog {
 
         if (usuario instanceof Gestante) {
             GestanteController controller = new GestanteController();
-            controller.atualizaSenha((Gestante) usuario, senha);
+            controller.atualizarSenha((Gestante) usuario, senha);
         } else if (usuario instanceof Medico) {
             MedicoController controller = new MedicoController();
-            controller.atualizaSenha((Medico) usuario, senha);
+            controller.atualizarSenha((Medico) usuario, senha);
         } else if (usuario instanceof Secretario) {
             SecretarioController controller = new SecretarioController();
-            controller.atualizaSenha((Secretario) usuario, senha);
+            controller.atualizarSenha((Secretario) usuario, senha);
         } else if (usuario instanceof Admin) {
             AdminController controller = new AdminController();
-            controller.atualizaSenha((Admin) usuario, senha);
+            controller.atualizarSenha((Admin) usuario, senha);
         }
 
         dispose();

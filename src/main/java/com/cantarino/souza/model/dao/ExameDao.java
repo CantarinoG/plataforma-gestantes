@@ -13,7 +13,7 @@ public class ExameDao implements IDao<Exame> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Exame obj) {
+    public void salvar(Exame obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -24,7 +24,7 @@ public class ExameDao implements IDao<Exame> {
     }
 
     @Override
-    public void update(Exame obj) {
+    public void editar(Exame obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -35,7 +35,7 @@ public class ExameDao implements IDao<Exame> {
     }
 
     @Override
-    public boolean delete(Exame obj) {
+    public boolean deletar(Exame obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -48,7 +48,7 @@ public class ExameDao implements IDao<Exame> {
     }
 
     @Override
-    public Exame find(int id) {
+    public Exame buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Exame exame = this.entityManager.find(Exame.class, id);
@@ -60,7 +60,7 @@ public class ExameDao implements IDao<Exame> {
     }
 
     @Override
-    public List<Exame> findAll() {
+    public List<Exame> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> exames = this.entityManager
@@ -71,7 +71,7 @@ public class ExameDao implements IDao<Exame> {
         return exames;
     }
 
-    public List<Exame> filterGestanteId(int id) {
+    public List<Exame> buscarPorGestante(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> consultas = this.entityManager
@@ -84,7 +84,7 @@ public class ExameDao implements IDao<Exame> {
         return consultas;
     }
 
-    public List<Exame> filterGestanteIdStatus(int id, String status) {
+    public List<Exame> buscarPorGestanteEStatus(int id, String status) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> consultas = this.entityManager
@@ -99,7 +99,7 @@ public class ExameDao implements IDao<Exame> {
         return consultas;
     }
 
-    public List<Exame> filterGestanteNameStartsWith(String substring) {
+    public List<Exame> buscarPorNomeGestante(String substring) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Exame> exames = this.entityManager

@@ -12,7 +12,7 @@ public class PagamentoDao implements IDao<Pagamento> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Pagamento obj) {
+    public void salvar(Pagamento obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -23,7 +23,7 @@ public class PagamentoDao implements IDao<Pagamento> {
     }
 
     @Override
-    public void update(Pagamento obj) {
+    public void editar(Pagamento obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         this.entityManager.merge(obj);
@@ -32,7 +32,7 @@ public class PagamentoDao implements IDao<Pagamento> {
     }
 
     @Override
-    public boolean delete(Pagamento obj) {
+    public boolean deletar(Pagamento obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         this.entityManager.getTransaction().begin();
         obj.setDeletadoEm(LocalDateTime.now());
@@ -43,7 +43,7 @@ public class PagamentoDao implements IDao<Pagamento> {
     }
 
     @Override
-    public Pagamento find(int id) {
+    public Pagamento buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         Pagamento pagamento = this.entityManager.find(Pagamento.class, id);
         this.entityManager.close();
@@ -51,7 +51,7 @@ public class PagamentoDao implements IDao<Pagamento> {
     }
 
     @Override
-    public List<Pagamento> findAll() {
+    public List<Pagamento> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Pagamento> pagamentos = this.entityManager.createQuery(
                 "FROM Pagamento p WHERE p.deletadoEm IS NULL ORDER BY p.id DESC",
@@ -61,7 +61,7 @@ public class PagamentoDao implements IDao<Pagamento> {
         return pagamentos;
     }
 
-    public List<Pagamento> filterGestanteId(int id) {
+    public List<Pagamento> buscarPorGestante(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         List<Pagamento> pagamentos = this.entityManager.createQuery(
                 "FROM Pagamento p WHERE p.deletadoEm IS NULL AND p.paciente.id = :id",
@@ -72,7 +72,7 @@ public class PagamentoDao implements IDao<Pagamento> {
         return pagamentos;
     }
 
-    public Pagamento filterProcedimentoId(int id) {
+    public Pagamento buscarPorProcedimento(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
         Pagamento pagamento = this.entityManager.createQuery(
                 "FROM Pagamento p WHERE p.deletadoEm IS NULL AND p.procedimento.id = :id",

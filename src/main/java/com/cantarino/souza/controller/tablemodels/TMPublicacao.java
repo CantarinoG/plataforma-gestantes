@@ -50,7 +50,7 @@ public class TMPublicacao extends AbstractTableModel {
                 case data:
                     return aux.getData().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 case autor:
-                    return aux.getAutor().getNome();
+                    return "(" + aux.getAutor().getId() + ") " + aux.getAutor().getNome();
                 default:
                     return null;
             }

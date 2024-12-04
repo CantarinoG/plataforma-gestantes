@@ -13,7 +13,7 @@ public class AdminDao implements IDao<Admin> {
     private EntityManager entityManager;
 
     @Override
-    public void save(Admin obj) {
+    public void salvar(Admin obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -24,7 +24,7 @@ public class AdminDao implements IDao<Admin> {
     }
 
     @Override
-    public void update(Admin obj) {
+    public void editar(Admin obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -35,7 +35,7 @@ public class AdminDao implements IDao<Admin> {
     }
 
     @Override
-    public boolean delete(Admin obj) {
+    public boolean deletar(Admin obj) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         this.entityManager.getTransaction().begin();
@@ -48,7 +48,7 @@ public class AdminDao implements IDao<Admin> {
     }
 
     @Override
-    public Admin find(int id) {
+    public Admin buscar(int id) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Admin admin = this.entityManager.find(Admin.class, id);
@@ -59,7 +59,7 @@ public class AdminDao implements IDao<Admin> {
     }
 
     @Override
-    public List<Admin> findAll() {
+    public List<Admin> buscarTodos() {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         List<Admin> admins = this.entityManager
@@ -70,7 +70,7 @@ public class AdminDao implements IDao<Admin> {
         return admins;
     }
 
-    public Admin findByCpf(String cpf) {
+    public Admin buscarPorCpf(String cpf) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Admin admin = this.entityManager
@@ -85,7 +85,7 @@ public class AdminDao implements IDao<Admin> {
         return admin;
     }
 
-    public Admin findByEmail(String email) {
+    public Admin buscarPorEmail(String email) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
         Admin admin = this.entityManager

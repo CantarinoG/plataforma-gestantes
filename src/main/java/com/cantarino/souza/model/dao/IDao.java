@@ -4,14 +4,14 @@ import java.util.List;
 
 public interface IDao<T> {
 
-    public void save(T obj);
+    public void salvar(T obj);
 
-    public void update(T obj);
+    public void editar(T obj);
 
-    public boolean delete(T obj);
+    public boolean deletar(T obj);
 
-    public T find(int id);
+    public T buscar(int id);
 
-    public List<T> findAll();
+    public List<T> buscarTodos();
 
 }

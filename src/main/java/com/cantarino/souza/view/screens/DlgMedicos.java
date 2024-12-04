@@ -13,10 +13,10 @@ import com.cantarino.souza.view.components.RoundedButton;
 
 public class DlgMedicos extends JDialog {
 
-    private JPanel panBackground;
+    private JPanel panFundo;
     private JPanel panHeader;
-    private JLabel lblTitle;
-    private JPanel panContent;
+    private JLabel lblTitulo;
+    private JPanel panConteudo;
     private JTable grdMedicos;
     private JScrollPane scrollPane;
     private JPanel panFooter;
@@ -28,8 +28,11 @@ public class DlgMedicos extends JDialog {
 
     public DlgMedicos(JFrame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
+
         medicoController = new MedicoController();
+
+        initComponents();
+
         medicoController.atualizarTabela(grdMedicos);
     }
 
@@ -39,9 +42,9 @@ public class DlgMedicos extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new BorderLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new BorderLayout());
+        setContentPane(panFundo);
 
         panHeader = new JPanel();
         panHeader.setPreferredSize(new Dimension(getWidth(), 80));
@@ -50,22 +53,22 @@ public class DlgMedicos extends JDialog {
         panHeader.setOpaque(true);
         panHeader.setLayout(new GridBagLayout());
 
-        lblTitle = new JLabel("Médicos");
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 24));
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
-        lblTitle.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo = new JLabel("Médicos");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 28));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 10, 0, 10);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.CENTER;
-        panHeader.add(lblTitle, gbc);
+        panHeader.add(lblTitulo, gbc);
 
-        panBackground.add(panHeader, BorderLayout.NORTH);
-        panContent = new PanConsultasAgendadas();
-        panContent.setLayout(new BorderLayout());
-        panContent.setBackground(new Color(255, 255, 255));
-        panContent.setOpaque(true);
+        panFundo.add(panHeader, BorderLayout.NORTH);
+        panConteudo = new PanConsultasAgendadas();
+        panConteudo.setLayout(new BorderLayout());
+        panConteudo.setBackground(new Color(255, 255, 255));
+        panConteudo.setOpaque(true);
 
         grdMedicos = new JTable();
         grdMedicos.setModel(new DefaultTableModel(
@@ -78,7 +81,7 @@ public class DlgMedicos extends JDialog {
                 new String[] {
                 }));
         scrollPane = new JScrollPane(grdMedicos);
-        panContent.add(scrollPane, BorderLayout.CENTER);
+        panConteudo.add(scrollPane, BorderLayout.CENTER);
 
         panFooter = new JPanel();
         panFooter.setPreferredSize(new Dimension(getWidth(), 80));
@@ -120,9 +123,9 @@ public class DlgMedicos extends JDialog {
         panFooter.add(btnEditar);
         panFooter.add(btnDeletar);
 
-        panContent.add(panFooter, BorderLayout.SOUTH);
+        panConteudo.add(panFooter, BorderLayout.SOUTH);
 
-        panBackground.add(panContent, BorderLayout.CENTER);
+        panFundo.add(panConteudo, BorderLayout.CENTER);
     }
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,7 +144,6 @@ public class DlgMedicos extends JDialog {
     }
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -149,15 +151,15 @@ public class DlgMedicos extends JDialog {
         }
 
         Medico medico = (Medico) selectedObject;
-        id = medico.getId();
-        DlgCadastroMedicos dialog = new DlgCadastroMedicos(this, true, id);
+
+        DlgCadastroMedicos dialog = new DlgCadastroMedicos(this, true, medico.getId());
         dialog.setVisible(true);
         medicoController.atualizarTabela(grdMedicos);
 
     }
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
+
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -165,15 +167,19 @@ public class DlgMedicos extends JDialog {
         }
 
         Medico medico = (Medico) selectedObject;
-        id = medico.getId();
 
-        int option = JOptionPane.showConfirmDialog(this,
+        Object[] options = { "Sim", "Não" };
+        int option = JOptionPane.showOptionDialog(this,
                 "Tem certeza que deseja excluir este médico?",
                 "Confirmar exclusão",
-                JOptionPane.YES_NO_OPTION);
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
 
         if (option == JOptionPane.YES_OPTION) {
-            medicoController.excluir(id);
+            medicoController.deletar(medico.getId());
             medicoController.atualizarTabela(grdMedicos);
         }
     }

@@ -18,19 +18,19 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class DlgCadastroRelatorio extends JDialog {
-    private JPanel panBackground;
-    private JPanel panColumn;
-    private JLabel lblAction;
-    private JPanel panButton;
+    private JPanel panFundo;
+    private JPanel panColuna;
+    private JLabel lblTitulo;
+    private JPanel panBotao;
     private JButton btnCadastrarRelatorio;
     private JTextArea edtObservacoes;
     private JTextField edtResultado;
-    private JPanel panDocumentoPdfContent;
+    private JPanel panDocumentoPdf;
     private JTextField edtArquivoSelecionado;
     private JButton btnSelecionarArquivo;
-    private JPanel panDocumentoPdfField;
-    private JPanel panObservacoesField;
-    private JPanel panResultadoField;
+    private JPanel panCampoDocumentoPdf;
+    private JPanel panObservacoes;
+    private JPanel panResultado;
 
     private RelatorioController relatorioController;
     private ConsultaController consultaController;
@@ -43,15 +43,16 @@ public class DlgCadastroRelatorio extends JDialog {
 
     public DlgCadastroRelatorio(JDialog parent, boolean modal, int procedimentoId) {
         super(parent, modal);
+
         relatorioController = new RelatorioController();
         consultaController = new ConsultaController();
         exameController = new ExameController();
         this.procedimentoId = procedimentoId;
         initComponents();
 
-        Procedimento procedimento = consultaController.buscarPorId(procedimentoId);
+        Procedimento procedimento = consultaController.buscar(procedimentoId);
         if (procedimento == null) {
-            procedimento = exameController.buscarPorId(procedimentoId);
+            procedimento = exameController.buscar(procedimentoId);
         }
         if (procedimento != null) {
             if (procedimento.getRelatorio() != null) {
@@ -73,9 +74,9 @@ public class DlgCadastroRelatorio extends JDialog {
         setSize(1920, 1080);
         setLocationRelativeTo(null);
 
-        panBackground = new BackgroundPanel("/images/background.png");
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new BackgroundPanel("/images/background.png");
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -84,28 +85,28 @@ public class DlgCadastroRelatorio extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel(atualizando == null ? "Cadastrar Relatório" : "Atualizar Relatório");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 32));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        lblTitulo = new JLabel(atualizando == null ? "Cadastrar Relatório" : "Atualizar Relatório");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblTitulo, gbc);
 
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
-        panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(3, 1, 20, 5));
-        panColumn.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panColumn, gbc);
+        panColuna = new JPanel();
+        panColuna.setLayout(new GridLayout(3, 1, 20, 5));
+        panColuna.setBackground(AppColors.TRANSPARENT);
+        panFundo.add(panColuna, gbc);
 
         edtResultado = new JTextField();
         edtResultado.setFont(new Font("Arial", Font.PLAIN, 22));
         edtResultado.setBackground(AppColors.FIELD_PINK);
         edtResultado.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        panResultadoField = createCustomTextfield("Resultado", edtResultado);
-        panColumn.add(panResultadoField);
+        panResultado = criarTextFieldCustomizado("Resultado", edtResultado);
+        panColuna.add(panResultado);
 
-        panDocumentoPdfContent = new JPanel(new BorderLayout(10, 0));
-        panDocumentoPdfContent.setBackground(AppColors.FIELD_PINK);
+        panDocumentoPdf = new JPanel(new BorderLayout(10, 0));
+        panDocumentoPdf.setBackground(AppColors.FIELD_PINK);
 
         edtArquivoSelecionado = new JTextField("Nenhum arquivo selecionado");
         edtArquivoSelecionado.setEditable(false);
@@ -121,11 +122,11 @@ public class DlgCadastroRelatorio extends JDialog {
         btnSelecionarArquivo.setPreferredSize(new Dimension(130, 30));
         btnSelecionarArquivo.addActionListener(evt -> btnSelecionarArquivoActionPerformed(evt));
 
-        panDocumentoPdfContent.add(edtArquivoSelecionado, BorderLayout.CENTER);
-        panDocumentoPdfContent.add(btnSelecionarArquivo, BorderLayout.EAST);
+        panDocumentoPdf.add(edtArquivoSelecionado, BorderLayout.CENTER);
+        panDocumentoPdf.add(btnSelecionarArquivo, BorderLayout.EAST);
 
-        panDocumentoPdfField = createCustomTextfield("Documento PDF (Opcional)", panDocumentoPdfContent);
-        panColumn.add(panDocumentoPdfField);
+        panCampoDocumentoPdf = criarTextFieldCustomizado("Documento PDF (Opcional)", panDocumentoPdf);
+        panColuna.add(panCampoDocumentoPdf);
 
         edtObservacoes = new JTextArea();
         edtObservacoes.setFont(new Font("Arial", Font.PLAIN, 22));
@@ -133,9 +134,9 @@ public class DlgCadastroRelatorio extends JDialog {
         edtObservacoes.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         edtObservacoes.setLineWrap(true);
         edtObservacoes.setWrapStyleWord(true);
-        panObservacoesField = createCustomTextfield("Observações (Opcional)", edtObservacoes);
+        panObservacoes = criarTextFieldCustomizado("Observações (Opcional)", edtObservacoes);
 
-        panColumn.add(panObservacoesField);
+        panColuna.add(panObservacoes);
 
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
@@ -145,8 +146,8 @@ public class DlgCadastroRelatorio extends JDialog {
         gbcButton.anchor = GridBagConstraints.NORTH;
         gbcButton.insets = new java.awt.Insets(10, 0, 0, 0);
 
-        panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panButton.setBackground(AppColors.TRANSPARENT);
+        panBotao = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        panBotao.setBackground(AppColors.TRANSPARENT);
 
         btnCadastrarRelatorio = new RoundedButton(atualizando == null ? "Cadastrar Relatório" : "Atualizar Relatório",
                 10);
@@ -155,11 +156,11 @@ public class DlgCadastroRelatorio extends JDialog {
         btnCadastrarRelatorio.setForeground(Color.WHITE);
         btnCadastrarRelatorio.addActionListener(evt -> btnCadastrarRelatorioActionPerformed(evt));
 
-        panButton.add(btnCadastrarRelatorio);
-        panBackground.add(panButton, gbcButton);
+        panBotao.add(btnCadastrarRelatorio);
+        panFundo.add(panBotao, gbcButton);
     }
 
-    private JPanel createCustomTextfield(String hint, JComponent textField) {
+    private JPanel criarTextFieldCustomizado(String hint, JComponent textField) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -190,37 +191,37 @@ public class DlgCadastroRelatorio extends JDialog {
         try {
             String resultado = edtResultado.getText();
             String observacoes = edtObservacoes.getText();
-            String destinationPath = null;
+            String caminhoDestino = null;
 
             if (selectedFilePath != null && !selectedFilePath.isEmpty()) {
-                File sourceFile = new File(selectedFilePath);
-                String fileName = "relatorio_" + procedimentoId + ".pdf";
-                destinationPath = "storage/relatorios/" + fileName;
-                File destinationFile = new File(destinationPath);
+                File arquivoBase = new File(selectedFilePath);
+                String nomeArquivo = "relatorio_" + procedimentoId + ".pdf";
+                caminhoDestino = "storage/relatorios/" + nomeArquivo;
+                File arquivoDestino = new File(caminhoDestino);
 
-                destinationFile.getParentFile().mkdirs();
+                arquivoDestino.getParentFile().mkdirs();
 
                 try {
-                    Files.copy(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(arquivoBase.toPath(), arquivoDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException e) {
-                    destinationPath = null;
+                    caminhoDestino = null;
                     JOptionPane.showMessageDialog(this, "Erro ao salvar o arquivo PDF", "Erro",
                             JOptionPane.ERROR_MESSAGE);
                     return;
                 }
             }
 
-            int relatorioId = relatorioController.cadastrar(LocalDateTime.now(), resultado, observacoes,
-                    destinationPath, null);
-            Relatorio relatorioCriado = relatorioController.buscarPorId(relatorioId);
+            int relatorioId = relatorioController.salvar(LocalDateTime.now(), resultado, observacoes,
+                    caminhoDestino, null);
+            Relatorio relatorioCriado = relatorioController.buscar(relatorioId);
 
-            Procedimento procedimento = consultaController.buscarPorId(procedimentoId);
+            Procedimento procedimento = consultaController.buscar(procedimentoId);
 
             if (procedimento != null) { // Pertence a uma consulta
                 consultaController.adicionarRelatorio(procedimento.getId(), procedimento.getPaciente(),
                         relatorioCriado);
             } else { // Pertence a um exame
-                procedimento = exameController.buscarPorId(procedimentoId);
+                procedimento = exameController.buscar(procedimentoId);
                 exameController.adicionarRelatorio(procedimento.getId(), procedimento.getPaciente(), relatorioCriado);
             }
 
@@ -235,14 +236,14 @@ public class DlgCadastroRelatorio extends JDialog {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecionar arquivo PDF");
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos PDF (*.pdf)", "pdf");
-        fileChooser.setFileFilter(filter);
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos PDF (*.pdf)", "pdf");
+        fileChooser.setFileFilter(filtro);
 
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            edtArquivoSelecionado.setText(selectedFile.getName());
-            selectedFilePath = selectedFile.getAbsolutePath();
+            File arquivoEscolhido = fileChooser.getSelectedFile();
+            edtArquivoSelecionado.setText(arquivoEscolhido.getName());
+            selectedFilePath = arquivoEscolhido.getAbsolutePath();
         }
     }
 }

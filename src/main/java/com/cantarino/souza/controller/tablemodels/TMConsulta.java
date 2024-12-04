@@ -70,7 +70,6 @@ public class TMConsulta extends AbstractTableModel {
     }
 
     @Override
-    // TODO: Alguns valores não vão poder ser null, mudar depois
     public Object getValueAt(int rowIndex, int columnIndex) {
         Consulta aux = new Consulta();
         if (lista.isEmpty()) {
@@ -84,24 +83,23 @@ public class TMConsulta extends AbstractTableModel {
                 case COL_ID:
                     return aux.getId();
                 case COL_PACIENTE:
-                    return aux.getPaciente() != null ? aux.getPaciente().getNome() : "-";
+                    return "(" + aux.getPaciente().getId() + ") " + aux.getPaciente().getNome();
                 case COL_DESCRICAO:
                     return aux.getDescricao();
                 case COL_DATA:
-                    return aux.getData() != null ? aux.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-                            : "-";
+                    return aux.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                 case COL_DURACAO:
                     return aux.getDuracao();
                 case COL_VALOR:
-                    return aux.getValor();
+                    return "R$ " + aux.getValor();
                 case COL_STATUS:
                     return aux.getStatus();
                 case COL_RELATORIO:
-                    return aux.getRelatorio() == null ? "-" : "REGISTRADO";
+                    return aux.getRelatorio() == null ? "" : "REGISTRADO";
                 case COL_MEDICO:
-                    return aux.getMedico() != null ? aux.getMedico().getNome() : "-";
+                    return "(" + aux.getMedico().getId() + ") " + aux.getMedico().getNome();
                 case COL_RETORNO:
-                    return aux.getRetorno() != null ? aux.getRetorno().getId() : "-";
+                    return aux.getRetorno() != null ? aux.getRetorno().getId() : "";
                 default:
                     return null;
             }
@@ -123,10 +121,10 @@ public class TMConsulta extends AbstractTableModel {
                 TMConsulta model = (TMConsulta) table.getModel();
                 Consulta consulta = model.lista.get(row);
 
-                if (StatusProcedimentos.CANCELADA.getValue().equals(consulta.getStatus())) {
+                if (StatusProcedimentos.CANCELADA.getValor().equals(consulta.getStatus())) {
                     c.setBackground(new Color(255, 200, 200));
                     setBackground(new Color(255, 200, 200));
-                } else if (StatusProcedimentos.CONCLUIDA.getValue().equals(consulta.getStatus())) {
+                } else if (StatusProcedimentos.CONCLUIDA.getValor().equals(consulta.getStatus())) {
                     c.setBackground(new Color(200, 255, 200));
                     setBackground(new Color(200, 255, 200));
                 } else {

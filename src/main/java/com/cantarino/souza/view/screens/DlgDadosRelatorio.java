@@ -13,19 +13,19 @@ import java.io.File;
 
 public class DlgDadosRelatorio extends JDialog {
 
-    private JPanel panBackground;
-    private JPanel panColumn;
-    private JLabel lblAction;
-    private JPanel panButton;
+    private JPanel panFundo;
+    private JPanel panColuna;
+    private JLabel lblTitulo;
+    private JPanel panBotao;
     private JButton btnEmitirPdf;
     private JLabel lblObservacoes;
     private JLabel lblResultado;
-    private JPanel panDocumentoPdfContent;
+    private JPanel panDocumentoPdf;
     private JLabel lblArquivoSelecionado;
     private JButton btnVerDocumento;
-    private JPanel panDocumentoPdfField;
-    private JPanel panObservacoesField;
-    private JPanel panResultadoField;
+    private JPanel panCampoDocumentoPdf;
+    private JPanel panObservacoes;
+    private JPanel panResultado;
 
     private RelatorioController relatorioController;
 
@@ -33,8 +33,10 @@ public class DlgDadosRelatorio extends JDialog {
 
     public DlgDadosRelatorio(JDialog parent, boolean modal, Procedimento procedimento) {
         super(parent, modal);
+
         relatorioController = new RelatorioController();
         this.procedimento = procedimento;
+
         initComponents();
 
         lblResultado.setText(procedimento.getRelatorio().getResultado());
@@ -50,10 +52,10 @@ public class DlgDadosRelatorio extends JDialog {
         setSize(1620, 930);
         setLocationRelativeTo(null);
 
-        panBackground = new JPanel();
-        panBackground.setBackground(AppColors.BUTTON_PINK);
-        panBackground.setLayout(new GridBagLayout());
-        setContentPane(panBackground);
+        panFundo = new JPanel();
+        panFundo.setBackground(AppColors.BUTTON_PINK);
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -62,29 +64,29 @@ public class DlgDadosRelatorio extends JDialog {
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.insets = new java.awt.Insets(10, 0, 10, 0);
 
-        lblAction = new JLabel("Visualizar Relatório");
-        lblAction.setFont(new Font("Arial", Font.BOLD, 32));
-        lblAction.setForeground(AppColors.TITLE_BLUE);
-        lblAction.setHorizontalAlignment(SwingConstants.CENTER);
-        panBackground.add(lblAction, gbc);
+        lblTitulo = new JLabel("Visualizar Relatório");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 32));
+        lblTitulo.setForeground(AppColors.TITLE_BLUE);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblTitulo, gbc);
 
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
-        panColumn = new JPanel();
-        panColumn.setLayout(new GridLayout(3, 1, 20, 5));
-        panColumn.setBackground(AppColors.TRANSPARENT);
-        panBackground.add(panColumn, gbc);
+        panColuna = new JPanel();
+        panColuna.setLayout(new GridLayout(3, 1, 20, 5));
+        panColuna.setBackground(AppColors.TRANSPARENT);
+        panFundo.add(panColuna, gbc);
 
         lblResultado = new JLabel();
         lblResultado.setFont(new Font("Arial", Font.PLAIN, 22));
         lblResultado.setBackground(AppColors.FIELD_PINK);
         lblResultado.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         lblResultado.setOpaque(true);
-        panResultadoField = createCustomLabelPanel("Resultado", lblResultado);
-        panColumn.add(panResultadoField);
+        panResultado = criarCampoCustomizado("Resultado", lblResultado);
+        panColuna.add(panResultado);
 
-        panDocumentoPdfContent = new JPanel(new BorderLayout(10, 0));
-        panDocumentoPdfContent.setBackground(AppColors.FIELD_PINK);
+        panDocumentoPdf = new JPanel(new BorderLayout(10, 0));
+        panDocumentoPdf.setBackground(AppColors.FIELD_PINK);
 
         lblArquivoSelecionado = new JLabel("Nenhum arquivo selecionado");
         lblArquivoSelecionado.setBackground(AppColors.FIELD_PINK);
@@ -100,20 +102,20 @@ public class DlgDadosRelatorio extends JDialog {
         btnVerDocumento.setPreferredSize(new Dimension(130, 30));
         btnVerDocumento.addActionListener(evt -> btnVerDocumentoActionPerformed(evt));
 
-        panDocumentoPdfContent.add(lblArquivoSelecionado, BorderLayout.CENTER);
-        panDocumentoPdfContent.add(btnVerDocumento, BorderLayout.EAST);
+        panDocumentoPdf.add(lblArquivoSelecionado, BorderLayout.CENTER);
+        panDocumentoPdf.add(btnVerDocumento, BorderLayout.EAST);
 
-        panDocumentoPdfField = createCustomLabelPanel("Documento PDF", panDocumentoPdfContent);
-        panColumn.add(panDocumentoPdfField);
+        panCampoDocumentoPdf = criarCampoCustomizado("Documento PDF", panDocumentoPdf);
+        panColuna.add(panCampoDocumentoPdf);
 
         lblObservacoes = new JLabel();
         lblObservacoes.setFont(new Font("Arial", Font.PLAIN, 22));
         lblObservacoes.setBackground(AppColors.FIELD_PINK);
         lblObservacoes.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         lblObservacoes.setOpaque(true);
-        panObservacoesField = createCustomLabelPanel("Observações", lblObservacoes);
+        panObservacoes = criarCampoCustomizado("Observações", lblObservacoes);
 
-        panColumn.add(panObservacoesField);
+        panColuna.add(panObservacoes);
 
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 0;
@@ -123,8 +125,8 @@ public class DlgDadosRelatorio extends JDialog {
         gbcButton.anchor = GridBagConstraints.NORTH;
         gbcButton.insets = new java.awt.Insets(10, 0, 0, 0);
 
-        panButton = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        panButton.setBackground(AppColors.TRANSPARENT);
+        panBotao = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        panBotao.setBackground(AppColors.TRANSPARENT);
 
         btnEmitirPdf = new RoundedButton("Emitir PDF",
                 10);
@@ -133,11 +135,11 @@ public class DlgDadosRelatorio extends JDialog {
         btnEmitirPdf.setBackground(Color.WHITE);
         btnEmitirPdf.addActionListener(evt -> btnEmitirPdfActionPerformed(evt));
 
-        panButton.add(btnEmitirPdf);
-        panBackground.add(panButton, gbcButton);
+        panBotao.add(btnEmitirPdf);
+        panFundo.add(panBotao, gbcButton);
     }
 
-    private JPanel createCustomLabelPanel(String hint, JComponent content) {
+    private JPanel criarCampoCustomizado(String hint, JComponent content) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -164,10 +166,10 @@ public class DlgDadosRelatorio extends JDialog {
             fileChooser.setDialogTitle("Emitir PDF");
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-            int result = fileChooser.showSaveDialog(this);
-            if (result == JFileChooser.APPROVE_OPTION) {
-                String selectedPath = fileChooser.getSelectedFile().getAbsolutePath();
-                relatorioController.gerarPdf(selectedPath, procedimento.getRelatorio().getId(), procedimento);
+            int resultado = fileChooser.showSaveDialog(this);
+            if (resultado == JFileChooser.APPROVE_OPTION) {
+                String caminhoSelecionado = fileChooser.getSelectedFile().getAbsolutePath();
+                relatorioController.gerarPdf(caminhoSelecionado, procedimento.getRelatorio().getId(), procedimento);
             }
             JOptionPane.showMessageDialog(this, "Relatório Gerado com Sucesso!", "Sucesso",
                     JOptionPane.INFORMATION_MESSAGE);
@@ -180,9 +182,9 @@ public class DlgDadosRelatorio extends JDialog {
 
     private void btnVerDocumentoActionPerformed(ActionEvent evt) {
         try {
-            File pdfFile = new File(procedimento.getRelatorio().getCaminhoPdf());
+            File arquivoPdf = new File(procedimento.getRelatorio().getCaminhoPdf());
             if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().open(pdfFile);
+                Desktop.getDesktop().open(arquivoPdf);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao abrir documento: " + e.getMessage(), "Erro",

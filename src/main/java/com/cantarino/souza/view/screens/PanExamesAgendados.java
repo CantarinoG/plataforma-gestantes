@@ -18,8 +18,8 @@ public class PanExamesAgendados extends JPanel {
     JTable grdExames;
     JScrollPane scrollPane;
     JPanel panFooter;
-    JLabel lblFilter;
-    JComboBox<String> cbFilter;
+    JLabel lblFiltro;
+    JComboBox<String> cbFiltro;
     JButton btnCancelar;
     JButton btnRelatorio;
 
@@ -29,11 +29,13 @@ public class PanExamesAgendados extends JPanel {
     private Usuario usuario;
 
     public PanExamesAgendados() {
-        initComponents();
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
         exameController = new ExameController();
-        exameController.filtrarTabelaPorIdGestante(grdExames, usuario.getId());
+
+        initComponents();
+
+        exameController.atualizarTabelaPorGestante(grdExames, usuario.getId());
     }
 
     private void initComponents() {
@@ -60,11 +62,11 @@ public class PanExamesAgendados extends JPanel {
         panFooter.setBorder(BorderFactory.createEmptyBorder(5, 64, 10, 5));
         panFooter.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 5));
 
-        lblFilter = new JLabel("Filtrar por:");
-        cbFilter = new JComboBox<>(
-                new String[] { "Todos", StatusProcedimentos.AGENDADA.getValue(),
-                        StatusProcedimentos.CONCLUIDA.getValue(), StatusProcedimentos.CANCELADA.getValue() });
-        cbFilter.addActionListener(new java.awt.event.ActionListener() {
+        lblFiltro = new JLabel("Filtrar por:");
+        cbFiltro = new JComboBox<>(
+                new String[] { "Todos", StatusProcedimentos.AGENDADA.getValor(),
+                        StatusProcedimentos.CONCLUIDA.getValor(), StatusProcedimentos.CANCELADA.getValor() });
+        cbFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbFilterActionPerformed(evt);
             }
@@ -90,8 +92,8 @@ public class PanExamesAgendados extends JPanel {
             }
         });
 
-        panFooter.add(lblFilter);
-        panFooter.add(cbFilter);
+        panFooter.add(lblFiltro);
+        panFooter.add(cbFiltro);
         panFooter.add(btnCancelar);
         panFooter.add(btnRelatorio);
 
@@ -99,7 +101,6 @@ public class PanExamesAgendados extends JPanel {
     }
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
-        int id = -1;
         Object selectedObject = getObjetoSelecionadoNaGrid();
         if (selectedObject == null) {
             JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -108,21 +109,24 @@ public class PanExamesAgendados extends JPanel {
 
         Exame consulta = (Exame) selectedObject;
 
-        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValue())) {
+        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
             JOptionPane.showMessageDialog(this, "Exame já cancelado", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
-        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValue())) {
+        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValor())) {
             JOptionPane.showMessageDialog(this, "Exame já concluído", "Aviso", JOptionPane.WARNING_MESSAGE);
         } else {
-            int option = JOptionPane.showConfirmDialog(this,
+            Object[] options = { "Sim", "Não" };
+            int option = JOptionPane.showOptionDialog(this,
                     "Tem certeza que deseja cancelar este exame?",
                     "Confirmar cancelamento",
-                    JOptionPane.YES_NO_OPTION);
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
 
             if (option == JOptionPane.YES_OPTION) {
-                id = consulta.getId();
-
-                exameController.cancelar(id);
+                exameController.cancelar(consulta.getId());
 
                 cbFilterActionPerformed(null);
 
@@ -162,11 +166,11 @@ public class PanExamesAgendados extends JPanel {
     }
 
     private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {
-        String selectedFilter = (String) cbFilter.getSelectedItem();
+        String selectedFilter = (String) cbFiltro.getSelectedItem();
         if (selectedFilter.equals("Todos")) {
-            exameController.filtrarTabelaPorIdGestante(grdExames, usuario.getId());
+            exameController.atualizarTabelaPorGestante(grdExames, usuario.getId());
         } else {
-            exameController.filtrarTabelaPorIdGestanteStatus(grdExames, usuario.getId(), selectedFilter);
+            exameController.atualizarTabelaPorGestanteEStatus(grdExames, usuario.getId(), selectedFilter);
         }
     }
 }

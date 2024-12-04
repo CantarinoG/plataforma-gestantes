@@ -25,14 +25,14 @@ public class DlgComentarios extends JDialog {
 
     private JScrollPane scrArea;
     private JScrollBar scrBar;
-    private JPanel panComments;
+    private JPanel panComentarios;
     private JPanel panHeader;
-    private JTextArea edtComment;
-    private JScrollPane scrComment;
-    private JPanel panCommentField;
+    private JTextArea edtComentario;
+    private JScrollPane scrComentario;
+    private JPanel panComentario;
     private JCheckBox chkAnonimo;
-    private JButton btnPublish;
-    private JPanel panContent;
+    private JButton btnPublicar;
+    private JPanel panConteudo;
 
     private int id;
 
@@ -40,17 +40,19 @@ public class DlgComentarios extends JDialog {
     private PublicacaoController publicacaoController;
     private AutenticacaoController autenticacaoController;
 
-    private Usuario usuario;
+    private Usuario usuario = null;
 
     public DlgComentarios(JDialog parent, boolean modal, int postId) {
         super(parent, modal);
+
         autenticacaoController = new AutenticacaoController();
         this.id = postId;
         comentarioController = new ComentarioController();
         publicacaoController = new PublicacaoController();
         usuario = autenticacaoController.getUsuario();
+
         initComponents();
-        initComments();
+        initComentarios();
     }
 
     private void initComponents() {
@@ -66,10 +68,10 @@ public class DlgComentarios extends JDialog {
         setBackground(AppColors.BG);
         setLayout(new BorderLayout());
 
-        panContent = new JPanel(new BorderLayout());
-        panContent.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panContent.setBackground(AppColors.BG);
-        setContentPane(panContent);
+        panConteudo = new JPanel(new BorderLayout());
+        panConteudo.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panConteudo.setBackground(AppColors.BG);
+        setContentPane(panConteudo);
 
         panHeader = new JPanel(new FlowLayout());
         panHeader.setBackground(AppColors.TRANSPARENT);
@@ -82,45 +84,45 @@ public class DlgComentarios extends JDialog {
                         new Font("Arial", Font.BOLD, 16)),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
-        edtComment = new JTextArea();
-        edtComment.setRows(3);
-        edtComment.setLineWrap(true);
-        edtComment.setWrapStyleWord(true);
-        edtComment.setBackground(AppColors.FIELD_PINK);
-        scrComment = new JScrollPane(edtComment);
-        scrComment.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        panCommentField = createCustomTextfield("Comentário", scrComment);
-        panHeader.add(panCommentField);
+        edtComentario = new JTextArea();
+        edtComentario.setRows(3);
+        edtComentario.setLineWrap(true);
+        edtComentario.setWrapStyleWord(true);
+        edtComentario.setBackground(AppColors.FIELD_PINK);
+        scrComentario = new JScrollPane(edtComentario);
+        scrComentario.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        panComentario = criarTextFieldCustomizado("Comentário", scrComentario);
+        panHeader.add(panComentario);
 
         chkAnonimo = new JCheckBox("Anônimo");
         chkAnonimo.setFont(new Font("Arial", Font.PLAIN, 14));
         chkAnonimo.setBackground(AppColors.TRANSPARENT);
         panHeader.add(chkAnonimo);
 
-        btnPublish = new RoundedButton("Publicar", 10);
-        btnPublish.setPreferredSize(new Dimension(150, 50));
-        btnPublish.setBackground(AppColors.BUTTON_PINK);
-        btnPublish.setForeground(Color.WHITE);
-        btnPublish.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnPublish.addActionListener(new java.awt.event.ActionListener() {
+        btnPublicar = new RoundedButton("Publicar", 10);
+        btnPublicar.setPreferredSize(new Dimension(150, 50));
+        btnPublicar.setBackground(AppColors.BUTTON_PINK);
+        btnPublicar.setForeground(Color.WHITE);
+        btnPublicar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnPublicar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPublishActionPerformed(evt);
+                btnPublicarActionPerformed(evt);
             }
         });
-        panHeader.add(btnPublish);
+        panHeader.add(btnPublicar);
 
-        panContent.add(panHeader, BorderLayout.NORTH);
+        panConteudo.add(panHeader, BorderLayout.NORTH);
 
         scrArea = new JScrollPane();
         scrArea.setBorder(null);
-        panContent.add(scrArea, BorderLayout.CENTER);
+        panConteudo.add(scrArea, BorderLayout.CENTER);
 
         scrBar = scrArea.getVerticalScrollBar();
         scrBar.setBackground(AppColors.BUTTON_PINK);
         scrBar.setForeground(AppColors.BUTTON_PINK);
     }
 
-    private JPanel createCustomTextfield(String hint, JComponent textField) {
+    private JPanel criarTextFieldCustomizado(String hint, JComponent textField) {
         JPanel fieldPanel = new JPanel();
         fieldPanel.setLayout(new BorderLayout());
         fieldPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -147,37 +149,37 @@ public class DlgComentarios extends JDialog {
         return fieldPanel;
     }
 
-    private void initComments() {
-        List<Comentario> comentarios = comentarioController.filtrarPorIdPublicacao(id);
+    private void initComentarios() {
+        List<Comentario> comentarios = comentarioController.buscarPorPublicacao(id);
 
         scrArea.setViewportView(null);
 
         if (comentarios.isEmpty()) {
-            JPanel emptyPanel = new JPanel(new GridBagLayout());
-            emptyPanel.setBackground(AppColors.TRANSPARENT);
+            JPanel panVazio = new JPanel(new GridBagLayout());
+            panVazio.setBackground(AppColors.TRANSPARENT);
 
-            JLabel emptyLabel = new JLabel("Nenhum comentário encontrado");
-            emptyLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+            JLabel lblVazio = new JLabel("Nenhum comentário encontrado");
+            lblVazio.setFont(new Font("Arial", Font.PLAIN, 16));
 
-            emptyPanel.add(emptyLabel);
-            scrArea.setViewportView(emptyPanel);
+            panVazio.add(lblVazio);
+            scrArea.setViewportView(panVazio);
         } else {
-            panComments = new JPanel();
-            panComments.setLayout(new BoxLayout(panComments, BoxLayout.Y_AXIS));
-            panComments.setBackground(AppColors.TRANSPARENT);
+            panComentarios = new JPanel();
+            panComentarios.setLayout(new BoxLayout(panComentarios, BoxLayout.Y_AXIS));
+            panComentarios.setBackground(AppColors.TRANSPARENT);
 
             for (Comentario comentario : comentarios) {
-                JPanel panComentario = createCommentComponent(comentario);
-                panComments.add(panComentario);
+                JPanel panComentario = criarComponenteComentario(comentario);
+                panComentarios.add(panComentario);
             }
 
-            scrArea.setViewportView(panComments);
+            scrArea.setViewportView(panComentarios);
             SwingUtilities.invokeLater(() -> scrArea.getViewport().setViewPosition(new Point(0, 0)));
         }
 
     }
 
-    private JPanel createCommentComponent(Comentario comentario) {
+    private JPanel criarComponenteComentario(Comentario comentario) {
         JPanel panPost = new JPanel();
         panPost.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         panPost.setLayout(new BorderLayout());
@@ -188,70 +190,70 @@ public class DlgComentarios extends JDialog {
         panHeader.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panHeader.setBackground(AppColors.BG);
 
-        JLabel lblUserPic = new JLabel();
+        JLabel lblIconeUsuario = new JLabel();
 
         if (comentario.isAnonimo() && usuario instanceof Gestante) {
-            lblUserPic = new JLabel(new ImageIcon(getClass().getResource("/images/anon.png")));
+            lblIconeUsuario = new JLabel(new ImageIcon(getClass().getResource("/images/anon.png")));
         } else if (comentario.getAutor() instanceof Medico) {
-            lblUserPic = new JLabel(new ImageIcon(getClass().getResource("/images/doctor.png")));
+            lblIconeUsuario = new JLabel(new ImageIcon(getClass().getResource("/images/doctor.png")));
         } else if (comentario.getAutor() instanceof Secretario) {
-            lblUserPic = new JLabel(new ImageIcon(getClass().getResource("/images/secretary.png")));
+            lblIconeUsuario = new JLabel(new ImageIcon(getClass().getResource("/images/secretary.png")));
         } else if (comentario.getAutor() instanceof Admin) {
-            lblUserPic = new JLabel(new ImageIcon(getClass().getResource("/images/adm.png")));
+            lblIconeUsuario = new JLabel(new ImageIcon(getClass().getResource("/images/adm.png")));
         } else if (comentario.getAutor() instanceof Gestante) {
-            lblUserPic = new JLabel(new ImageIcon(getClass().getResource("/images/patient.png")));
+            lblIconeUsuario = new JLabel(new ImageIcon(getClass().getResource("/images/patient.png")));
         }
 
-        ImageIcon icon = (ImageIcon) lblUserPic.getIcon();
-        if (icon != null) {
-            Image img = icon.getImage();
+        ImageIcon icone = (ImageIcon) lblIconeUsuario.getIcon();
+        if (icone != null) {
+            Image img = icone.getImage();
             Image scaledImg = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            lblUserPic.setIcon(new ImageIcon(scaledImg));
+            lblIconeUsuario.setIcon(new ImageIcon(scaledImg));
         }
-        lblUserPic.setPreferredSize(new Dimension(50, 50));
-        panHeader.add(lblUserPic, BorderLayout.WEST);
+        lblIconeUsuario.setPreferredSize(new Dimension(50, 50));
+        panHeader.add(lblIconeUsuario, BorderLayout.WEST);
 
         JPanel panInfo = new JPanel();
         panInfo.setLayout(new GridLayout(3, 1));
         panInfo.setBackground(AppColors.BG);
         panInfo.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-        JLabel lblAuthor = new JLabel(comentario.getAutor().getNome());
+        JLabel lblAutor = new JLabel(comentario.getAutor().getNome());
         if (comentario.isAnonimo() && usuario instanceof Gestante) {
-            lblAuthor.setText("Usuário Desconhecido");
+            lblAutor.setText("Usuário Desconhecido");
         }
-        lblAuthor.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblAutor.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        JLabel lblTime = new JLabel(comentario.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        lblTime.setFont(new Font("Arial", Font.ITALIC, 12));
+        JLabel lblTempo = new JLabel(comentario.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        lblTempo.setFont(new Font("Arial", Font.ITALIC, 12));
 
-        JLabel lblSpecialist = new JLabel("");
-        lblSpecialist.setFont(new Font("Arial", Font.BOLD, 12));
-        lblSpecialist.setForeground(AppColors.BUTTON_PINK);
+        JLabel lblEspecial = new JLabel("");
+        lblEspecial.setFont(new Font("Arial", Font.BOLD, 12));
+        lblEspecial.setForeground(AppColors.BUTTON_PINK);
 
         if (comentario.getAutor() instanceof Medico) {
-            lblSpecialist.setText("Comentário de Especialista");
+            lblEspecial.setText("Comentário de Especialista");
         } else if (comentario.getAutor() instanceof Secretario || comentario.getAutor() instanceof Admin) {
-            lblSpecialist.setText("Comentário da Moderação");
+            lblEspecial.setText("Comentário da Moderação");
         }
 
-        panInfo.add(lblAuthor);
-        panInfo.add(lblTime);
-        panInfo.add(lblSpecialist);
+        panInfo.add(lblAutor);
+        panInfo.add(lblTempo);
+        panInfo.add(lblEspecial);
 
         panHeader.add(panInfo, BorderLayout.CENTER);
 
-        JTextArea txtAreaBody = new JTextArea();
-        txtAreaBody.setEditable(false);
-        txtAreaBody.setWrapStyleWord(true);
-        txtAreaBody.setLineWrap(true);
-        txtAreaBody.setFont(new Font("Arial", Font.PLAIN, 14));
-        txtAreaBody.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        txtAreaBody.setBackground(AppColors.BG);
-        txtAreaBody.setText(comentario.getConteudo());
+        JTextArea txtCorpo = new JTextArea();
+        txtCorpo.setEditable(false);
+        txtCorpo.setWrapStyleWord(true);
+        txtCorpo.setLineWrap(true);
+        txtCorpo.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtCorpo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        txtCorpo.setBackground(AppColors.BG);
+        txtCorpo.setText(comentario.getConteudo());
 
-        JPanel panButtom = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panButtom.setBackground(AppColors.BG);
+        JPanel panBotoes = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panBotoes.setBackground(AppColors.BG);
 
         if ((comentario.getAutor().getId() == usuario.getId()) || usuario instanceof Admin
                 || usuario instanceof Secretario) {
@@ -264,27 +266,27 @@ public class DlgComentarios extends JDialog {
                     btnDeleteActionPerformed(evt, comentario.getId());
                 }
             });
-            panButtom.add(btnDelete);
+            panBotoes.add(btnDelete);
         }
 
         panPost.add(panHeader, BorderLayout.NORTH);
-        panPost.add(txtAreaBody, BorderLayout.CENTER);
-        panPost.add(panButtom, BorderLayout.SOUTH);
+        panPost.add(txtCorpo, BorderLayout.CENTER);
+        panPost.add(panBotoes, BorderLayout.SOUTH);
 
         return panPost;
     }
 
-    private void btnPublishActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnPublicarActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-            Publicacao publicacao = publicacaoController.buscarPorId(id);
-            comentarioController.cadastrar(edtComment.getText(), LocalDateTime.now(), chkAnonimo.isSelected(),
+            Publicacao publicacao = publicacaoController.buscar(id);
+            comentarioController.salvar(edtComentario.getText(), LocalDateTime.now(), chkAnonimo.isSelected(),
                     publicacao,
                     usuario, null);
-            edtComment.setText("");
+            edtComentario.setText("");
             chkAnonimo.setSelected(false);
             JOptionPane.showMessageDialog(this, "Comentário realizado com sucesso!", "Sucesso",
                     JOptionPane.INFORMATION_MESSAGE);
-            initComments();
+            initComentarios();
             this.repaint();
 
         } catch (Exception e) {
@@ -294,15 +296,19 @@ public class DlgComentarios extends JDialog {
     }
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt, int id) {
-        int option = JOptionPane.showConfirmDialog(this,
+        Object[] options = { "Sim", "Não" };
+        int option = JOptionPane.showOptionDialog(this,
                 "Tem certeza que deseja excluir esta publicação?",
                 "Confirmar exclusão",
                 JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
 
         if (option == JOptionPane.YES_OPTION) {
-            comentarioController.excluir(id);
-            initComments();
+            comentarioController.deletar(id);
+            initComentarios();
             this.repaint();
         }
     }

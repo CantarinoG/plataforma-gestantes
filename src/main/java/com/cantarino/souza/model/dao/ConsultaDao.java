@@ -10,148 +10,149 @@ import com.cantarino.souza.model.entities.Consulta;
 
 public class ConsultaDao implements IDao<Consulta> {
 
-    private EntityManager entityManager;
+        private EntityManager entityManager;
 
-    @Override
-    public void save(Consulta obj) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        @Override
+        public void salvar(Consulta obj) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        this.entityManager.getTransaction().begin();
-        this.entityManager.persist(obj);
-        this.entityManager.getTransaction().commit();
+                this.entityManager.getTransaction().begin();
+                this.entityManager.persist(obj);
+                this.entityManager.getTransaction().commit();
 
-        this.entityManager.close();
-    }
+                this.entityManager.close();
+        }
 
-    @Override
-    public void update(Consulta obj) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        @Override
+        public void editar(Consulta obj) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        this.entityManager.getTransaction().begin();
-        this.entityManager.merge(obj);
-        this.entityManager.getTransaction().commit();
+                this.entityManager.getTransaction().begin();
+                this.entityManager.merge(obj);
+                this.entityManager.getTransaction().commit();
 
-        this.entityManager.close();
-    }
+                this.entityManager.close();
+        }
 
-    @Override
-    public boolean delete(Consulta obj) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        @Override
+        public boolean deletar(Consulta obj) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        this.entityManager.getTransaction().begin();
-        obj.setDeletadoEm(LocalDateTime.now());
-        this.entityManager.merge(obj);
-        this.entityManager.getTransaction().commit();
+                this.entityManager.getTransaction().begin();
+                obj.setDeletadoEm(LocalDateTime.now());
+                this.entityManager.merge(obj);
+                this.entityManager.getTransaction().commit();
 
-        this.entityManager.close();
-        return true;
-    }
+                this.entityManager.close();
+                return true;
+        }
 
-    @Override
-    public Consulta find(int id) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        @Override
+        public Consulta buscar(int id) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        Consulta consulta = this.entityManager.find(Consulta.class, id);
+                Consulta consulta = this.entityManager.find(Consulta.class, id);
 
-        this.entityManager.close();
+                this.entityManager.close();
 
-        return consulta;
-    }
+                return consulta;
+        }
 
-    @Override
-    public List<Consulta> findAll() {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        @Override
+        public List<Consulta> buscarTodos() {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        List<Consulta> consultas = this.entityManager
-                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL ORDER BY c.data DESC", Consulta.class)
-                .getResultList();
+                List<Consulta> consultas = this.entityManager
+                                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL ORDER BY c.data DESC",
+                                                Consulta.class)
+                                .getResultList();
 
-        this.entityManager.close();
-        return consultas;
-    }
+                this.entityManager.close();
+                return consultas;
+        }
 
-    public List<Consulta> filterMedicoId(int id) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        public List<Consulta> buscarPorMedico(int id) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        List<Consulta> consultas = this.entityManager
-                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id ORDER BY c.data DESC",
-                        Consulta.class)
-                .setParameter("id", id)
-                .getResultList();
+                List<Consulta> consultas = this.entityManager
+                                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id ORDER BY c.data DESC",
+                                                Consulta.class)
+                                .setParameter("id", id)
+                                .getResultList();
 
-        this.entityManager.close();
-        return consultas;
-    }
+                this.entityManager.close();
+                return consultas;
+        }
 
-    public List<Consulta> filterGestanteId(int id) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        public List<Consulta> buscarPorGestante(int id) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        List<Consulta> consultas = this.entityManager
-                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id ORDER BY c.data DESC",
-                        Consulta.class)
-                .setParameter("id", id)
-                .getResultList();
+                List<Consulta> consultas = this.entityManager
+                                .createQuery("FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id ORDER BY c.data DESC",
+                                                Consulta.class)
+                                .setParameter("id", id)
+                                .getResultList();
 
-        this.entityManager.close();
-        return consultas;
-    }
+                this.entityManager.close();
+                return consultas;
+        }
 
-    public List<Consulta> filterMedicoIdStatus(int id, String status) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        public List<Consulta> buscarPorMedicoEStatus(int id, String status) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        List<Consulta> consultas = this.entityManager
-                .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id AND c.status = :status ORDER BY c.data DESC",
-                        Consulta.class)
-                .setParameter("id", id)
-                .setParameter("status", status)
-                .getResultList();
+                List<Consulta> consultas = this.entityManager
+                                .createQuery(
+                                                "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.medico.id = :id AND c.status = :status ORDER BY c.data DESC",
+                                                Consulta.class)
+                                .setParameter("id", id)
+                                .setParameter("status", status)
+                                .getResultList();
 
-        this.entityManager.close();
-        return consultas;
-    }
+                this.entityManager.close();
+                return consultas;
+        }
 
-    public List<Consulta> filterGestanteIdStatus(int id, String status) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        public List<Consulta> buscarPorGestanteEStatus(int id, String status) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        List<Consulta> consultas = this.entityManager
-                .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id AND c.status = :status ORDER BY c.data DESC",
-                        Consulta.class)
-                .setParameter("id", id)
-                .setParameter("status", status)
-                .getResultList();
+                List<Consulta> consultas = this.entityManager
+                                .createQuery(
+                                                "FROM Consulta c WHERE c.deletadoEm IS NULL AND c.paciente.id = :id AND c.status = :status ORDER BY c.data DESC",
+                                                Consulta.class)
+                                .setParameter("id", id)
+                                .setParameter("status", status)
+                                .getResultList();
 
-        this.entityManager.close();
-        return consultas;
-    }
+                this.entityManager.close();
+                return consultas;
+        }
 
-    public List<Consulta> filterGestanteNameStartsWith(String substring) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        public List<Consulta> buscarPorNomeGestante(String substring) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        List<Consulta> consultas = this.entityManager
-                .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.paciente.nome) LIKE LOWER(:substring) ORDER BY c.data DESC",
-                        Consulta.class)
-                .setParameter("substring", substring + "%")
-                .getResultList();
+                List<Consulta> consultas = this.entityManager
+                                .createQuery(
+                                                "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.paciente.nome) LIKE LOWER(:substring) ORDER BY c.data DESC",
+                                                Consulta.class)
+                                .setParameter("substring", substring + "%")
+                                .getResultList();
 
-        this.entityManager.close();
-        return consultas;
-    }
+                this.entityManager.close();
+                return consultas;
+        }
 
-    public List<Consulta> filterMedicoNameStartsWith(String subString) {
-        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+        public List<Consulta> buscarPorNomeMedico(String subString) {
+                this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 
-        List<Consulta> consultas = this.entityManager
-                .createQuery(
-                        "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.medico.nome) LIKE LOWER(:substring) ORDER BY c.data DESC",
-                        Consulta.class)
-                .setParameter("substring", subString + "%")
-                .getResultList();
+                List<Consulta> consultas = this.entityManager
+                                .createQuery(
+                                                "FROM Consulta c WHERE c.deletadoEm IS NULL AND LOWER(c.medico.nome) LIKE LOWER(:substring) ORDER BY c.data DESC",
+                                                Consulta.class)
+                                .setParameter("substring", subString + "%")
+                                .getResultList();
 
-        this.entityManager.close();
-        return consultas;
-    }
+                this.entityManager.close();
+                return consultas;
+        }
 
 }
