@@ -31,11 +31,13 @@ public class GestanteController {
         Util.jTableShow(grd, new TMGestantes(repositorio.buscarTodos()), null);
     }
 
-    public void salvar(String cpf, String nome, String email, String senha, String dataNascimento,
+    public void salvar(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm, String previsaoParto, String contatoEmergencia,
             String historicoMedico, String tipoSanguineo) {
 
-        Gestante novaGestante = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
+        Gestante novaGestante = validador.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada, dataNascimento,
+                telefone,
                 endereco, deletadoEm, previsaoParto, contatoEmergencia, historicoMedico, tipoSanguineo);
 
         String hashSenha = gerenciadorCriptografia.criptografarSenha(novaGestante.getSenha());
@@ -66,7 +68,7 @@ public class GestanteController {
             String telefone, String endereco, String deletadoEm, String previsaoParto, String contatoEmergencia,
             String historicoMedico, String tipoSanguineo) {
 
-        Gestante novaGestante = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
+        Gestante novaGestante = validador.validaCamposEntrada(cpf, nome, email, senha, senha, dataNascimento, telefone,
                 endereco, deletadoEm, previsaoParto, contatoEmergencia, historicoMedico, tipoSanguineo);
 
         novaGestante.setId(id);
@@ -98,13 +100,16 @@ public class GestanteController {
 
     public Gestante adicionarCodigoRecuperacao(String cpf, String codigo) {
         Gestante gestante = repositorio.buscarPorCpf(cpf);
-        if (gestante != null) {
-            gestante.setCodigoRecuperacao(codigo);
-            gestante.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));
-            repositorio.editar(gestante);
-            notificador.notificar(gestante, "BemGestar | Recuperação de Senha", "Seu código de recuperação é: " + codigo
-                    + ". Pelos próximos 30 minutos, você vai conseguir logar na sua conta utilizando este código no lugar da senha. Entre na sua conta e seleciona a opção de mudar senha para redefinir sua senha.");
+
+        if (gestante == null) {
+            throw new GestanteException("ERRO: Não foi encontrada uma gestante com esse cpf.");
         }
+
+        gestante.setCodigoRecuperacao(codigo);
+        gestante.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));
+        repositorio.editar(gestante);
+        notificador.notificar(gestante, "BemGestar | Recuperação de Senha", "Seu código de recuperação é: " + codigo
+                + ". Pelos próximos 30 minutos, você vai conseguir logar na sua conta utilizando este código no lugar da senha. Entre na sua conta e seleciona a opção de mudar senha para redefinir sua senha.");
         return gestante;
     }
 

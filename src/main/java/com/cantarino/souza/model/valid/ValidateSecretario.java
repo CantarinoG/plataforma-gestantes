@@ -9,11 +9,13 @@ import com.cantarino.souza.model.exceptions.SecretarioException;
 
 public class ValidateSecretario extends ValidateUsuario {
 
-    public Secretario validaCamposEntrada(String cpf, String nome, String email, String senha, String dataNascimento,
+    public Secretario validaCamposEntrada(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm, String dataContratacao) {
 
         Secretario secretario = new Secretario();
-        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada, dataNascimento, telefone,
+                endereco,
                 deletadoEm);
         secretario.setCpf(base.getCpf());
         secretario.setNome(base.getNome());

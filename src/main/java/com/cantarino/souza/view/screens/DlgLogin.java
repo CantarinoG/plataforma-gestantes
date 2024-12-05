@@ -209,34 +209,33 @@ public class DlgLogin extends JDialog {
 
         Usuario usuario = null;
 
-        if (tipoEscolhido.equals(TipoUsuario.GESTANTE.getValor())) {
-            usuario = gestanteController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
-        } else if (tipoEscolhido.equals(TipoUsuario.MEDICO.getValor())) {
-            usuario = medicoController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
-        } else if (tipoEscolhido.equals(TipoUsuario.SECRETARIO.getValor())) {
-            usuario = secretarioController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
-        } else if (tipoEscolhido.equals(TipoUsuario.ADMIN.getValor())) {
-            usuario = adminController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
-        } else {
-            JOptionPane.showMessageDialog(this, "Selecione um tipo de usuário válido");
+        try {
+            if (tipoEscolhido.equals(TipoUsuario.GESTANTE.getValor())) {
+                usuario = gestanteController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+            } else if (tipoEscolhido.equals(TipoUsuario.MEDICO.getValor())) {
+                usuario = medicoController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+            } else if (tipoEscolhido.equals(TipoUsuario.SECRETARIO.getValor())) {
+                usuario = secretarioController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+            } else if (tipoEscolhido.equals(TipoUsuario.ADMIN.getValor())) {
+                usuario = adminController.adicionarCodigoRecuperacao(login, codigoRecuperacao);
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione um tipo de usuário válido");
+                return;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
             return;
         }
 
-        if (usuario == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Não foi possível começar o processo de recuperação de senha. Entre em contato com um administrador.");
-            return;
-        } else {
-            String email = usuario.getEmail();
-            String[] parts = email.split("@");
-            String username = parts[0];
-            String domain = parts[1];
-            String maskedUsername = username.substring(0, 4) + "*".repeat(username.length() - 4);
-            String maskedEmail = maskedUsername + "@" + domain;
-            JOptionPane.showMessageDialog(this,
-                    "Um código de recuperação está sendo enviado para o seu email: " + maskedEmail + ".");
-            return;
-        }
+        String email = usuario.getEmail();
+        String[] parts = email.split("@");
+        String username = parts[0];
+        String domain = parts[1];
+        String maskedUsername = username.substring(0, 4) + "*".repeat(username.length() - 4);
+        String maskedEmail = maskedUsername + "@" + domain;
+        JOptionPane.showMessageDialog(this,
+                "Um código de recuperação está sendo enviado para o seu email: " + maskedEmail + ".");
+        return;
 
     }
 

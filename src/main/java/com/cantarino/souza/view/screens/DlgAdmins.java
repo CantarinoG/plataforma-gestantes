@@ -174,12 +174,6 @@ public class DlgAdmins extends JDialog {
 
         Admin admin = (Admin) selectedObject;
 
-        if (admin.getId() == usuario.getId()) {
-            JOptionPane.showMessageDialog(this, "Você não pode deletar a si mesmo", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         Object[] options = { "Sim", "Não" };
         int option = JOptionPane.showOptionDialog(this,
                 "Tem certeza que deseja excluir este administrador?",
@@ -191,8 +185,12 @@ public class DlgAdmins extends JDialog {
                 options[1]);
 
         if (option == JOptionPane.YES_OPTION) {
-            adminController.deletar(admin.getId());
-            adminController.atualizarTabela(grdAdmins);
+            try {
+                adminController.deletar(admin.getId(), usuario.getId());
+                adminController.atualizarTabela(grdAdmins);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

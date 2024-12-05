@@ -190,34 +190,30 @@ public class DlgAgendaMedico extends JDialog {
 
         Consulta consulta = (Consulta) selectedObject;
 
-        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
-            JOptionPane.showMessageDialog(this, "Consulta já cancelada", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValor())) {
-            JOptionPane.showMessageDialog(this, "Consulta já concluída", "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else {
-            // Precisei fazer essa verificação direto na view, para conseguir fazer com que,
-            // caso não seja válido, já interrompa antes de mostrar o dialog de confirmação.
-            Object[] options = { "Sim", "Não" };
-            int option = JOptionPane.showOptionDialog(this,
-                    "Tem certeza que deseja cancelar esta consulta?",
-                    "Confirmar cancelamento",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[1]);
+        Object[] options = { "Sim", "Não" };
+        int option = JOptionPane.showOptionDialog(this,
+                "Tem certeza que deseja cancelar esta consulta?",
+                "Confirmar cancelamento",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
 
-            if (option == JOptionPane.YES_OPTION) {
-                id = consulta.getId();
+        if (option == JOptionPane.YES_OPTION) {
+            id = consulta.getId();
+            try {
                 consultaController.cancelar(id);
                 cbFiltroActionPerformed(null);
 
                 JOptionPane.showMessageDialog(this, "Consulta cancelada com sucesso!", "Sucesso",
                         JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-            return;
         }
+        return;
+
     }
 
     private void btnVerRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,14 +224,10 @@ public class DlgAgendaMedico extends JDialog {
         }
 
         Consulta consulta = (Consulta) selectedObject;
-        if (consulta.getRelatorio() == null) {
-            JOptionPane.showMessageDialog(this, "Essa consulta não possui nenhum relatório cadastrado", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        } else {
-            DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, consulta);
-            dialog.setVisible(true);
-        }
+
+        DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, consulta);
+        dialog.setVisible(true);
+
     }
 
     private void btnCadastrarRelatorioActionPerformed(java.awt.event.ActionEvent evt) {

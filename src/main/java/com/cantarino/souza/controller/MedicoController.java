@@ -31,10 +31,12 @@ public class MedicoController {
         Util.jTableShow(grd, new TMMedico(repositorio.buscarTodos()), null);
     }
 
-    public void salvar(String cpf, String nome, String email, String senha, String dataNascimento,
+    public void salvar(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm, String especializacao, String crm) {
 
-        Medico novoMedico = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Medico novoMedico = validador.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada, dataNascimento,
+                telefone, endereco,
                 deletadoEm, especializacao, crm);
         String hashSenha = gerenciadorCriptografia.criptografarSenha(novoMedico.getSenha());
         novoMedico.setSenha(hashSenha);
@@ -66,7 +68,8 @@ public class MedicoController {
 
     public void editar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
             String telefone, String endereco, String deletadoEm, String especializacao, String crm) {
-        Medico novoMedico = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Medico novoMedico = validador.validaCamposEntrada(cpf, nome, email, senha, senha, dataNascimento, telefone,
+                endereco,
                 deletadoEm, especializacao, crm);
         novoMedico.setId(id);
 
@@ -100,6 +103,11 @@ public class MedicoController {
 
     public Medico adicionarCodigoRecuperacao(String cpf, String codigo) {
         Medico medico = repositorio.buscarPorCpf(cpf);
+
+        if (medico == null) {
+            throw new GestanteException("ERRO: Não foi encontrado um(a) médico(a) com esse cpf.");
+        }
+
         if (medico != null) {
             medico.setCodigoRecuperacao(codigo);
             medico.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));

@@ -164,6 +164,9 @@ public class ConsultaController {
 
     public void cancelar(int id) {
         Consulta consulta = repositorio.buscar(id);
+
+        validador.validarCancelamento(consulta);
+
         consulta.setStatus(StatusProcedimentos.CANCELADA.getValor());
         repositorio.editar(consulta);
 

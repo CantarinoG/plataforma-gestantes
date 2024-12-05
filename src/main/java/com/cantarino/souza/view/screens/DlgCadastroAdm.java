@@ -2,7 +2,6 @@ package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.AdminController;
 import com.cantarino.souza.model.entities.Admin;
-import com.cantarino.souza.model.exceptions.SecretarioException;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -223,15 +222,13 @@ public class DlgCadastroAdm extends JDialog {
                     edtDataNascimento.getText().split("/")[0];
 
             if (atualizando == null) { // Criando novo adm
-                if (!(new String(edtSenha.getPassword()).equals(new String(edtConfSenha.getPassword())))) {
-                    throw new SecretarioException("As senhas não coincidem.");
-                }
 
                 adminController.salvar(
                         cpf,
                         edtNome.getText(),
                         edtEmail.getText(),
                         new String(edtSenha.getPassword()),
+                        new String(edtConfSenha.getPassword()),
                         dataNascimento,
                         edtTelefone.getText(),
                         edtEndereco.getText(),

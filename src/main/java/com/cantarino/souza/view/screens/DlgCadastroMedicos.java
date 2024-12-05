@@ -3,7 +3,6 @@ package com.cantarino.souza.view.screens;
 import com.cantarino.souza.controller.MedicoController;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.enums.EspecializacaoMedico;
-import com.cantarino.souza.model.exceptions.SecretarioException;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -254,15 +253,13 @@ public class DlgCadastroMedicos extends JDialog {
                     edtDataNascimento.getText().split("/")[1] + "-" +
                     edtDataNascimento.getText().split("/")[0];
             if (atualizando == null) { // Criando novo medico
-                if (!(new String(edtSenha.getPassword()).equals(new String(edtConfSenha.getPassword())))) {
-                    throw new SecretarioException("As senhas não coincidem.");
-                }
 
                 medicoController.salvar(
                         cpf,
                         edtNome.getText(),
                         edtEmail.getText(),
                         new String(edtSenha.getPassword()),
+                        new String(edtConfSenha.getPassword()),
                         dataNascimento,
                         edtTelefone.getText(),
                         edtEndereco.getText(),

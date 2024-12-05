@@ -286,14 +286,10 @@ public class DlgDadosGestante extends JDialog {
         }
 
         Consulta consulta = (Consulta) selectedObject;
-        if (consulta.getRelatorio() == null) {
-            JOptionPane.showMessageDialog(this, "Essa consulta não possui nenhum relatório cadastrado", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        } else {
-            DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, consulta);
-            dialog.setVisible(true);
-        }
+
+        DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, consulta);
+        dialog.setVisible(true);
+
     }
 
     private void verRelatorioExame() {
@@ -303,14 +299,10 @@ public class DlgDadosGestante extends JDialog {
         }
 
         Exame exame = (Exame) selectedObject;
-        if (exame.getRelatorio() == null) {
-            JOptionPane.showMessageDialog(this, "Esse exame não possui nenhum relatório cadastrado", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        } else {
-            DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, exame);
-            dialog.setVisible(true);
-        }
+
+        DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, exame);
+        dialog.setVisible(true);
+
     }
 
     private void grdDadosActionPerformed(MouseEvent evt) {

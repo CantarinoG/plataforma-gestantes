@@ -3,7 +3,6 @@ package com.cantarino.souza.view.screens;
 import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.enums.TipoSanguineo;
-import com.cantarino.souza.model.exceptions.SecretarioException;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -289,15 +288,13 @@ public class DlgCadastroGestantes extends JDialog {
                     edtPrevisaoParto.getText().split("/")[0];
 
             if (atualizando == null) { // Criando gestante
-                if (!(new String(edtSenha.getPassword()).equals(new String(edtConfSenha.getPassword())))) {
-                    throw new SecretarioException("As senhas não coincidem.");
-                }
 
                 gestanteController.salvar(
                         cpf,
                         edtNome.getText(),
                         edtEmail.getText(),
                         new String(edtSenha.getPassword()),
+                        new String(edtConfSenha.getPassword()),
                         dataNascimento,
                         edtTelefone.getText(),
                         edtEndereco.getText(),

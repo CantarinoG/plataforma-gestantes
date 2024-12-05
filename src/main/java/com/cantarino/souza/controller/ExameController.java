@@ -133,6 +133,9 @@ public class ExameController {
 
     public void cancelar(int id) {
         Exame exame = repositorio.buscar(id);
+
+        validador.validarCancelamento(exame);
+
         exame.setStatus(StatusProcedimentos.CANCELADA.getValor());
         repositorio.editar(exame);
 

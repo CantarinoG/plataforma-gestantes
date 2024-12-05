@@ -9,12 +9,14 @@ import com.cantarino.souza.model.exceptions.GestanteException;
 
 public class ValidateGestante extends ValidateUsuario {
 
-    public Gestante validaCamposEntrada(String cpf, String nome, String email, String senha, String dataNascimento,
+    public Gestante validaCamposEntrada(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm, String previsaoParto, String contatoEmergencia,
             String historicoMedico, String tipoSanguineo) {
 
         Gestante gestante = new Gestante();
-        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada, dataNascimento, telefone,
+                endereco,
                 deletadoEm);
         gestante.setCpf(base.getCpf());
         gestante.setNome(base.getNome());

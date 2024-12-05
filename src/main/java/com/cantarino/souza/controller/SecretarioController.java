@@ -30,10 +30,12 @@ public class SecretarioController {
         Util.jTableShow(grd, new TMSecretario(repositorio.buscarTodos()), null);
     }
 
-    public void salvar(String cpf, String nome, String email, String senha, String dataNascimento,
+    public void salvar(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm, String dataContratacao) {
 
-        Secretario novoSecretario = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
+        Secretario novoSecretario = validador.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada,
+                dataNascimento, telefone,
                 endereco, deletadoEm, dataContratacao);
         String hashSenha = gerenciadorCriptografia.criptografarSenha(novoSecretario.getSenha());
         novoSecretario.setSenha(hashSenha);
@@ -57,7 +59,8 @@ public class SecretarioController {
 
     public void editar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
             String telefone, String endereco, String deletadoEm, String dataContratacao) {
-        Secretario novoSecretario = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone,
+        Secretario novoSecretario = validador.validaCamposEntrada(cpf, nome, email, senha, senha, dataNascimento,
+                telefone,
                 endereco, deletadoEm, dataContratacao);
         novoSecretario.setId(id);
 
@@ -73,8 +76,9 @@ public class SecretarioController {
         repositorio.editar(novoSecretario);
     }
 
-    public void deletar(int id) {
+    public void deletar(int id, int idAutenticado) {
         Secretario secretario = repositorio.buscar(id);
+        validador.validaExclusão(secretario, idAutenticado);
         repositorio.deletar(secretario);
     }
 
@@ -87,6 +91,11 @@ public class SecretarioController {
 
     public Secretario adicionarCodigoRecuperacao(String cpf, String codigo) {
         Secretario secretario = repositorio.buscarPorCpf(cpf);
+
+        if (secretario == null) {
+            throw new GestanteException("ERRO: Não foi encontrado um(a) secretário(a) com esse cpf.");
+        }
+
         if (secretario != null) {
             secretario.setCodigoRecuperacao(codigo);
             secretario.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));

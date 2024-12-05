@@ -43,6 +43,11 @@ public class AdminController {
 
     public Admin adicionarCodigoRecuperacao(String cpf, String codigo) {
         Admin admin = repositorio.buscarPorCpf(cpf);
+
+        if (admin == null) {
+            throw new GestanteException("ERRO: Não foi encontrado um(a) administrador(a) com esse cpf.");
+        }
+
         if (admin != null) {
             admin.setCodigoRecuperacao(codigo);
             admin.setValidadeCodigoRecuperacao(LocalDateTime.now().plusMinutes(30));
@@ -54,10 +59,12 @@ public class AdminController {
         return admin;
     }
 
-    public void salvar(String cpf, String nome, String email, String senha, String dataNascimento,
+    public void salvar(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm) {
 
-        Admin novoAdm = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Admin novoAdm = validador.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada, dataNascimento,
+                telefone, endereco,
                 deletadoEm);
         String hashSenha = gerenciadorCriptografia.criptografarSenha(novoAdm.getSenha());
         novoAdm.setSenha(hashSenha);
@@ -76,7 +83,8 @@ public class AdminController {
 
     public void editar(int id, String cpf, String nome, String email, String senha, String dataNascimento,
             String telefone, String endereco, String deletadoEm) {
-        Admin novoAdm = validador.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Admin novoAdm = validador.validaCamposEntrada(cpf, nome, email, senha, senha, dataNascimento, telefone,
+                endereco,
                 deletadoEm);
         novoAdm.setId(id);
 
@@ -92,8 +100,9 @@ public class AdminController {
         repositorio.editar(novoAdm);
     }
 
-    public void deletar(int id) {
+    public void deletar(int id, int idAutenticado) {
         Admin adm = repositorio.buscar(id);
+        validador.validaExclusão(adm, idAutenticado);
         repositorio.deletar(adm);
     }
 

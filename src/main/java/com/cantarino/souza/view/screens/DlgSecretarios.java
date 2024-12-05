@@ -175,12 +175,6 @@ public class DlgSecretarios extends JDialog {
 
         Secretario secretario = (Secretario) selectedObject;
 
-        if (secretario.getId() == usuario.getId()) {
-            JOptionPane.showMessageDialog(this, "Você não pode deletar a si mesmo", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         Object[] options = { "Sim", "Não" };
         int option = JOptionPane.showOptionDialog(this,
                 "Tem certeza que deseja excluir este secretário?",
@@ -192,8 +186,12 @@ public class DlgSecretarios extends JDialog {
                 options[1]);
 
         if (option == JOptionPane.YES_OPTION) {
-            secretarioController.deletar(secretario.getId());
-            secretarioController.atualizarTabela(grdSecretarios);
+            try {
+                secretarioController.deletar(secretario.getId(), usuario.getId());
+                secretarioController.atualizarTabela(grdSecretarios);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

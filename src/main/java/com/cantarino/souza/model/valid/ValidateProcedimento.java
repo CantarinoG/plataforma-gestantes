@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 import com.cantarino.souza.model.entities.Procedimento;
+import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.model.exceptions.ProcedimentoException;
-import com.cantarino.souza.model.exceptions.UsuarioException;
 
 public class ValidateProcedimento {
 
@@ -67,12 +67,20 @@ public class ValidateProcedimento {
             try {
                 deleteDate = LocalDateTime.parse(deletadoEm);
             } catch (DateTimeParseException e) {
-                throw new UsuarioException("ERRO: Formato de data de delete inválido.");
+                throw new ProcedimentoException("ERRO: Formato de data de delete inválido.");
             }
             procedimento.setDeletadoEm(deleteDate);
         }
 
         return procedimento;
+    }
+
+    public void validarCancelamento(Procedimento procedimento) {
+        if (procedimento.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
+            throw new ProcedimentoException("ERRO: Não é possível cancelar um procedimento já cancelado.");
+        } else if (procedimento.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValor())) {
+            throw new ProcedimentoException("ERRO: Não é possível cancelar um procedimento já concluído.");
+        }
     }
 
 }
