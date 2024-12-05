@@ -38,7 +38,7 @@ public class AutenticacaoController {
 
     private void realizarAutenticacao(Usuario usuario, String senha) {
         if (usuario.getCodigoRecuperacao() != null && usuario.getValidadeCodigoRecuperacao() != null) {
-            if (usuario.getCodigoRecuperacao().equals(usuario.getCodigoRecuperacao())
+            if (usuario.getCodigoRecuperacao().equals(senha)
                     && usuario.getValidadeCodigoRecuperacao().isAfter(LocalDateTime.now())) {
                 autenticacao.setUsuario(usuario);
                 return;

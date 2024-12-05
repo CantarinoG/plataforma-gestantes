@@ -21,11 +21,15 @@ public class DlgDadosPagamento extends JDialog {
     public DlgDadosPagamento(JDialog parent, boolean modal, Pagamento pagamento) {
         super(parent, modal);
 
-        initComponents();
+        if (pagamento == null) {
+            initComponentsVazio();
+        } else {
+            initComponents();
+            lblValor.setText(String.valueOf(pagamento.getValor()));
+            lblMetodoPagamento.setText(pagamento.getMetodoPagamento());
+            lblProcedimento.setText(pagamento.getProcedimento().getDescricao());
+        }
 
-        lblValor.setText(String.valueOf(pagamento.getValor()));
-        lblMetodoPagamento.setText(pagamento.getMetodoPagamento());
-        lblProcedimento.setText(pagamento.getProcedimento().getDescricao());
     }
 
     private void initComponents() {
@@ -78,6 +82,24 @@ public class DlgDadosPagamento extends JDialog {
         lblMetodoPagamento.setOpaque(true);
         panMetodo = criarCampoCustomizado("Método de Pagamento", lblMetodoPagamento);
         panColuna.add(panMetodo);
+    }
+
+    private void initComponentsVazio() {
+        setTitle("Dados de Pagamento");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1620, 930);
+        setLocationRelativeTo(null);
+
+        panFundo = new JPanel();
+        panFundo.setBackground(AppColors.BUTTON_PINK);
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
+
+        JLabel lblMensagem = new JLabel("Não há pagamento cadastrado");
+        lblMensagem.setFont(new Font("Arial", Font.BOLD, 32));
+        lblMensagem.setForeground(AppColors.TITLE_BLUE);
+        lblMensagem.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblMensagem, new GridBagConstraints());
     }
 
     private JPanel criarCampoCustomizado(String hint, JComponent textField) {

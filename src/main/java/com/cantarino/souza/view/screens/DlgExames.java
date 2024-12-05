@@ -253,12 +253,6 @@ public class DlgExames extends JDialog {
 
         Exame exame = (Exame) selectedObject;
 
-        if (exame.getRelatorio() == null) {
-            JOptionPane.showMessageDialog(this, "Esse exame não possui nenhum relatório cadastrado", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         DlgDadosRelatorio dialog = new DlgDadosRelatorio(this, true, exame);
         dialog.setVisible(true);
 
@@ -273,6 +267,12 @@ public class DlgExames extends JDialog {
 
         Exame exame = (Exame) selectedObject;
 
+        // Preciso fazer essa verificação
+        // direto aqui na view pois afeta
+        // diretamente o fluxo de telas. Se
+        // a consulta estiver cancelada,
+        // não quero nem que vá para a tela
+        // de cadastro, ao invés de fazer essa verficiação lá.
         if (exame.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
             JOptionPane.showMessageDialog(this,
                     "Não é possível adicionar ou editar um relatório num procedimento cancelado", "Aviso",
@@ -302,11 +302,6 @@ public class DlgExames extends JDialog {
 
         Exame exame = (Exame) selectedObject;
         Pagamento pagamento = pagamentoController.buscarPorIdProcedimento(exame.getId());
-        if (pagamento == null) {
-            JOptionPane.showMessageDialog(this, "Não há nenhum pagamento registrado para esse procedimento", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
 
         DlgDadosPagamento dialog = new DlgDadosPagamento(this, true, pagamento);
         dialog.setVisible(true);

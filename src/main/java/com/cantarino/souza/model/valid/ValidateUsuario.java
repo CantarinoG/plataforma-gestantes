@@ -71,7 +71,14 @@ public class ValidateUsuario {
         return senha;
     }
 
-    public Usuario validaCamposEntrada(String cpf, String nome, String email, String senha, String dataNascimento,
+    public void validaExclusão(Usuario usuario, int idUsuarioAutenticado) {
+        if (usuario.getId() == idUsuarioAutenticado) {
+            throw new UsuarioException("ERRO: Você não pode deletar a si mesmo.");
+        }
+    }
+
+    public Usuario validaCamposEntrada(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm) {
 
         Usuario usuario = new Usuario();
@@ -91,6 +98,10 @@ public class ValidateUsuario {
         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
             throw new UsuarioException("ERRO: Email inválido.");
         usuario.setEmail(email);
+
+        if (!senha.equals(senhaConfirmada)) {
+            throw new UsuarioException("ERRO: As senhas não coincidem.");
+        }
 
         String senhaValidada = validaSenha(senha);
         usuario.setSenha(senhaValidada);

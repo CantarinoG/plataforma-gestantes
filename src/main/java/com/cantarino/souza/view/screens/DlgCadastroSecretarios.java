@@ -2,7 +2,6 @@ package com.cantarino.souza.view.screens;
 
 import com.cantarino.souza.controller.SecretarioController;
 import com.cantarino.souza.model.entities.Secretario;
-import com.cantarino.souza.model.exceptions.SecretarioException;
 import com.cantarino.souza.model.exceptions.UsuarioException;
 import com.cantarino.souza.view.components.*;
 
@@ -237,15 +236,13 @@ public class DlgCadastroSecretarios extends JDialog {
                     edtDataContratacao.getText().split("/")[1] + "-" +
                     edtDataContratacao.getText().split("/")[0];
             if (atualizando == null) { // Criando
-                if (!(new String(edtSenha.getPassword()).equals(new String(edtConfSenha.getPassword())))) {
-                    throw new SecretarioException("As senhas não coincidem.");
-                }
 
                 secretarioController.salvar(
                         cpf,
                         edtNome.getText(),
                         edtEmail.getText(),
                         new String(edtSenha.getPassword()),
+                        new String(edtConfSenha.getPassword()),
                         dataNascimento,
                         edtTelefone.getText(),
                         edtEndereco.getText(),

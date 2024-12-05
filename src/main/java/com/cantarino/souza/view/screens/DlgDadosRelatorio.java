@@ -33,17 +33,21 @@ public class DlgDadosRelatorio extends JDialog {
 
     public DlgDadosRelatorio(JDialog parent, boolean modal, Procedimento procedimento) {
         super(parent, modal);
-
         relatorioController = new RelatorioController();
         this.procedimento = procedimento;
 
-        initComponents();
+        if (procedimento == null || procedimento.getRelatorio() == null) {
+            initComponentsVazio();
+        } else {
+            initComponents();
 
-        lblResultado.setText(procedimento.getRelatorio().getResultado());
-        lblObservacoes.setText(procedimento.getRelatorio().getObeservacoes());
-        if (procedimento.getRelatorio().getCaminhoPdf() != null) {
-            lblArquivoSelecionado.setText(procedimento.getRelatorio().getCaminhoPdf());
+            lblResultado.setText(procedimento.getRelatorio().getResultado());
+            lblObservacoes.setText(procedimento.getRelatorio().getObeservacoes());
+            if (procedimento.getRelatorio().getCaminhoPdf() != null) {
+                lblArquivoSelecionado.setText(procedimento.getRelatorio().getCaminhoPdf());
+            }
         }
+
     }
 
     private void initComponents() {
@@ -137,6 +141,24 @@ public class DlgDadosRelatorio extends JDialog {
 
         panBotao.add(btnEmitirPdf);
         panFundo.add(panBotao, gbcButton);
+    }
+
+    private void initComponentsVazio() {
+        setTitle("Dados de Relatório");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1620, 930);
+        setLocationRelativeTo(null);
+
+        panFundo = new JPanel();
+        panFundo.setBackground(AppColors.BUTTON_PINK);
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
+
+        JLabel lblMensagem = new JLabel("Não há relatório cadastrado");
+        lblMensagem.setFont(new Font("Arial", Font.BOLD, 32));
+        lblMensagem.setForeground(AppColors.TITLE_BLUE);
+        lblMensagem.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblMensagem, new GridBagConstraints());
     }
 
     private JPanel criarCampoCustomizado(String hint, JComponent content) {

@@ -5,12 +5,14 @@ import com.cantarino.souza.model.entities.Usuario;
 
 public class ValidateAdmin extends ValidateUsuario {
 
-    public Admin validaCamposEntrada(String cpf, String nome, String email, String senha, String dataNascimento,
+    public Admin validaCamposEntrada(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm) {
 
         Admin admin = new Admin();
 
-        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada, dataNascimento, telefone,
+                endereco,
                 deletadoEm);
         admin.setCpf(base.getCpf());
         admin.setNome(base.getNome());

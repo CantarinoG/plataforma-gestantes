@@ -6,11 +6,13 @@ import com.cantarino.souza.model.exceptions.MedicoException;
 
 public class ValidateMedico extends ValidateUsuario {
 
-    public Medico validaCamposEntrada(String cpf, String nome, String email, String senha, String dataNascimento,
+    public Medico validaCamposEntrada(String cpf, String nome, String email, String senha, String senhaConfirmada,
+            String dataNascimento,
             String telefone, String endereco, String deletadoEm, String especializacao, String crm) {
 
         Medico medico = new Medico();
-        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, dataNascimento, telefone, endereco,
+        Usuario base = super.validaCamposEntrada(cpf, nome, email, senha, senhaConfirmada, dataNascimento, telefone,
+                endereco,
                 deletadoEm);
         medico.setCpf(base.getCpf());
         medico.setNome(base.getNome());

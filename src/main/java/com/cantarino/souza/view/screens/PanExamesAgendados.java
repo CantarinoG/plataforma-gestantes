@@ -109,32 +109,28 @@ public class PanExamesAgendados extends JPanel {
 
         Exame consulta = (Exame) selectedObject;
 
-        if (consulta.getStatus().equals(StatusProcedimentos.CANCELADA.getValor())) {
-            JOptionPane.showMessageDialog(this, "Exame já cancelado", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
-        } else if (consulta.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValor())) {
-            JOptionPane.showMessageDialog(this, "Exame já concluído", "Aviso", JOptionPane.WARNING_MESSAGE);
-        } else {
-            Object[] options = { "Sim", "Não" };
-            int option = JOptionPane.showOptionDialog(this,
-                    "Tem certeza que deseja cancelar este exame?",
-                    "Confirmar cancelamento",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    options,
-                    options[1]);
+        Object[] options = { "Sim", "Não" };
+        int option = JOptionPane.showOptionDialog(this,
+                "Tem certeza que deseja cancelar este exame?",
+                "Confirmar cancelamento",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[1]);
 
-            if (option == JOptionPane.YES_OPTION) {
+        if (option == JOptionPane.YES_OPTION) {
+            try {
                 exameController.cancelar(consulta.getId());
-
                 cbFilterActionPerformed(null);
-
                 JOptionPane.showMessageDialog(this, "Exame cancelado com sucesso!", "Sucesso",
                         JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
-            return;
         }
+        return;
+
     }
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {
@@ -145,15 +141,11 @@ public class PanExamesAgendados extends JPanel {
         }
 
         Exame exame = (Exame) selectedObject;
-        if (exame.getRelatorio() == null) {
-            JOptionPane.showMessageDialog(this, "Esse exame não possui nenhum relatório cadastrado", "Aviso",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        } else {
-            JDialog parentWindow = (JDialog) SwingUtilities.getWindowAncestor(this);
-            DlgDadosRelatorio dialog = new DlgDadosRelatorio(parentWindow, true, exame);
-            dialog.setVisible(true);
-        }
+
+        JDialog parentWindow = (JDialog) SwingUtilities.getWindowAncestor(this);
+        DlgDadosRelatorio dialog = new DlgDadosRelatorio(parentWindow, true, exame);
+        dialog.setVisible(true);
+
     }
 
     private Object getObjetoSelecionadoNaGrid() {
