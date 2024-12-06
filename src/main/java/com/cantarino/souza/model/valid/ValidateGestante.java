@@ -27,15 +27,20 @@ public class ValidateGestante extends ValidateUsuario {
         gestante.setEndereco(base.getEndereco());
         gestante.setDeletadoEm(base.getDeletadoEm());
 
-        if (previsaoParto == null || previsaoParto.isEmpty())
-            throw new GestanteException("ERRO: Campo previsão de parto não pode ser vazio.");
-        LocalDate dataConvertida;
-        try {
-            dataConvertida = LocalDate.parse(previsaoParto);
-        } catch (DateTimeParseException e) {
-            throw new GestanteException("ERRO: Formato de data inválido.");
+        if (previsaoParto != null) {
+            if (previsaoParto.isEmpty())
+                throw new GestanteException("ERRO: Campo previsão de parto não válido.");
+            LocalDate dataConvertida;
+            try {
+                dataConvertida = LocalDate.parse(previsaoParto);
+                if (dataConvertida.isBefore(LocalDate.now())) {
+                    throw new GestanteException("ERRO: Data de previsão de parto não pode ser anterior a hoje.");
+                }
+            } catch (DateTimeParseException e) {
+                throw new GestanteException("ERRO: Formato de data inválido.");
+            }
+            gestante.setPrevisaoParto(dataConvertida);
         }
-        gestante.setPrevisaoParto(dataConvertida);
 
         if (contatoEmergencia == null || contatoEmergencia.isEmpty())
             throw new GestanteException("ERRO: Campo contato de emergência não pode ser vazio.");

@@ -70,7 +70,9 @@ public class DlgCadastroGestantes extends JDialog {
         edtDataNascimento.setText(atualizando.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         edtTelefone.setText(atualizando.getTelefone());
         edtEndereco.setText(atualizando.getEndereco());
-        edtPrevisaoParto.setText(atualizando.getPrevisaoParto().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        if (atualizando.getPrevisaoParto() != null) {
+            edtPrevisaoParto.setText(atualizando.getPrevisaoParto().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        }
         edtContatoEmergencia.setText(atualizando.getContatoEmergencia());
         edtHistoricoMedico.setText(atualizando.getHistoricoMedico());
         cbTipoSanguineo.setSelectedItem(atualizando.getTipoSanguineo());
@@ -191,7 +193,7 @@ public class DlgCadastroGestantes extends JDialog {
             edtPrevisaoParto.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
             edtPrevisaoParto.setToolTipText("Digite a data no formato: dd/mm/aaaa");
 
-            panCampoPrevisaoParto = criarTextFieldCustomizado("Previsão de Parto", edtPrevisaoParto);
+            panCampoPrevisaoParto = criarTextFieldCustomizado("Previsão de Parto (Opcional)", edtPrevisaoParto);
             panColuna.add(panCampoPrevisaoParto);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -283,9 +285,10 @@ public class DlgCadastroGestantes extends JDialog {
                     edtDataNascimento.getText().split("/")[1] + "-" +
                     edtDataNascimento.getText().split("/")[0];
 
-            String previsaoParto = edtPrevisaoParto.getText().split("/")[2] + "-" +
-                    edtPrevisaoParto.getText().split("/")[1] + "-" +
-                    edtPrevisaoParto.getText().split("/")[0];
+            String previsaoParto = edtPrevisaoParto.getText().equals("__/__/____") ? null
+                    : edtPrevisaoParto.getText().split("/")[2] + "-" +
+                            edtPrevisaoParto.getText().split("/")[1] + "-" +
+                            edtPrevisaoParto.getText().split("/")[0];
 
             if (atualizando == null) { // Criando gestante
 
