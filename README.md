@@ -9,7 +9,6 @@
     - [Diagramas de Sequência](#diagramas-de-sequência)
 3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
 4. [Instalação](#instalação)
-5. [Uso](#uso)
 
 ## Introdução
 
@@ -82,8 +81,60 @@ O BemGestar foi desenvolvido utilizando as seguintes tecnologias:
 
 A escolha dessas tecnologias foi baseada na necessidade de criar uma aplicação desktop robusta e confiável, com foco na facilidade de manutenção e segurança. O Java com Swing oferece uma solução completa para interfaces desktop, enquanto o SQLite proporciona um banco de dados leve e eficiente. A segurança dos dados é garantida através do BCrypt para criptografia de senhas, e a geração de documentos é facilitada pelo iTextPDF.
 
-
-
 ## Instalação
 
-## Uso
+Para executar o BemGestar, você precisa ter os seguintes pré-requisitos instalados em seu sistema:
+
+### Pré-requisitos
+
+1. **Java Development Kit (JDK) 17 ou superior**
+   - Faça o download e instale o JDK através do [site oficial da Oracle](https://www.oracle.com/java/technologies/downloads/)
+   - Verifique a instalação executando no terminal:
+     ```
+     java -version
+     ```
+
+2. **Apache Maven**
+   - No Linux, você pode instalar via apt:
+     ```
+     sudo apt update
+     sudo apt install maven
+     ```
+   - Alternativamente, faça o download do Maven através do [site oficial](https://maven.apache.org/download.cgi)
+   - Configure as variáveis de ambiente conforme a [documentação](https://maven.apache.org/install.html)
+   - Verifique a instalação executando no terminal:
+     ```
+     mvn -version
+     ```
+3. **Senha de App do Gmail**
+   - Para enviar emails através da aplicação, é necessário configurar uma Senha de App do Gmail
+   - Para mais detalhes, consulte a [documentação oficial do Google](https://support.google.com/mail/answer/185833?hl=pt-BR).
+
+### Passos para Instalação
+
+1. Clone o repositório:
+   ```
+   git clone https://github.com/CantarinoG/plataforma-gestantes.git
+   ```
+
+2. Navegue até o diretório do projeto.
+
+3. Crie o arquivo `Secrets.java` no diretório `src/main/java/com/cantarino/souza/model/services/` com o seguinte conteúdo:
+   ```java
+   package com.cantarino.souza.model.services;
+
+   public class Secrets {
+       public static String GMAIL_KEY = "sua_senha_de_app_do_gmail_aqui";
+   }
+   ```
+   Substitua "sua_senha_de_app_do_gmail_aqui" pela senha de app do Gmail obtida no passo 3 dos pré-requisitos.
+
+4. Compile o projeto usando Maven:
+   ```
+   mvn clean install
+   ```
+
+5. Execute o projeto usando Maven:
+    ```
+    mvn exec:java
+    ```
