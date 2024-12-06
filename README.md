@@ -9,6 +9,7 @@
     - [Diagramas de Sequência](#diagramas-de-sequência)
 3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
 4. [Instalação](#instalação)
+5. [Primeiro Login](#primeiro-login)
 
 ## Introdução
 
@@ -138,3 +139,10 @@ Para executar o BemGestar, você precisa ter os seguintes pré-requisitos instal
     ```
     mvn exec:java
     ```
+## Primeiro Login
+
+Ao instalar a aplicação, é criado automaticamente um usuário administrador com as seguintes credenciais:
+- CPF: 000.000.000-00
+- Senha: 000000
+
+Após realizar o primeiro login com essas credenciais, é recomendado que você altere a senha deste usuário por questões de segurança. Com este usuário administrador, você poderá criar novos usuários e começar a utilizar todas as funcionalidades do sistema normalmente.
