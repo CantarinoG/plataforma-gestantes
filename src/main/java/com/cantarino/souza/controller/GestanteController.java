@@ -10,6 +10,7 @@ import com.cantarino.souza.model.dao.GestanteDao;
 import com.cantarino.souza.model.entities.Gestante;
 import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.GerenciadorCriptografia;
+import com.cantarino.souza.model.services.INotificador;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateGestante;
 
@@ -17,7 +18,7 @@ public class GestanteController {
 
     private GestanteDao repositorio;
     private ValidateGestante validador;
-    private NotificadorEmail notificador;
+    private INotificador notificador;
     private GerenciadorCriptografia gerenciadorCriptografia;
 
     public GestanteController() {

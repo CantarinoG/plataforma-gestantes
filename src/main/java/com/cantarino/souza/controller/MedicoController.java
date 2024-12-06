@@ -10,6 +10,7 @@ import com.cantarino.souza.model.dao.MedicoDao;
 import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.GerenciadorCriptografia;
+import com.cantarino.souza.model.services.INotificador;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateMedico;
 
@@ -17,7 +18,7 @@ public class MedicoController {
 
     private MedicoDao repositorio;
     private ValidateMedico validador;
-    private NotificadorEmail notificador;
+    private INotificador notificador;
     private GerenciadorCriptografia gerenciadorCriptografia;
 
     public MedicoController() {

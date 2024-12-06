@@ -9,6 +9,7 @@ import com.cantarino.souza.model.dao.AdminDao;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.GerenciadorCriptografia;
+import com.cantarino.souza.model.services.INotificador;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateAdmin;
 
@@ -16,7 +17,7 @@ public class AdminController {
 
     private AdminDao repositorio;
     private ValidateAdmin validador;
-    private NotificadorEmail notificador;
+    private INotificador notificador;
     private GerenciadorCriptografia gerenciadorCriptografia;
 
     public AdminController() {

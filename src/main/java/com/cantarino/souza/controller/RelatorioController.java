@@ -13,17 +13,18 @@ import com.cantarino.souza.model.dao.RelatorioDao;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.services.GeradorPdf;
+import com.cantarino.souza.model.services.IGeradorDocumento;
 import com.cantarino.souza.model.valid.ValidateRelatorio;
 
 public class RelatorioController {
     private RelatorioDao repositorio;
     private ValidateRelatorio validador;
-    private GeradorPdf gerenciadorPdf;
+    private IGeradorDocumento geradorDocumento;
 
     public RelatorioController() {
         this.repositorio = new RelatorioDao();
         this.validador = new ValidateRelatorio();
-        this.gerenciadorPdf = new GeradorPdf();
+        this.geradorDocumento = new GeradorPdf();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -57,13 +58,13 @@ public class RelatorioController {
         return repositorio.buscar(id);
     }
 
-    public void gerarPdf(String caminho, int id, Procedimento procedimento) {
+    public void gerarDocumento(String caminho, int id, Procedimento procedimento) {
         Relatorio relatorio = repositorio.buscar(id);
         String caminhoTemporario = "storage/relatorios/temp";
 
         new File(caminhoTemporario).mkdirs();
 
-        gerenciadorPdf.gerarDocumento(caminhoTemporario,
+        geradorDocumento.gerarDocumento(caminhoTemporario,
                 "PDF gerado em: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), "\n",
                 "Bem Gestar" + "\n",
                 "Relatório de Procedimento", "\n",
@@ -80,6 +81,6 @@ public class RelatorioController {
                 "Observações: " + relatorio.getObeservacoes());
         String caminhoArquivo = caminhoTemporario + "/recibo.pdf";
         List<String> caminhosEntrada = Arrays.asList(caminhoArquivo, relatorio.getCaminhoPdf());
-        gerenciadorPdf.combinarDocumentos(caminho, caminhosEntrada);
+        geradorDocumento.combinarDocumentos(caminho, caminhosEntrada);
     }
 }
