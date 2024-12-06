@@ -190,9 +190,10 @@ public class DlgPagamentos extends JDialog {
             if (result == JFileChooser.APPROVE_OPTION) {
                 String selectedPath = fileChooser.getSelectedFile().getAbsolutePath();
                 controller.gerarRecibo(selectedPath, pagamento.getId());
+                JOptionPane.showMessageDialog(this, "Recibo Gerado com Sucesso!", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
-            JOptionPane.showMessageDialog(this, "Recibo Gerado com Sucesso!", "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE);
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao gerar recibo: " + e.getMessage(), "Erro",
                     JOptionPane.ERROR_MESSAGE);

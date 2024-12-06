@@ -192,9 +192,9 @@ public class DlgDadosRelatorio extends JDialog {
             if (resultado == JFileChooser.APPROVE_OPTION) {
                 String caminhoSelecionado = fileChooser.getSelectedFile().getAbsolutePath();
                 relatorioController.gerarPdf(caminhoSelecionado, procedimento.getRelatorio().getId(), procedimento);
+                JOptionPane.showMessageDialog(this, "Relatório Gerado com Sucesso!", "Sucesso",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
-            JOptionPane.showMessageDialog(this, "Relatório Gerado com Sucesso!", "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao gerar documento: " + e.getMessage(), "Erro",
                     JOptionPane.ERROR_MESSAGE);
