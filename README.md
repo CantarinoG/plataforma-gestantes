@@ -21,10 +21,7 @@ Além disso, o BemGestar oferece uma comunidade de apoio, onde as gestantes pode
 
 ### Quadro Scrum
 
-O desenvolvimento do BemGestar segue a metodologia ágil Scrum, permitindo um gerenciamento eficiente do projeto através de sprints, priorização de tarefas e acompanhamento contínuo do progresso. O quadro de tarefas está organizado no Trello, onde é possível visualizar o backlog, as sprints em andamento e as tarefas concluídas. Essa abordagem garante uma entrega incremental e adaptável, focada na evolução contínua do sistema.
-
-![Quadro Scrum](./docs/quadroScrum.png)
-*Atualizado em 26/11/2024
+O desenvolvimento do BemGestar segue a metodologia ágil Scrum, permitindo um gerenciamento eficiente do projeto através de sprints, priorização de tarefas e acompanhamento contínuo do progresso. O quadro de tarefas está organizado no Trello, onde é possível visualizar o backlog, as sprints em andamento e as tarefas concluídas. Essa abordagem garante uma entrega incremental e adaptável, focada na evolução contínua do sistema. O quadro pode ser acessado [aqui](https://trello.com/invite/b/670e74754ad3442f24634e35/ATTIdc5159a42914a0ad99b494a518cd1b0bA314F45A/2024-12-13-tcc).
 
 ### Diagrama de Casos de Uso
 
@@ -36,7 +33,7 @@ O Diagrama de Casos de Uso do BemGestar apresenta as principais interações ent
 
 A seção de Diagrama de Classes do BemGestar apresenta a estrutura de classes que compõem o sistema, detalhando as relações entre os diferentes tipos de usuários (como gestantes, médicos e administradores) e os principais componentes do sistema. Este diagrama demonstra a hierarquia de herança e a organização das classes, ilustrando como cada uma delas interage para possibilitar funcionalidades como gerenciamento de contas, registro de consultas e geração de relatórios. Essa visão estrutural do sistema facilita o entendimento do modelo de dados e da lógica de negócio por trás do BemGestar.
 
-![Diagrama de Classes](./docs/bemGestarDiagramaClasse.png)
+![Diagrama de Classes](./docs/bemGestarDiagramaClasses.jpg)
 
 ### Diagramas de Sequência
 
@@ -61,6 +58,31 @@ Este diagrama descreve o processo de visualização da agenda de procedimentos d
 
 
 ## Tecnologias Utilizadas
+
+O BemGestar foi desenvolvido utilizando as seguintes tecnologias:
+
+### Desenvolvimento
+- **Java**: Linguagem de programação principal, escolhida por sua robustez e amplo suporte
+- **SQLite**: Banco de dados relacional leve e de fácil integração
+- **Hibernate**: Framework ORM para mapeamento objeto-relacional
+- **Lombok**: Biblioteca para redução de código boilerplate
+- **JavaMail**: API para envio de emails e notificações
+- **iTextPDF**: Biblioteca para geração de documentos PDF
+- **BCrypt**: Biblioteca para criptografia segura de senhas
+- **Swing**: Framework para desenvolvimento da interface gráfica desktop
+
+### Ferramentas
+- **Maven**: Gerenciamento de dependências e build do projeto
+- **Git**: Controle de versão do código fonte
+- **GitHub**: Plataforma para hospedagem e colaboração do código
+
+### Documentação e Modelagem
+- **StarUML**: Ferramenta para criação dos diagramas UML
+- **Trello**: Gerenciamento ágil do projeto usando Scrum
+
+A escolha dessas tecnologias foi baseada na necessidade de criar uma aplicação desktop robusta e confiável, com foco na facilidade de manutenção e segurança. O Java com Swing oferece uma solução completa para interfaces desktop, enquanto o SQLite proporciona um banco de dados leve e eficiente. A segurança dos dados é garantida através do BCrypt para criptografia de senhas, e a geração de documentos é facilitada pelo iTextPDF.
+
+
 
 ## Instalação
 
