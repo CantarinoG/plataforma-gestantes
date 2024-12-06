@@ -8,7 +8,6 @@ import com.cantarino.souza.controller.AdminController;
 import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ConsultaController;
 import com.cantarino.souza.controller.ExameController;
-import com.cantarino.souza.controller.GestanteController;
 import com.cantarino.souza.controller.PagamentoController;
 import com.cantarino.souza.controller.SecretarioController;
 import com.cantarino.souza.model.entities.Admin;
@@ -37,7 +36,6 @@ public class DlgCadastroPagamentos extends JDialog {
     JPanel panProcedimento;
 
     PagamentoController pagamentoController;
-    GestanteController gestanteController;
     ExameController exameController;
     ConsultaController consultaController;
     AutenticacaoController autenticacaoController;
@@ -51,7 +49,6 @@ public class DlgCadastroPagamentos extends JDialog {
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
         pagamentoController = new PagamentoController();
-        gestanteController = new GestanteController();
         exameController = new ExameController();
         consultaController = new ConsultaController();
         atualizando = pagamentoController.buscarPorId(id);
@@ -70,7 +67,6 @@ public class DlgCadastroPagamentos extends JDialog {
         autenticacaoController = new AutenticacaoController();
         usuario = autenticacaoController.getUsuario();
         pagamentoController = new PagamentoController();
-        gestanteController = new GestanteController();
         exameController = new ExameController();
         consultaController = new ConsultaController();
 

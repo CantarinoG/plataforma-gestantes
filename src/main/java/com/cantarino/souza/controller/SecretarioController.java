@@ -9,6 +9,7 @@ import com.cantarino.souza.model.dao.SecretarioDao;
 import com.cantarino.souza.model.entities.Secretario;
 import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.services.GerenciadorCriptografia;
+import com.cantarino.souza.model.services.INotificador;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateSecretario;
 
@@ -16,7 +17,7 @@ public class SecretarioController {
 
     private SecretarioDao repositorio;
     private ValidateSecretario validador;
-    private NotificadorEmail notificador;
+    private INotificador notificador;
     private GerenciadorCriptografia gerenciadorCriptografia;
 
     public SecretarioController() {

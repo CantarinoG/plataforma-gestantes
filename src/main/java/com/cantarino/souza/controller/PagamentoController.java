@@ -8,6 +8,8 @@ import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.exceptions.PagamentoException;
 import com.cantarino.souza.model.services.GeradorPdf;
+import com.cantarino.souza.model.services.IGeradorDocumento;
+import com.cantarino.souza.model.services.INotificador;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidatePagamento;
 
@@ -20,14 +22,14 @@ import javax.swing.JTable;
 public class PagamentoController {
     private PagamentoDao repositorio;
     private ValidatePagamento validator;
-    private NotificadorEmail notificador;
-    private GeradorPdf gerenciadorPdf;
+    private INotificador notificador;
+    private IGeradorDocumento geradorDocumento;
 
     public PagamentoController() {
         this.repositorio = new PagamentoDao();
         this.validator = new ValidatePagamento();
         this.notificador = new NotificadorEmail();
-        this.gerenciadorPdf = new GeradorPdf();
+        this.geradorDocumento = new GeradorPdf();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -81,9 +83,9 @@ public class PagamentoController {
         Util.jTableShow(grd, new TMPagamento(repositorio.buscarPorGestante(id)), null);
     }
 
-    public void gerarRecibo(String path, int id) {
+    public void gerarRecibo(String caminho, int id) {
         Pagamento pagamento = repositorio.buscar(id);
-        gerenciadorPdf.gerarDocumento(path,
+        geradorDocumento.gerarDocumento(caminho,
                 "PDF gerado em: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), "\n",
                 "Bem Gestar" + "\n",
                 "Recibo de Pagamento", "\n",
