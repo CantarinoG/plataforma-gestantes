@@ -10,9 +10,10 @@ import com.itextpdf.text.pdf.PdfCopy;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 
-public class GerenciadorPdf {
+public class GeradorPdf implements IGeradorDocumento {
 
-    public void gerarPdf(String caminho, String... conteudo) {
+    @Override
+    public void gerarDocumento(String caminho, String... conteudo) {
         Document documento = new Document();
         try {
             String caminhoArquivo = caminho + "/recibo.pdf";
@@ -30,7 +31,8 @@ public class GerenciadorPdf {
         }
     }
 
-    public void combinarPdfs(String caminhoSaida, List<String> caminhosEntrada) {
+    @Override
+    public void combinarDocumentos(String caminhoSaida, List<String> caminhosEntrada) {
         Document documento = new Document();
         try {
             if (new File(caminhoSaida).isDirectory()) {

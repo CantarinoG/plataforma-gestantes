@@ -7,7 +7,7 @@ import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.exceptions.PagamentoException;
-import com.cantarino.souza.model.services.GerenciadorPdf;
+import com.cantarino.souza.model.services.GeradorPdf;
 import com.cantarino.souza.model.services.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidatePagamento;
 
@@ -21,13 +21,13 @@ public class PagamentoController {
     private PagamentoDao repositorio;
     private ValidatePagamento validator;
     private NotificadorEmail notificador;
-    private GerenciadorPdf gerenciadorPdf;
+    private GeradorPdf gerenciadorPdf;
 
     public PagamentoController() {
         this.repositorio = new PagamentoDao();
         this.validator = new ValidatePagamento();
         this.notificador = new NotificadorEmail();
-        this.gerenciadorPdf = new GerenciadorPdf();
+        this.gerenciadorPdf = new GeradorPdf();
     }
 
     public void atualizarTabela(JTable grd) {
@@ -83,7 +83,7 @@ public class PagamentoController {
 
     public void gerarRecibo(String path, int id) {
         Pagamento pagamento = repositorio.buscar(id);
-        gerenciadorPdf.gerarPdf(path,
+        gerenciadorPdf.gerarDocumento(path,
                 "PDF gerado em: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), "\n",
                 "Bem Gestar" + "\n",
                 "Recibo de Pagamento", "\n",
