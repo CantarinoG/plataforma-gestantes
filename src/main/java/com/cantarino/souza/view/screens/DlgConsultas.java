@@ -189,6 +189,7 @@ public class DlgConsultas extends JDialog {
         panFooter.add(btnEditar);
         panFooter.add(btnDeletar);
         panFooter.add(btnVisuRelatorio);
+        panFooter.add(btnVerPagamento);
 
         if (usuario instanceof Admin) {
             btnGerenciarRelatorio = new RoundedButton("Cadastrar/Editar Relatório", 10);
@@ -202,7 +203,7 @@ public class DlgConsultas extends JDialog {
             });
 
             panFooter.add(btnGerenciarRelatorio);
-            panFooter.add(btnVerPagamento);
+
         }
 
         panConteudo.add(panFooter, BorderLayout.SOUTH);

@@ -153,7 +153,9 @@ public class DlgDadosGestante extends JDialog {
         panColuna.add(panEndereco);
 
         lblPrevisaoParto = new JLabel(
-                gestante.getPrevisaoParto().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                gestante.getPrevisaoParto() != null
+                        ? gestante.getPrevisaoParto().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        : "");
         lblPrevisaoParto.setFont(new Font("Arial", Font.PLAIN, 22));
         lblPrevisaoParto.setBackground(AppColors.FIELD_PINK);
         lblPrevisaoParto.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
