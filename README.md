@@ -6,6 +6,7 @@
     - [Quadro Scrum](#quadro-scrum)
     - [Diagrama de Casos de Uso](#diagrama-de-casos-de-uso)
     - [Diagrama de Classes](#diagrama-de-classes)
+    - [Diagrama Entidade Relacionamento](#diagrama-entidade-relacionamento)
     - [Diagramas de Sequência](#diagramas-de-sequência)
 3. [Tecnologias Utilizadas](#tecnologias-utilizadas)
 4. [Instalação](#instalação)
@@ -34,6 +35,12 @@ O Diagrama de Casos de Uso do BemGestar apresenta as principais interações ent
 A seção de Diagrama de Classes do BemGestar apresenta a estrutura de classes que compõem o sistema, detalhando as relações entre os diferentes tipos de usuários (como gestantes, médicos e administradores) e os principais componentes do sistema. Este diagrama demonstra a hierarquia de herança e a organização das classes, ilustrando como cada uma delas interage para possibilitar funcionalidades como gerenciamento de contas, registro de consultas e geração de relatórios. Essa visão estrutural do sistema facilita o entendimento do modelo de dados e da lógica de negócio por trás do BemGestar.
 
 ![Diagrama de Classes](./docs/bemGestarDiagramaClasses.jpg)
+
+### Diagrama Entidade Relacionamento
+
+O Diagrama Entidade Relacionamento (DER) do BemGestar representa a estrutura do banco de dados do sistema, ilustrando as entidades, seus atributos e os relacionamentos entre elas. Este diagrama é fundamental para entender como os dados são organizados e armazenados, mostrando a estrutura das tabelas que suportam funcionalidades como cadastro de usuários, agendamento de consultas, registro de exames e gerenciamento da comunidade.
+
+![Diagrama Entidade Relacionamento](./docs/diagramaER.jpg)
 
 ### Diagramas de Sequência
 
