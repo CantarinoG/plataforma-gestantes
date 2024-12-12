@@ -68,6 +68,43 @@ public class ExameController {
                 throw new ExameException("ERRO: Existe um conflito com outro exame agendado para o paciente.");
             }
         }
+
+        if (novoExame.getMedico() != null) {
+            List<Consulta> consultasMedico = new ConsultaController().buscarPorMedico(novoExame.getMedico().getId());
+            for (Consulta consulta : consultasMedico) {
+                LocalDateTime consultaInicio = consulta.getData();
+                LocalDateTime consultaFim = consulta.getData().plusMinutes(consulta.getDuracao());
+                LocalDateTime novoInicio = novoExame.getData();
+                LocalDateTime novoFim = novoExame.getData().plusMinutes(novoExame.getDuracao());
+
+                if ((novoInicio.isAfter(consultaInicio) && novoInicio.isBefore(consultaFim)) ||
+                        (novoFim.isAfter(consultaInicio) && novoFim.isBefore(consultaFim)) ||
+                        (novoInicio.isEqual(consultaInicio)) ||
+                        (novoInicio.isBefore(consultaInicio) && novoFim.isAfter(consultaFim))) {
+                    throw new ExameException(
+                            "ERRO: Existe um conflito com uma consulta agendada para o médico executante.");
+                }
+            }
+
+            List<Exame> examesMedico = buscarPorMedico(novoExame.getMedico().getId());
+            for (Exame exame : examesMedico) {
+                if (exame.getId() == novoExame.getId())
+                    continue;
+
+                LocalDateTime exameInicio = exame.getData();
+                LocalDateTime exameFim = exame.getData().plusMinutes(exame.getDuracao());
+                LocalDateTime novoInicio = novoExame.getData();
+                LocalDateTime novoFim = novoExame.getData().plusMinutes(novoExame.getDuracao());
+
+                if ((novoInicio.isAfter(exameInicio) && novoInicio.isBefore(exameFim)) ||
+                        (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
+                        (novoInicio.isEqual(exameInicio)) ||
+                        (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
+                    throw new ExameException(
+                            "ERRO: Existe um conflito com outro exame agendado para o médico executante.");
+                }
+            }
+        }
     }
 
     public void salvar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
@@ -113,6 +150,10 @@ public class ExameController {
 
     public List<Exame> buscarPorGestante(int id) {
         return repositorio.buscarPorGestante(id);
+    }
+
+    public List<Exame> buscarPorMedico(int id) {
+        return repositorio.buscarPorMedico(id);
     }
 
     public void deletar(int id) {

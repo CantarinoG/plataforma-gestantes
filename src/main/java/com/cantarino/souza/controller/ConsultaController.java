@@ -42,6 +42,10 @@ public class ConsultaController {
         return repositorio.buscarPorGestante(id);
     }
 
+    List<Consulta> buscarPorMedico(int id) {
+        return repositorio.buscarPorMedico(id);
+    }
+
     private void verificarConflitos(Consulta novaConsulta) {
         List<Consulta> consultaPaciente = repositorio.buscarPorGestante(novaConsulta.getPaciente().getId());
         for (Consulta consulta : consultaPaciente) {
@@ -91,6 +95,21 @@ public class ConsultaController {
                     (novoInicio.isEqual(exameInicio)) ||
                     (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
                 throw new ConsultaException("ERRO: Existe um conflito com um exame agendado para o paciente.");
+            }
+        }
+
+        List<Exame> exameMedico = new ExameController().buscarPorMedico(novaConsulta.getMedico().getId());
+        for (Exame exame : exameMedico) {
+            LocalDateTime exameInicio = exame.getData();
+            LocalDateTime exameFim = exame.getData().plusMinutes(exame.getDuracao());
+            LocalDateTime novoInicio = novaConsulta.getData();
+            LocalDateTime novoFim = novaConsulta.getData().plusMinutes(novaConsulta.getDuracao());
+
+            if ((novoInicio.isAfter(exameInicio) && novoInicio.isBefore(exameFim)) ||
+                    (novoFim.isAfter(exameInicio) && novoFim.isBefore(exameFim)) ||
+                    (novoInicio.isEqual(exameInicio)) ||
+                    (novoInicio.isBefore(exameInicio) && novoFim.isAfter(exameFim))) {
+                throw new ConsultaException("ERRO: Existe um conflito com um exame agendado para o médico.");
             }
         }
     }
