@@ -81,6 +81,11 @@ public class ValidateProcedimento {
         } else if (procedimento.getStatus().equals(StatusProcedimentos.CONCLUIDA.getValor())) {
             throw new ProcedimentoException("ERRO: Não é possível cancelar um procedimento já concluído.");
         }
+
+        if (procedimento.getData().isBefore(LocalDateTime.now().plusHours(6))) {
+            throw new ProcedimentoException(
+                    "ERRO: Só é possível cancelar procedimentos com pelo menos 6 horas de antecedência.");
+        }
     }
 
 }
