@@ -15,7 +15,7 @@ import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.model.exceptions.ConsultaException;
-import com.cantarino.souza.model.services.NotificadorEmail;
+import com.cantarino.souza.model.utils.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateConsulta;
 
 public class ConsultaController {

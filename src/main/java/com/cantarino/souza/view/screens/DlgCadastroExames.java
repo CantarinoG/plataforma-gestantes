@@ -27,11 +27,13 @@ public class DlgCadastroExames extends JDialog {
     private JFormattedTextField edtData;
     private JTextField edtValor;
     private JComboBox<String> cbMedico;
+    private JComboBox<String> cbMedicoExecutante;
     private JPanel panCampoPaciente;
     private JPanel panCampoDescricao;
     private JPanel panCampoData;
     private JPanel panCampoValor;
     private JPanel panCampoMedico;
+    private JPanel panCampoMedicoExecutante;
     private JFormattedTextField edtDataResultado;
     private JTextField edtLaboratorio;
     private JPanel panCampoDataResultado;
@@ -83,6 +85,12 @@ public class DlgCadastroExames extends JDialog {
         } else {
             cbMedico.setSelectedItem("Requisição Própria");
         }
+        Medico medicoExecutante = (Medico) atualizando.getMedico();
+        if (medicoExecutante != null) {
+            cbMedicoExecutante.setSelectedItem(medicoExecutante.getId() + " | " + medicoExecutante.getNome());
+        } else {
+            cbMedicoExecutante.setSelectedItem("");
+        }
         cbStatus.setSelectedItem(atualizando.getStatus());
     }
 
@@ -100,6 +108,17 @@ public class DlgCadastroExames extends JDialog {
         java.util.List<Medico> medicos = medicoController.buscarTodos();
         String[] options = new String[medicos.size() + 1];
         options[0] = "Requisição Própria";
+        for (int i = 0; i < medicos.size(); i++) {
+            Medico medico = medicos.get(i);
+            options[i + 1] = medico.getId() + " | " + medico.getNome();
+        }
+        return options;
+    }
+
+    private String[] getMedicosExecutantesOptions() {
+        java.util.List<Medico> medicos = medicoController.buscarTodos();
+        String[] options = new String[medicos.size() + 1];
+        options[0] = "";
         for (int i = 0; i < medicos.size(); i++) {
             Medico medico = medicos.get(i);
             options[i + 1] = medico.getId() + " | " + medico.getNome();
@@ -142,7 +161,7 @@ public class DlgCadastroExames extends JDialog {
         gbc.gridy = 1;
         gbc.insets = new java.awt.Insets(30, 0, 10, 0);
         panColuna = new JPanel();
-        panColuna.setLayout(new GridLayout(atualizando != null ? 9 : 8, 1, 20, 5));
+        panColuna.setLayout(new GridLayout(atualizando != null ? 10 : 9, 1, 20, 5));
         panColuna.setBackground(AppColors.TRANSPARENT);
         panFundo.add(panColuna, gbc);
 
@@ -213,6 +232,12 @@ public class DlgCadastroExames extends JDialog {
         cbMedico.setBackground(AppColors.FIELD_PINK);
         panCampoMedico = criarTextFieldCustomizada("Requisitado por:", cbMedico);
         panColuna.add(panCampoMedico);
+
+        cbMedicoExecutante = new JComboBox<>(getMedicosExecutantesOptions());
+        cbMedicoExecutante.setFont(new Font("Arial", Font.PLAIN, 22));
+        cbMedicoExecutante.setBackground(AppColors.FIELD_PINK);
+        panCampoMedicoExecutante = criarTextFieldCustomizada("Médico Executante:", cbMedicoExecutante);
+        panColuna.add(panCampoMedicoExecutante);
 
         if (atualizando != null) {
             cbStatus = new JComboBox<>(getStatusOptions());
@@ -285,6 +310,13 @@ public class DlgCadastroExames extends JDialog {
                 medico = medicoController.buscar(medicoId);
             }
 
+            String selectedMedicoExecutante = (String) cbMedicoExecutante.getSelectedItem();
+            Medico medicoExecutante = null;
+            if (!selectedMedicoExecutante.isBlank() || !selectedMedicoExecutante.isEmpty()) {
+                int medicoExecutanteId = Integer.parseInt(selectedMedicoExecutante.split(" \\| ")[0]);
+                medicoExecutante = medicoController.buscar(medicoExecutanteId);
+            }
+
             String dataStr = edtData.getText(); // Formato: dd/MM/yyyy HH:mm
             String[] dateParts = dataStr.split(" ")[0].split("/");
             String[] timeParts = dataStr.split(" ")[1].split(":");
@@ -320,7 +352,8 @@ public class DlgCadastroExames extends JDialog {
                         null,
                         formattedDataResultado,
                         medico,
-                        edtLaboratorio.getText());
+                        edtLaboratorio.getText(),
+                        medicoExecutante);
                 dispose();
             } else { // Edição de exame
                 exameController.editar(
@@ -335,7 +368,8 @@ public class DlgCadastroExames extends JDialog {
                         null,
                         formattedDataResultado,
                         medico,
-                        edtLaboratorio.getText());
+                        edtLaboratorio.getText(),
+                        medicoExecutante);
                 dispose();
             }
 

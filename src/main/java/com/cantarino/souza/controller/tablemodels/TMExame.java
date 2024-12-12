@@ -26,6 +26,7 @@ public class TMExame extends AbstractTableModel {
     private final int COL_DATA_RESULTADO = 8;
     private final int COL_REQUISITADO_POR = 9;
     private final int COL_LABORATORIO = 10;
+    private final int COL_MEDICO = 11;
 
     public TMExame(List<Exame> listaExames) {
         lista = listaExames;
@@ -33,7 +34,7 @@ public class TMExame extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 11;
+        return 12;
     }
 
     @Override
@@ -66,6 +67,8 @@ public class TMExame extends AbstractTableModel {
                 return "Requisitado Por";
             case COL_LABORATORIO:
                 return "Laboratório";
+            case COL_MEDICO:
+                return "Médico";
             default:
                 return "";
         }
@@ -107,6 +110,8 @@ public class TMExame extends AbstractTableModel {
                             : "";
                 case COL_LABORATORIO:
                     return aux.getLaboratorio();
+                case COL_MEDICO:
+                    return aux.getMedico() == null ? "-" : aux.getMedico().getNome();
                 default:
                     return null;
             }

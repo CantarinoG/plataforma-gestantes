@@ -1,4 +1,4 @@
-package com.cantarino.souza.model.services;
+package com.cantarino.souza.model.utils;
 
 import java.util.List;
 

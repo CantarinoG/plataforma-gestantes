@@ -8,9 +8,9 @@ import com.cantarino.souza.controller.tablemodels.TMAdmin;
 import com.cantarino.souza.model.dao.AdminDao;
 import com.cantarino.souza.model.entities.Admin;
 import com.cantarino.souza.model.exceptions.GestanteException;
-import com.cantarino.souza.model.services.GerenciadorCriptografia;
-import com.cantarino.souza.model.services.INotificador;
-import com.cantarino.souza.model.services.NotificadorEmail;
+import com.cantarino.souza.model.utils.GerenciadorCriptografia;
+import com.cantarino.souza.model.utils.INotificador;
+import com.cantarino.souza.model.utils.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateAdmin;
 
 public class AdminController {

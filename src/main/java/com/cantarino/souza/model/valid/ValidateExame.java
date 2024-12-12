@@ -5,6 +5,7 @@ import java.time.format.DateTimeParseException;
 
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.exceptions.ExameException;
@@ -12,7 +13,8 @@ import com.cantarino.souza.model.exceptions.ExameException;
 public class ValidateExame extends ValidateProcedimento {
 
     public Exame validaCamposEntrada(String descricao, String data, String duracao, String valor, String status,
-            String deletadoEm, String dataResultado, String laboratorio, Gestante paciente, Usuario requisitadoPor) {
+            String deletadoEm, String dataResultado, String laboratorio, Gestante paciente, Usuario requisitadoPor,
+            Medico medicoExecutante) {
 
         Exame exame = new Exame();
         Procedimento base = super.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm);
@@ -47,6 +49,7 @@ public class ValidateExame extends ValidateProcedimento {
         }
         exame.setPaciente(paciente);
         exame.setRequisitadoPor(requisitadoPor);
+        exame.setMedico(medicoExecutante);
 
         return exame;
 

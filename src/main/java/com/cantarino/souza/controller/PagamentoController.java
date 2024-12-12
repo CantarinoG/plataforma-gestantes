@@ -7,10 +7,10 @@ import com.cantarino.souza.model.entities.Pagamento;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.exceptions.PagamentoException;
-import com.cantarino.souza.model.services.GeradorPdf;
-import com.cantarino.souza.model.services.IGeradorDocumento;
-import com.cantarino.souza.model.services.INotificador;
-import com.cantarino.souza.model.services.NotificadorEmail;
+import com.cantarino.souza.model.utils.GeradorPdf;
+import com.cantarino.souza.model.utils.IGeradorDocumento;
+import com.cantarino.souza.model.utils.INotificador;
+import com.cantarino.souza.model.utils.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidatePagamento;
 
 import java.time.LocalDateTime;

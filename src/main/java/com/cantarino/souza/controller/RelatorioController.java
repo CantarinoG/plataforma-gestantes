@@ -12,8 +12,8 @@ import com.cantarino.souza.controller.tablemodels.TMRelatorio;
 import com.cantarino.souza.model.dao.RelatorioDao;
 import com.cantarino.souza.model.entities.Procedimento;
 import com.cantarino.souza.model.entities.Relatorio;
-import com.cantarino.souza.model.services.GeradorPdf;
-import com.cantarino.souza.model.services.IGeradorDocumento;
+import com.cantarino.souza.model.utils.GeradorPdf;
+import com.cantarino.souza.model.utils.IGeradorDocumento;
 import com.cantarino.souza.model.valid.ValidateRelatorio;
 
 public class RelatorioController {

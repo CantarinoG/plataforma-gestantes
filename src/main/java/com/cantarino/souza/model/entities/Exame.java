@@ -27,13 +27,18 @@ public class Exame extends Procedimento {
     @JoinColumn(name = "requisitado_por_id")
     private Usuario requisitadoPor;
 
+    @ManyToOne
+    @JoinColumn(name = "medico_id")
+    private Medico medico;
+
     public Exame(Gestante paciente, String descricao, LocalDateTime data, int duracao, double valor, String status,
             Relatorio relatorio, LocalDateTime deletadoEm, LocalDate dataResultado, String laboratorio,
-            Usuario requisitadoPor) {
+            Usuario requisitadoPor, Medico medico) {
         super(0, paciente, descricao, data, duracao, valor, status, relatorio, deletadoEm);
         this.laboratorio = laboratorio;
         this.dataResultado = dataResultado;
         this.requisitadoPor = requisitadoPor;
+        this.medico = medico;
     }
 
 }

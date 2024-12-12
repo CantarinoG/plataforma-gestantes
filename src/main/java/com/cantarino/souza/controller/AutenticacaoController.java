@@ -15,8 +15,8 @@ import com.cantarino.souza.model.exceptions.AdminException;
 import com.cantarino.souza.model.exceptions.GestanteException;
 import com.cantarino.souza.model.exceptions.MedicoException;
 import com.cantarino.souza.model.exceptions.SecretarioException;
-import com.cantarino.souza.model.services.Autenticacao;
-import com.cantarino.souza.model.services.GerenciadorCriptografia;
+import com.cantarino.souza.model.utils.Autenticacao;
+import com.cantarino.souza.model.utils.GerenciadorCriptografia;
 
 public class AutenticacaoController {
 

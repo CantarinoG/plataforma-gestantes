@@ -11,11 +11,12 @@ import com.cantarino.souza.model.dao.ExameDao;
 import com.cantarino.souza.model.entities.Consulta;
 import com.cantarino.souza.model.entities.Exame;
 import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Relatorio;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.model.exceptions.ExameException;
-import com.cantarino.souza.model.services.NotificadorEmail;
+import com.cantarino.souza.model.utils.NotificadorEmail;
 import com.cantarino.souza.model.valid.ValidateExame;
 
 public class ExameController {
@@ -70,11 +71,12 @@ public class ExameController {
     }
 
     public void salvar(Gestante paciente, String descricao, String data, String duracao, String valor, String status,
-            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
+            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio,
+            Medico medicoExecutante) {
 
         Exame novoExame = validador.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
                 dataResultado,
-                laboratorio, paciente, requisitadoPor);
+                laboratorio, paciente, requisitadoPor, medicoExecutante);
 
         verificarConflitos(novoExame);
 
@@ -92,11 +94,12 @@ public class ExameController {
 
     public void editar(int id, Gestante paciente, String descricao, String data, String duracao, String valor,
             String status,
-            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio) {
+            Relatorio relatorio, String deletadoEm, String dataResultado, Usuario requisitadoPor, String laboratorio,
+            Medico medicoExecutante) {
 
         Exame novoExame = validador.validaCamposEntrada(descricao, data, duracao, valor, status, deletadoEm,
                 dataResultado,
-                laboratorio, paciente, requisitadoPor);
+                laboratorio, paciente, requisitadoPor, medicoExecutante);
         novoExame.setId(id);
 
         verificarConflitos(novoExame);
