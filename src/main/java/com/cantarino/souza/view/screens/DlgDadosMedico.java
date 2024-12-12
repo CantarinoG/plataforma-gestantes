@@ -34,14 +34,36 @@ public class DlgDadosMedico extends JDialog {
         medicoController = new MedicoController();
         medico = medicoController.buscar(id);
 
-        initComponents();
+        if (medico == null) {
+            initComponentsVazio();
+        } else {
+            initComponents();
+            lblCrm.setText(medico.getCrm());
+            lblNome.setText(medico.getNome());
+            lblEmail.setText(medico.getEmail());
+            lblTelefone.setText(medico.getTelefone());
+            lblEndereco.setText(medico.getEndereco());
+            lblEspecializacao.setText(medico.getEspecializacao());
+        }
 
-        lblCrm.setText(medico.getCrm());
-        lblNome.setText(medico.getNome());
-        lblEmail.setText(medico.getEmail());
-        lblTelefone.setText(medico.getTelefone());
-        lblEndereco.setText(medico.getEndereco());
-        lblEspecializacao.setText(medico.getEspecializacao());
+    }
+
+    private void initComponentsVazio() {
+        setTitle("Dados de Pagamento");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(1620, 930);
+        setLocationRelativeTo(null);
+
+        panFundo = new JPanel();
+        panFundo.setBackground(AppColors.BUTTON_PINK);
+        panFundo.setLayout(new GridBagLayout());
+        setContentPane(panFundo);
+
+        JLabel lblMensagem = new JLabel("Não há médico para esse exame.");
+        lblMensagem.setFont(new Font("Arial", Font.BOLD, 32));
+        lblMensagem.setForeground(AppColors.TITLE_BLUE);
+        lblMensagem.setHorizontalAlignment(SwingConstants.CENTER);
+        panFundo.add(lblMensagem, new GridBagConstraints());
     }
 
     private void initComponents() {

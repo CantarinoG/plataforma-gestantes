@@ -22,6 +22,7 @@ public class PanExamesAgendados extends JPanel {
     JComboBox<String> cbFiltro;
     JButton btnCancelar;
     JButton btnRelatorio;
+    JButton btnMedico;
 
     private ExameController exameController;
     private AutenticacaoController autenticacaoController;
@@ -92,10 +93,21 @@ public class PanExamesAgendados extends JPanel {
             }
         });
 
+        btnMedico = new RoundedButton("Ver dados do médico", 10);
+        btnMedico.setPreferredSize(new Dimension(150, 50));
+        btnMedico.setBackground(Color.WHITE);
+        btnMedico.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMedicoActionPerformed(evt);
+            }
+        });
+
         panFooter.add(lblFiltro);
         panFooter.add(cbFiltro);
         panFooter.add(btnCancelar);
         panFooter.add(btnRelatorio);
+        panFooter.add(btnMedico);
 
         add(panFooter, BorderLayout.SOUTH);
     }
@@ -107,7 +119,7 @@ public class PanExamesAgendados extends JPanel {
             return;
         }
 
-        Exame consulta = (Exame) selectedObject;
+        Exame exame = (Exame) selectedObject;
 
         Object[] options = { "Sim", "Não" };
         int option = JOptionPane.showOptionDialog(this,
@@ -121,7 +133,7 @@ public class PanExamesAgendados extends JPanel {
 
         if (option == JOptionPane.YES_OPTION) {
             try {
-                exameController.cancelar(consulta.getId());
+                exameController.cancelar(exame.getId());
                 cbFilterActionPerformed(null);
                 JOptionPane.showMessageDialog(this, "Exame cancelado com sucesso!", "Sucesso",
                         JOptionPane.INFORMATION_MESSAGE);
@@ -164,5 +176,25 @@ public class PanExamesAgendados extends JPanel {
         } else {
             exameController.atualizarTabelaPorGestanteEStatus(grdExames, usuario.getId(), selectedFilter);
         }
+    }
+
+    private void btnMedicoActionPerformed(java.awt.event.ActionEvent evt) {
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Exame exame = (Exame) selectedObject;
+        if (exame.getMedico() == null) {
+            JOptionPane.showMessageDialog(this, "Não há médico cadastrado para esse exame", "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int id = exame.getMedico().getId();
+        JDialog parentWindow = (JDialog) SwingUtilities.getWindowAncestor(this);
+        DlgDadosMedico dialog = new DlgDadosMedico(parentWindow, true, id);
+        dialog.setVisible(true);
     }
 }
