@@ -127,9 +127,9 @@ Para executar o BemGestar, você precisa ter os seguintes pré-requisitos instal
 
 2. Navegue até o diretório do projeto.
 
-3. Crie o arquivo `Secrets.java` no diretório `src/main/java/com/cantarino/souza/model/services/` com o seguinte conteúdo:
+3. Crie o arquivo `Secrets.java` no diretório `src/main/java/com/cantarino/souza/model/utils/` com o seguinte conteúdo:
    ```java
-   package com.cantarino.souza.model.services;
+   package com.cantarino.souza.model.utils;
 
    public class Secrets {
        public static String GMAIL_KEY = "sua_senha_de_app_do_gmail_aqui";
