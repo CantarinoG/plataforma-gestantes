@@ -8,6 +8,8 @@ import java.awt.*;
 import com.cantarino.souza.controller.AutenticacaoController;
 import com.cantarino.souza.controller.ExameController;
 import com.cantarino.souza.model.entities.Exame;
+import com.cantarino.souza.model.entities.Gestante;
+import com.cantarino.souza.model.entities.Medico;
 import com.cantarino.souza.model.entities.Usuario;
 import com.cantarino.souza.model.enums.StatusProcedimentos;
 import com.cantarino.souza.view.components.AppColors;
@@ -23,6 +25,7 @@ public class PanExamesAgendados extends JPanel {
     JButton btnCancelar;
     JButton btnRelatorio;
     JButton btnMedico;
+    JButton btnGestante;
 
     private ExameController exameController;
     private AutenticacaoController autenticacaoController;
@@ -36,7 +39,12 @@ public class PanExamesAgendados extends JPanel {
 
         initComponents();
 
-        exameController.atualizarTabelaPorGestante(grdExames, usuario.getId());
+        if (usuario instanceof Gestante) {
+            exameController.atualizarTabelaPorGestante(grdExames, usuario.getId());
+        } else {
+            exameController.atualizarTabelaPorMedico(grdExames, usuario.getId());
+        }
+
     }
 
     private void initComponents() {
@@ -103,13 +111,42 @@ public class PanExamesAgendados extends JPanel {
             }
         });
 
+        btnGestante = new RoundedButton("Ver dados da paciente", 10);
+        btnGestante.setPreferredSize(new Dimension(150, 50));
+        btnGestante.setBackground(Color.WHITE);
+        btnGestante.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnGestante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGestanteActionPerformed(evt);
+            }
+        });
+
         panFooter.add(lblFiltro);
         panFooter.add(cbFiltro);
         panFooter.add(btnCancelar);
         panFooter.add(btnRelatorio);
-        panFooter.add(btnMedico);
+
+        if (usuario instanceof Gestante) {
+            panFooter.add(btnMedico);
+        } else {
+            panFooter.add(btnGestante);
+        }
 
         add(panFooter, BorderLayout.SOUTH);
+    }
+
+    private void btnGestanteActionPerformed(java.awt.event.ActionEvent evt) {
+        Object selectedObject = getObjetoSelecionadoNaGrid();
+        if (selectedObject == null) {
+            JOptionPane.showMessageDialog(this, "Seleciona um campo da tabela", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Exame exame = (Exame) selectedObject;
+
+        JDialog parentWindow = (JDialog) SwingUtilities.getWindowAncestor(this);
+        DlgDadosGestante dialog = new DlgDadosGestante(parentWindow, true, exame.getPaciente().getId());
+        dialog.setVisible(true);
     }
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,11 +208,21 @@ public class PanExamesAgendados extends JPanel {
 
     private void cbFilterActionPerformed(java.awt.event.ActionEvent evt) {
         String selectedFilter = (String) cbFiltro.getSelectedItem();
-        if (selectedFilter.equals("Todos")) {
-            exameController.atualizarTabelaPorGestante(grdExames, usuario.getId());
+
+        if (usuario instanceof Medico) {
+            if (selectedFilter.equals("Todos")) {
+                exameController.atualizarTabelaPorMedico(grdExames, usuario.getId());
+            } else {
+                exameController.atualizarTabelaPorMedicoEStatus(grdExames, usuario.getId(), selectedFilter);
+            }
         } else {
-            exameController.atualizarTabelaPorGestanteEStatus(grdExames, usuario.getId(), selectedFilter);
+            if (selectedFilter.equals("Todos")) {
+                exameController.atualizarTabelaPorGestante(grdExames, usuario.getId());
+            } else {
+                exameController.atualizarTabelaPorGestanteEStatus(grdExames, usuario.getId(), selectedFilter);
+            }
         }
+
     }
 
     private void btnMedicoActionPerformed(java.awt.event.ActionEvent evt) {

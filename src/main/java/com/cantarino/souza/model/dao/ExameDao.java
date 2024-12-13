@@ -112,6 +112,21 @@ public class ExameDao implements IDao<Exame> {
         return consultas;
     }
 
+    public List<Exame> buscarPorMedicoEStatus(int id, String status) {
+        this.entityManager = DatabaseJPA.getInstance().getEntityManager();
+
+        List<Exame> exames = this.entityManager
+                .createQuery(
+                        "FROM Exame e WHERE e.deletadoEm IS NULL AND e.medico.id = :id AND e.status = :status ORDER BY e.data DESC",
+                        Exame.class)
+                .setParameter("id", id)
+                .setParameter("status", status)
+                .getResultList();
+
+        this.entityManager.close();
+        return exames;
+    }
+
     public List<Exame> buscarPorNomeGestante(String substring) {
         this.entityManager = DatabaseJPA.getInstance().getEntityManager();
 

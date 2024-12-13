@@ -170,6 +170,15 @@ public class ExameController {
                 TMExame.getCustomRenderer());
     }
 
+    public void atualizarTabelaPorMedico(JTable grd, int id) {
+        Util.jTableShow(grd, new TMExame(repositorio.buscarPorMedico(id)), TMExame.getCustomRenderer());
+    }
+
+    public void atualizarTabelaPorMedicoEStatus(JTable grd, int id, String status) {
+        Util.jTableShow(grd, new TMExame(repositorio.buscarPorMedicoEStatus(id, status)),
+                TMExame.getCustomRenderer());
+    }
+
     public void atualizarTabelaPorNomeGestante(JTable grd, String substring) {
         Util.jTableShow(grd, new TMExame(repositorio.buscarPorNomeGestante(substring)),
                 TMExame.getCustomRenderer());

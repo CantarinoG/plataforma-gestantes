@@ -339,12 +339,12 @@ public class FrMenu extends JFrame {
     }
 
     private void btnAgendaGestanteActionPerformed(java.awt.event.ActionEvent evt) {
-        DlgAgendaGestante dialog = new DlgAgendaGestante(this, true);
+        DlgAgenda dialog = new DlgAgenda(this, true);
         dialog.setVisible(true);
     }
 
     private void btnAgendaMedicoActionPerformed(java.awt.event.ActionEvent evt) {
-        DlgAgendaMedico dialog = new DlgAgendaMedico(this, true);
+        DlgAgenda dialog = new DlgAgenda(this, true);
         dialog.setVisible(true);
     }
 

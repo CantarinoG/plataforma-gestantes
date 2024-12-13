@@ -5,7 +5,7 @@ import java.awt.*;
 import javax.swing.*;
 import com.cantarino.souza.view.components.*;
 
-public class DlgAgendaGestante extends JDialog {
+public class DlgAgenda extends JDialog {
 
         private JPanel panFundo;
         private JPanel panHeader;
@@ -14,7 +14,7 @@ public class DlgAgendaGestante extends JDialog {
         private JPanel panConteudo;
         private JLabel lblTitulo;
 
-        public DlgAgendaGestante(JFrame parent, boolean modal) {
+        public DlgAgenda(JFrame parent, boolean modal) {
                 super(parent, modal);
                 initComponents();
         }
